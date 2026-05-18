@@ -1,0 +1,62 @@
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f3f3f3;
+  font-family: system-ui, sans-serif;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.mersi-runtime {
+  min-height: 100vh;
+}
+
+.mersi-runtime:not(.is-ready) {
+  display: none;
+}
+
+.status-screen {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(62, 160, 148, 0.18), transparent 24%),
+    linear-gradient(180deg, #f8f8f8, #ececec);
+  color: #222;
+  text-align: center;
+}
+
+.status-screen h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+}
+
+.status-screen p {
+  max-width: 42rem;
+  margin: 0;
+  color: rgba(34, 34, 34, 0.72);
+  font-size: 1rem;
+}
+
+.status-screen__eyebrow {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(34, 34, 34, 0.6);
+}
+
+.status-screen--error {
+  background: linear-gradient(180deg, #fff2ef, #f8e7e1);
+}
+
