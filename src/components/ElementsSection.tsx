@@ -1,4 +1,5 @@
 import { highlightCards } from "../data/portfolio";
+import { ProjectPreviewImage } from "./ProjectPreviewImage";
 
 export function ElementsSection() {
   return (
@@ -25,7 +26,7 @@ export function ElementsSection() {
                   <div className="box-figure">
                     <figure className="figure-rollover js-collectable is-large">
                       <a className="figure-rollover__link" href={card.href} aria-label={card.title}>
-                        <img className="figure-rollover__file" src={card.image} alt={card.title} />
+                        <ProjectPreviewImage card={card} />
                       </a>
                       <div className="figure-rollover__hover">
                         <div className="figure-rollover__left">

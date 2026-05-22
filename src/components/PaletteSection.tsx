@@ -1,4 +1,13 @@
-import { palette } from "../data/portfolio";
+const beliefTags = [
+  "Creative",
+  "Rapid Prototyping",
+  "Fast Execution",
+  "Product Focus",
+  "Product Thinking",
+  "AI Integration",
+  "User Flow Design",
+  "Initiative",
+];
 
 export function PaletteSection() {
   return (
@@ -6,46 +15,62 @@ export function PaletteSection() {
       <div className="block">
         <div className="heading-section sticky">
           <div className="heading-section__left">
-            <h2 className="heading-section__title">Color Palette</h2>
+            <h2 className="heading-section__title">Product Belief</h2>
           </div>
         </div>
 
-        <div className="palette">
-          <p className="palette__desc">
-            This portfolio uses a restrained
+        <div className="palette belief">
+          <p className="palette__desc belief__intro">
+            A frontend builder
             <br />
-            palette of <strong>{palette.length}</strong> colors
+            creating <strong>usable products.</strong>
           </p>
           <div className="palette__list">
             <ul className="list-palette list-palette--h">
-              {palette.map((color) => (
-                <li key={color.value}>
-                  <div
-                    className="list-palette__item"
-                    style={{ background: color.value, color: color.text }}
-                  >
-                    <div className="list-palette__box">
-                      <div className="list-palette__header">
-                        <div className="list-palette__name">
-                          <strong>HEX</strong> {color.value}
-                        </div>
-                        <div className="list-palette__bts">
-                          <a href="#typography" aria-label={`Search ${color.value}`}>
-                            <span className="list-palette__bt" style={{ color: color.text }}>
-                              <svg className="ico-svg" viewBox="0 0 20 20" width="20">
-                                <use href="https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#lupe" />
-                              </svg>
-                            </span>
-                          </a>
-                        </div>
-                      </div>
-                      <div className="list-palette__footer">
-                        <span className="list-palette__aa">Aa</span>
+              <li>
+                <div className="list-palette__item belief-card belief-card--back">
+                  <div className="list-palette__box belief-card__box">
+                    <div className="list-palette__header">
+                      <div className="list-palette__name">
+                        <strong>How</strong> I build products
                       </div>
                     </div>
+                    <div className="belief-card__body">
+                      <p>
+                        I approach product building through rapid prototyping, interactive frontend development,
+                        and practical iteration.
+                      </p>
+                      <p> into clear, interactive products through frontend craft, rapid iteration,
+                      and a strong focus on usable experiences.</p>
+                      <ul className="belief-tags">
+                        {beliefTags.map((tag) => (
+                          <li key={tag}>{tag}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </li>
-              ))}
+                </div>
+              </li>
+              <li>
+                <div className="list-palette__item belief-card belief-card--front">
+                  <div className="list-palette__box belief-card__box">
+                    <div className="list-palette__header">
+                      <div className="list-palette__name">
+                        <strong>Frontend</strong> Product Craft
+                      </div>
+                    </div>
+                    <div className="belief-card__statement">
+                      <span>A</span>
+                      <span>frontend builder</span>
+                      <span>creating</span>
+                      <span>usable products.</span>
+                    </div>
+                    <p className="belief-card__copy">
+                           
+                    </p>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>

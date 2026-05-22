@@ -1,3 +1,5 @@
+import { marqueeItems, siteMeta } from "../data/portfolio";
+
 export function MarqueeBar() {
   const items = Array.from({ length: 8 });
 
@@ -8,11 +10,11 @@ export function MarqueeBar() {
           <div className="marquee-top__track">
             {items.map((_, index) => (
               <div className="marquee-top__item" key={index}>
-                <span>Watch all courses for just $12/month</span>
+                <span>{siteMeta.brand} Portfolio Welcome</span>
                 <span className="marquee-top__ico" aria-hidden="true">
                   *
                 </span>
-                <strong>The Creative Pass</strong>
+                <strong>{marqueeItems[index % marqueeItems.length]}</strong>
                 <span className="marquee-top__separator" aria-hidden="true">
                   :)
                 </span>

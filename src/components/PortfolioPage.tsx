@@ -33,17 +33,7 @@ export function PortfolioPage() {
         </div>
         <FloatingMenu />
       </main>
-      <div className="cookies-popup is-show">
-        <p>
-          This website uses cookies to ensure you get the best experience on our website.{" "}
-          <a className="link-underlined" href="#footer">
-            Cookies Policy
-          </a>
-        </p>
-        <button className="button button--small--rounded--white" type="button">
-          GOT IT
-        </button>
-      </div>
+      
       <FooterSection />
     </div>
   );

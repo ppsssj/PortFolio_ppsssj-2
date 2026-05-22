@@ -1,12 +1,86 @@
+import { useEffect, useRef, useState } from "react";
+
 const headerItems = [
-  { label: "Explore", href: "#creator" },
-  { label: "Directory", href: "#details" },
-  { label: "Academy", href: "#details", badge: "New" },
-  { label: "Jobs", href: "#score" },
-  { label: "Market", href: "#contact" },
+  { label: "Home", href: "#creator" },
+  { label: "Projects", href: "#highlights" },
+  { label: "Belief", href: "#typography" },
+  { label: "Details", href: "#details" },
+  { label: "Index", href: "#score" },
 ];
 
 export function SiteHeader() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isThumbOnDark, setIsThumbOnDark] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isScrolled = scrollProgress > 0.5;
+
+  useEffect(() => {
+    const getElementBackground = (element: Element | null) => {
+      let currentElement = element;
+
+      while (currentElement && currentElement !== document.documentElement) {
+        const background = window.getComputedStyle(currentElement).backgroundColor;
+
+        if (background && background !== "rgba(0, 0, 0, 0)" && background !== "transparent") {
+          return background;
+        }
+
+        currentElement = currentElement.parentElement;
+      }
+
+      return window.getComputedStyle(document.body).backgroundColor;
+    };
+
+    const isDarkColor = (color: string) => {
+      const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+
+      if (!match) {
+        return false;
+      }
+
+      const [, red, green, blue] = match.map(Number);
+      const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+
+      return luminance < 0.5;
+    };
+
+    const updateThumbContrast = (progress: number) => {
+      window.requestAnimationFrame(() => {
+        const track = trackRef.current;
+
+        if (!track) {
+          return;
+        }
+
+        const rect = track.getBoundingClientRect();
+        const x = rect.left + rect.width * (progress / 100);
+        const y = rect.top + rect.height / 2;
+        const elementBehindThumb = document.elementFromPoint(x, y);
+        const background = getElementBackground(elementBehindThumb);
+
+        setIsThumbOnDark(isDarkColor(background));
+      });
+    };
+
+    const updateScrollProgress = () => {
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const nextProgress = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
+      const clampedProgress = Math.min(100, Math.max(0, nextProgress));
+
+      setScrollProgress(clampedProgress);
+      updateThumbContrast(clampedProgress);
+    };
+
+    updateScrollProgress();
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+    window.addEventListener("resize", updateScrollProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateScrollProgress);
+      window.removeEventListener("resize", updateScrollProgress);
+    };
+  }, []);
+
   return (
     <header id="header">
       <div className="inner">
@@ -21,9 +95,7 @@ export function SiteHeader() {
               </div>
 
               <a className="header-main__logo" href="#creator" aria-label="Portfolio home">
-                <svg width="30" height="16" viewBox="0 0 30 16">
-                  <path d="m18.4 0-2.803 10.855L12.951 0H9.34L6.693 10.855 3.892 0H0l5.012 15.812h3.425l2.708-10.228 2.709 10.228h3.425L22.29 0h-3.892ZM24.77 13.365c0 1.506 1.12 2.635 2.615 2.635C28.879 16 30 14.87 30 13.365c0-1.506-1.12-2.636-2.615-2.636s-2.615 1.13-2.615 2.636Z" />
-                </svg>
+                PPsssJ
               </a>
 
               <nav className="nav-header-main" aria-label="Primary">
@@ -44,29 +116,30 @@ export function SiteHeader() {
               </nav>
 
               <div className="header-main__search">
-                <div className="search-form">
-                  <div className="search-form__field">
-                    <button type="submit" className="search-form__button" aria-label="Search">
-                      <svg className="ico-svg" viewBox="0 0 20 20" width="14">
-                        <use href="https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#lupe" />
-                      </svg>
-                    </button>
-                    <input className="search-form__input" type="text" placeholder="Search by Inspiration" readOnly />
+                <div
+                  className={`scroll-progress${isScrolled ? " is-scrolled" : ""}`}
+                  role="progressbar"
+                  aria-label="Page scroll progress"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(scrollProgress)}
+                >
+                  <div className="scroll-progress__track" ref={trackRef}>
+                    <div
+                      className={`scroll-progress__thumb${isThumbOnDark ? " is-on-dark" : ""}`}
+                      style={{ left: `${scrollProgress}%` }}
+                    />
                   </div>
                 </div>
               </div>
 
               <div className="header-main__right">
-                <div className="header-main__user">
-                  <strong className="header-main__link hidden-sm">Log in</strong>
-                  <strong className="header-main__link hidden-sm">Sign Up</strong>
-                </div>
                 <div className="header-main__bts">
-                  <a className="button button--small--rounded" href="#details">
-                    Be Pro
+                  <a className="button button--small--rounded" href="https://github.com/ppsssj">
+                    GitHub
                   </a>
-                  <a className="button button--small--outline--rounded" href="#contact">
-                    Submit Website
+                  <a className="button button--small--outline--rounded" href="mailto:ppssjj020222@gmail.com">
+                    Send mail
                   </a>
                 </div>
               </div>

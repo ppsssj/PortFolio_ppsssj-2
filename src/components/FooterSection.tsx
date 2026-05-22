@@ -1,5 +1,18 @@
 import { connectLinks, footerGroups, siteMeta } from "../data/portfolio";
 
+const footerLinkMap: Record<string, string> = {
+  Home: "#creator",
+  Projects: "#highlights",
+  "Product Belief": "#typography",
+  "Tech Stack": "#details",
+  "Build Index": "#score",
+  Details: "#details",
+  GitHub: "https://github.com/ppsssj",
+  Gmail: "mailto:ppssjj020222@gmail.com",
+  "Naver Mail": "mailto:ppssjj020222@naver.com",
+  "Back to top": "#creator",
+};
+
 export function FooterSection() {
   return (
     <footer id="footer">
@@ -12,7 +25,7 @@ export function FooterSection() {
                 <ul className="footer__menu" key={`group-${index}`}>
                   {group.map((item) => (
                     <li key={item}>
-                      <a href="#contact">{item}</a>
+                      <a href={footerLinkMap[item] ?? "#contact"}>{item}</a>
                     </li>
                   ))}
                 </ul>
@@ -24,7 +37,10 @@ export function FooterSection() {
           <div className="footer__left">
             <ul className="footer__nav">
               <li>
-                <a href="mailto:hello@example.com">hello@example.com</a>
+                <a href="mailto:ppssjj020222@gmail.com">ppssjj020222@gmail.com</a>
+              </li>
+              <li>
+                <a href="mailto:ppssjj020222@naver.com">ppssjj020222@naver.com</a>
               </li>
               <li>
                 <a href="#creator">Back to top</a>

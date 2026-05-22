@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+
 import { creatorCredits, heroGallery, siteMeta } from "../data/portfolio";
+import { getCurrentDateParts } from "../utils/currentDate";
 
 function SpriteIcon({ id }: { id: string }) {
   return (
@@ -9,7 +12,7 @@ function SpriteIcon({ id }: { id: string }) {
 }
 
 function CreditBadge({ name, role, badge }: { name: string; role: string; badge?: string }) {
-  const initials = name.slice(0, 2).toUpperCase();
+  const initials = badge ?? name.slice(0, 2).toUpperCase();
 
   return (
     <li>
@@ -19,7 +22,6 @@ function CreditBadge({ name, role, badge }: { name: string; role: string; badge?
             <div className="avatar-name__img avatar-name__img--placeholder">{initials}</div>
             <figcaption className="avatar-name__name">
               <strong className="link-underlined">{name}</strong>
-              {badge ? <sup>{badge}</sup> : null}
               <span>{role}</span>
             </figcaption>
           </div>
@@ -30,6 +32,16 @@ function CreditBadge({ name, role, badge }: { name: string; role: string; badge?
 }
 
 export function CreatorSection() {
+  const [currentDate, setCurrentDate] = useState(() => getCurrentDateParts());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrentDate(getCurrentDateParts());
+    }, 60 * 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
     <section className="anchor-section" id="creator">
       <div className="content-header">
@@ -44,8 +56,8 @@ export function CreatorSection() {
                     </div>
                     <div className="box-score__bottom">
                       <div className="box-score__note">
-                        <strong>{siteMeta.score}</strong>
-                        <sub>/10</sub>
+                        <strong>{currentDate.dayMonth}</strong>
+                        <sub>{currentDate.year}</sub>
                       </div>
                     </div>
                   </div>
@@ -74,10 +86,10 @@ export function CreatorSection() {
 
               <div className="c-heading text-center">
                 <div className="c-heading__top">
-                  <h2 className="text-default">{siteMeta.eyebrow}</h2>
+                  <h2 className="text-default">Site of the Day - {currentDate.longDate}</h2>
                 </div>
                 <div className="c-heading__middle">
-                  <h1 className="heading-1 text-uppercase">
+                  <h1 className="heading-1">
                     <a href={siteMeta.visitHref}>{siteMeta.brand}</a>
                   </h1>
                 </div>
