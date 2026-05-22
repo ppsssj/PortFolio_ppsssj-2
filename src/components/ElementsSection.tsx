@@ -135,8 +135,8 @@ export function ElementsSection() {
                           </button>
                           <div className="figure-rollover__hover">
                             <div className="figure-rollover__left">
-                              <div className="figure-rollover__row">
-                                <small>ELEMENT</small>
+                          <div className="figure-rollover__row">
+                                <small>{card.typeLabel}</small>
                               </div>
                               <div className="figure-rollover__row">
                                 <h3>{card.title}</h3>

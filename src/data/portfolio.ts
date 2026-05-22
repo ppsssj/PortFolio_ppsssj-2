@@ -12,6 +12,7 @@ export type CreditItem = {
 export type HighlightCard = {
   title: string;
   category: string;
+  typeLabel: string;
   description: string;
   image: string;
   previewImage?: string;
@@ -117,6 +118,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "CodeGraph",
     category: "Code Visualization",
+    typeLabel: "VS Extension",
     description: "Repository structure and code relationships presented as a visual graph experience.",
     image: "/assets/CodeGraph.png",
     href: "#contact",
@@ -136,6 +138,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "Cogic",
     category: "Code Visualization",
+    typeLabel: "VS Extension",
     description: "Node-based interaction flow with animated clicks and structured exploration.",
     image: "/assets/Cogic-NodeClick.gif",
     previewImage: "/assets/Cogic-NodeClick-poster.png",
@@ -156,6 +159,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "Git Effects",
     category: "Developer Tooling",
+    typeLabel: "VS Extension",
     description: "A motion-focused Git workflow concept that makes code changes easier to scan.",
     image: "/assets/git_effects.gif",
     previewImage: "/assets/git_effects-poster.png",
@@ -176,6 +180,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "GraphMind",
     category: "AI Mapping",
+    typeLabel: "Web",
     description: "Knowledge mapping interface for organizing ideas, context, and connected insights.",
     image: "/assets/GraphMind.png",
     href: "#typography",
@@ -195,6 +200,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "PrismDesign",
     category: "Design System",
+    typeLabel: "Web",
     description: "Color, layout, and component exploration shaped into a polished interface system.",
     image: "/assets/PrismDesign.gif",
     previewImage: "/assets/PrismDesign-poster.png",
@@ -215,6 +221,7 @@ export const highlightCards: HighlightCard[] = [
   {
     title: "Traffic Noise Prediction System",
     category: "Data Prediction",
+    typeLabel: "Web",
     description: "Prediction dashboard for reading traffic noise patterns through clear visual output.",
     image: "/assets/Traffic Noise Prediction System.png",
     href: "#score",
