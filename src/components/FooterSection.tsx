@@ -7,10 +7,6 @@ const footerLinkMap: Record<string, string> = {
   "Tech Stack": "#details",
   "Build Index": "#score",
   Details: "#details",
-  GitHub: "https://github.com/ppsssj",
-  Gmail: "mailto:ppssjj020222@gmail.com",
-  "Naver Mail": "mailto:ppssjj020222@naver.com",
-  "Back to top": "#creator",
 };
 
 export function FooterSection() {
@@ -39,12 +35,6 @@ export function FooterSection() {
               <li>
                 <a href="mailto:ppssjj020222@gmail.com">ppssjj020222@gmail.com</a>
               </li>
-              <li>
-                <a href="mailto:ppssjj020222@naver.com">ppssjj020222@naver.com</a>
-              </li>
-              <li>
-                <a href="#creator">Back to top</a>
-              </li>
             </ul>
           </div>
           <div className="footer__right">
@@ -54,7 +44,7 @@ export function FooterSection() {
               </li>
               {connectLinks.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} target="_blank" rel="noreferrer">
+                  <a href={item.href} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel="noreferrer">
                     {item.label}
                   </a>
                 </li>

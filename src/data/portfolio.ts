@@ -16,6 +16,15 @@ export type HighlightCard = {
   image: string;
   previewImage?: string;
   href: string;
+  detail: {
+    role: string;
+    stack: string[];
+    overview: string;
+    problem: string;
+    solution: string;
+    highlights: string[];
+    links?: LinkItem[];
+  };
 };
 
 export type PaletteItem = {
@@ -111,14 +120,38 @@ export const highlightCards: HighlightCard[] = [
     description: "Repository structure and code relationships presented as a visual graph experience.",
     image: "/assets/CodeGraph.png",
     href: "#contact",
+    detail: {
+      role: "Frontend implementation, graph layout, interaction design",
+      stack: ["React", "TypeScript", "Graph UI", "CSS Architecture"],
+      overview: "A visual interface that turns repository structure into a readable graph so users can understand code relationships faster.",
+      problem: "Large codebases are hard to scan when folders, files, and dependencies only appear as nested text.",
+      solution: "I organized the repository as a visual map with clear node hierarchy, readable grouping, and interaction states for exploration.",
+      highlights: [
+        "Built a graph-first project browsing experience",
+        "Designed node hierarchy and visual grouping rules",
+        "Focused on making technical structure understandable at a glance",
+      ],
+    },
   },
   {
-    title: "Cogic NodeClick",
-    category: "Interaction Prototype",
+    title: "Cogic",
+    category: "Code Visualization",
     description: "Node-based interaction flow with animated clicks and structured exploration.",
     image: "/assets/Cogic-NodeClick.gif",
     previewImage: "/assets/Cogic-NodeClick-poster.png",
     href: "#creator",
+    detail: {
+      role: "Interaction prototyping, motion detail, frontend UI",
+      stack: ["React", "TypeScript", "Animation", "Node Interaction"],
+      overview: "A node-click prototype for exploring connected logic through compact visual interactions.",
+      problem: "Complex logic flows can feel static and hard to follow when each step is hidden behind text or menus.",
+      solution: "I used animated node selection and focused transitions to make each relationship feel direct and inspectable.",
+      highlights: [
+        "Created an animated node interaction model",
+        "Reduced visual noise around selected states",
+        "Designed click feedback that makes exploration feel immediate",
+      ],
+    },
   },
   {
     title: "Git Effects",
@@ -127,6 +160,18 @@ export const highlightCards: HighlightCard[] = [
     image: "/assets/git_effects.gif",
     previewImage: "/assets/git_effects-poster.png",
     href: "#creator",
+    detail: {
+      role: "Developer experience design, interface motion, frontend prototype",
+      stack: ["React", "Git Workflow", "Motion UI", "CSS"],
+      overview: "A developer tooling concept that uses movement and visual emphasis to make Git changes easier to review.",
+      problem: "Git states and code changes often require careful reading before users understand what actually changed.",
+      solution: "I explored motion cues, contrast, and grouped change states to help developers scan workflow context faster.",
+      highlights: [
+        "Designed motion states for change review",
+        "Grouped workflow information into readable UI moments",
+        "Focused on reducing friction in developer-facing interfaces",
+      ],
+    },
   },
   {
     title: "GraphMind",
@@ -134,6 +179,18 @@ export const highlightCards: HighlightCard[] = [
     description: "Knowledge mapping interface for organizing ideas, context, and connected insights.",
     image: "/assets/GraphMind.png",
     href: "#typography",
+    detail: {
+      role: "AI product thinking, information architecture, frontend UI",
+      stack: ["React", "AI Workflow", "Knowledge Graph", "TypeScript"],
+      overview: "A knowledge mapping interface for structuring ideas, context, and AI-assisted insights as connected nodes.",
+      problem: "AI conversations and research notes can become fragmented, making it difficult to reuse or connect earlier context.",
+      solution: "I shaped the experience around connected concepts so users can preserve context and move through ideas spatially.",
+      highlights: [
+        "Mapped ideas into reusable visual context",
+        "Explored AI-assisted organization patterns",
+        "Balanced dense information with a clean graph interface",
+      ],
+    },
   },
   {
     title: "PrismDesign",
@@ -142,6 +199,18 @@ export const highlightCards: HighlightCard[] = [
     image: "/assets/PrismDesign.gif",
     previewImage: "/assets/PrismDesign-poster.png",
     href: "#details",
+    detail: {
+      role: "Design system exploration, UI composition, frontend implementation",
+      stack: ["React", "Design Systems", "CSS", "Figma"],
+      overview: "A design system study focused on color, layout rhythm, and reusable component presentation.",
+      problem: "Visual systems can become inconsistent when colors, spacing, and components are explored separately.",
+      solution: "I treated the interface as a connected system, aligning component rhythm, contrast, and layout structure.",
+      highlights: [
+        "Explored reusable visual language",
+        "Built polished component and layout states",
+        "Connected design decisions to frontend implementation",
+      ],
+    },
   },
   {
     title: "Traffic Noise Prediction System",
@@ -149,6 +218,18 @@ export const highlightCards: HighlightCard[] = [
     description: "Prediction dashboard for reading traffic noise patterns through clear visual output.",
     image: "/assets/Traffic Noise Prediction System.png",
     href: "#score",
+    detail: {
+      role: "Dashboard UI, data presentation, product planning",
+      stack: ["Data Visualization", "Dashboard UI", "Prediction Model", "Frontend"],
+      overview: "A prediction dashboard for interpreting traffic noise patterns through clear status, output, and comparison views.",
+      problem: "Prediction results are difficult to act on when users only see raw values without context or visual hierarchy.",
+      solution: "I presented noise patterns through dashboard sections that make trends, outputs, and decision points easier to read.",
+      highlights: [
+        "Structured prediction output for quick interpretation",
+        "Designed dashboard sections around practical reading flow",
+        "Connected data results to user-facing decision context",
+      ],
+    },
   },
 ];
 
@@ -390,13 +471,10 @@ export const profileTableTabs: ProfileTableTab[] = [
 export const footerGroups = [
   ["Home", "Projects", "Product Belief"],
   ["Tech Stack", "Build Index", "Details"],
-  ["GitHub", "Gmail"],
-  ["Naver Mail", "Back to top"],
 ];
 
 export const connectLinks: LinkItem[] = [
   { label: "GitHub", href: "https://github.com/ppsssj" },
   { label: "Gmail", href: "mailto:ppssjj020222@gmail.com" },
   { label: "Naver Mail", href: "mailto:ppssjj020222@naver.com" },
-  { label: "Back to top", href: "#creator" },
 ];
