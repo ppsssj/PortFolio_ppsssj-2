@@ -263,6 +263,8 @@ export const stack = [
 export const detailDescription =
   "This portfolio presents how I turn ideas into usable products through frontend implementation, AI-driven thinking, rapid prototyping, and interaction details that make each flow easier to understand.";
 
+export const githubUsername = "ppsssj";
+
 export const scoreBreakdown: ScoreItem[] = [
   { label: "Frontend Craft", weight: "35%", value: 92, score: "92%" },
   { label: "Product Thinking", weight: "25%", value: 86, score: "86%" },

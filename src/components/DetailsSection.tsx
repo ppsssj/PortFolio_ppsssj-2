@@ -1,4 +1,5 @@
-import { detailDescription, stack } from "../data/portfolio";
+import { stack } from "../data/portfolio";
+import { GitHubActivity } from "./GitHubActivity";
 
 export function DetailsSection() {
   return (
@@ -25,14 +26,10 @@ export function DetailsSection() {
       </div>
 
       <div className="block">
-        <div className="c-heading c-heading--small">
-          <div className="c-heading__top">
-            <h2 className="text-default">Description</h2>
-          </div>
-          <div className="c-heading__middle">
-            <h3 className="heading-6">{detailDescription}</h3>
-          </div>
+        <div className="github-activity-heading">
+          <h2>GitHub Contributions</h2>
         </div>
+        <GitHubActivity />
       </div>
 
     </section>

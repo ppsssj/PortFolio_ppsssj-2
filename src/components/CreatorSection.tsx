@@ -146,7 +146,7 @@ export function CreatorSection() {
               "--brand-letter-left": `${letter.left}px`,
               "--brand-letter-target-left": `${letter.targetLeft}px`,
               "--brand-letter-progress": brandGatherProgress,
-              "--brand-letter-opacity": isBrandSticky ? Math.min(brandGatherProgress * 2.5, 1) : 0,
+              "--brand-letter-opacity": isBrandSticky ? 1 : 0,
               left: `${letter.left}px`,
               top: `${letter.top}px`,
               width: `${letter.width}px`,
