@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { profileTableTabs, scoreBreakdown, siteMeta } from "../data/portfolio";
 
 const profileRowGridStyle = { "--score-cols": 4 } as CSSProperties;
@@ -160,18 +160,70 @@ function ProfileMark({ name }: { name: string }) {
 
 export function ScoreSection() {
   const [activeTab, setActiveTab] = useState(profileTableTabs[0].label);
+  const [hasAnimatedScore, setHasAnimatedScore] = useState(false);
+  const [scoreProgress, setScoreProgress] = useState(0);
+  const scoreSectionRef = useRef<HTMLElement>(null);
   const currentTab = profileTableTabs.find((tab) => tab.label === activeTab) ?? profileTableTabs[0];
   const levelColumnLabel = dateColumnTabs.has(currentTab.label) ? "Date" : "Level";
+  const buildScore = Number.parseInt(siteMeta.score, 10);
+
+  useEffect(() => {
+    const section = scoreSectionRef.current;
+
+    if (!section) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasAnimatedScore(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.28 },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasAnimatedScore) {
+      return;
+    }
+
+    let animationFrame = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const rawProgress = Math.min(elapsed / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - rawProgress, 3);
+
+      setScoreProgress(easedProgress);
+
+      if (rawProgress < 1) {
+        animationFrame = window.requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(animate);
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [hasAnimatedScore]);
 
   return (
-    <section className="anchor-section" id="score">
+    <section className="anchor-section" id="score" ref={scoreSectionRef}>
       <div className="block">
         <div className="c-heading-score">
           <h2 className="heading-2">
             {siteMeta.scoreLabel} / SCORE
             <span className="c-heading-score__note">
               {" "}
-              -&gt; {siteMeta.score}
+              -&gt; {Math.round(buildScore * scoreProgress)}%
               <sup>INDEX</sup>
             </span>
           </h2>
@@ -193,14 +245,14 @@ export function ScoreSection() {
           {scoreBreakdown.map((item) => (
             <div className="layout-overall__chart" key={`${item.label}-chart`}>
               <div className="layout-overall__progress">
-                <div className="layout-overall__progressbar" style={{ width: `${item.value}%` }} />
+                <div className="layout-overall__progressbar" style={{ width: `${item.value * scoreProgress}%` }} />
               </div>
             </div>
           ))}
 
           {scoreBreakdown.map((item) => (
             <div className="layout-overall__score" key={`${item.label}-score`}>
-              <strong>{item.score}</strong>
+              <strong>{Math.round(item.value * scoreProgress)}%</strong>
             </div>
           ))}
         </div>
