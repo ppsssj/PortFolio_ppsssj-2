@@ -1149,8 +1149,178 @@
 }
 
 @media (max-width: 576px) {
+  .belief .palette__list {
+    display: block !important;
+    width: min(100%, 430px) !important;
+    max-width: none;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .belief .list-palette--h {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100% !important;
+    min-height: 380px;
+    margin-inline: auto;
+    padding: 6px 0 32px !important;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    transform: none !important;
+  }
+
+  .belief .list-palette--h > li {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100% !important;
+    min-width: 0;
+    margin: 0 !important;
+    transition: transform 0.32s ease;
+  }
+
+  .belief .list-palette--h > li:first-child {
+    z-index: 1;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    user-select: none;
+    transform: translate3d(0, 84px, 0) !important;
+  }
+
+  .belief .list-palette--h > li:first-child.is-pulled {
+    transform: translate3d(0, 136px, 0) !important;
+  }
+
+  .belief .list-palette--h > li:nth-child(2) {
+    z-index: 2;
+    transform: translate3d(0, 0, 0) !important;
+  }
+
+  .belief .list-palette__item {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 214px !important;
+    min-height: 214px !important;
+    aspect-ratio: 16 / 9;
+    transform: none !important;
+  }
+
+  .belief-card--back {
+    cursor: pointer;
+  }
+
+  .belief .list-palette__box {
+    height: 100%;
+  }
+
+  .belief-card__box {
+    padding: 14px;
+  }
+
+  .belief-card__body {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .belief-card__body p,
+  .belief-card__copy {
+    max-width: 24em;
+    font-size: 12px;
+    line-height: 135%;
+  }
+
+  .belief-card--back .belief-card__body p:nth-of-type(2),
+  .belief-tags {
+    display: none;
+  }
+
+  .belief-tags {
+    gap: 5px;
+  }
+
+  .belief-tags li {
+    padding: 4px 7px;
+    font-size: 10px;
+  }
+
+  .belief-card__statement {
+    max-width: 360px;
+    margin-block: 16px 0 0;
+    font-size: clamp(28px, 8.5vw, 38px);
+    line-height: 0.94;
+  }
+
   .github-activity {
     padding-top: 0;
+    align-items: stretch;
+  }
+
+  .github-activity__viewport {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .github-activity__chart {
+    --activity-cell: clamp(4px, 1.35vw, 5px);
+    --activity-gap: clamp(1px, 0.55vw, 2px);
+    width: 100%;
+    padding: 4px 0 6px;
+  }
+
+  .github-activity__months {
+    grid-template-columns: repeat(53, var(--activity-cell));
+    gap: var(--activity-gap);
+    margin-left: 22px;
+    margin-bottom: 5px;
+    font-size: 8px;
+  }
+
+  .github-activity__body {
+    gap: 6px;
+  }
+
+  .github-activity__days {
+    grid-template-rows: repeat(7, var(--activity-cell));
+    gap: var(--activity-gap);
+    width: 16px;
+    font-size: 7px;
+    line-height: var(--activity-cell);
+  }
+
+  .github-activity__grid {
+    grid-template-columns: repeat(53, var(--activity-cell));
+    gap: var(--activity-gap);
+  }
+
+  .github-activity__week {
+    grid-template-rows: repeat(7, var(--activity-cell));
+    gap: var(--activity-gap);
+  }
+
+  .github-activity__cell {
+    width: var(--activity-cell);
+    height: var(--activity-cell);
+  }
+
+  .github-activity__cell[data-neighbor="true"] {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-0.5px) scale(1.06);
+  }
+
+  .github-activity__cell[data-active="true"] {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+    transform: translateY(-1.5px) scale(1.16);
+  }
+
+  .github-activity__summary {
+    margin-top: 7px;
+    font-size: 10px;
+  }
+
+  .github-activity__avatar {
+    width: 16px;
+    height: 16px;
   }
 
 }

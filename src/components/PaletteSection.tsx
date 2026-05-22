@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const beliefTags = [
   "Creative",
   "Rapid Prototyping",
@@ -10,6 +12,9 @@ const beliefTags = [
 ];
 
 export function PaletteSection() {
+  const [isBackCardPulled, setIsBackCardPulled] = useState(false);
+  const toggleBackCard = () => setIsBackCardPulled((current) => !current);
+
   return (
     <section className="anchor-section" id="typography">
       <div className="block">
@@ -26,9 +31,24 @@ export function PaletteSection() {
             creating <strong>usable products.</strong>
           </p>
           <div className="palette__list">
-            <ul className="list-palette list-palette--h">
-              <li>
-                <div className="list-palette__item belief-card belief-card--back">
+            <ul
+              className="list-palette list-palette--h"
+              onClickCapture={toggleBackCard}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  toggleBackCard();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              <li
+                className={isBackCardPulled ? "is-pulled" : undefined}
+              >
+                <div
+                  className="list-palette__item belief-card belief-card--back"
+                >
                   <div className="list-palette__box belief-card__box">
                     <div className="list-palette__header">
                       <div className="list-palette__name">
