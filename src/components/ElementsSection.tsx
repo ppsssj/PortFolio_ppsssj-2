@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { highlightCards } from "../data/portfolio";
@@ -97,6 +97,19 @@ function ProjectDetailPanel({
 
 export function ElementsSection() {
   const [selectedCard, setSelectedCard] = useState<HighlightCard | null>(null);
+
+  useEffect(() => {
+    if (!selectedCard) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [selectedCard]);
 
   return (
     <section className="anchor-section" id="highlights">
