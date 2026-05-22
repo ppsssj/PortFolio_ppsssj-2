@@ -101,7 +101,7 @@ export const creatorCredits: CreditItem[] = [
 ];
 
 export const heroGallery = [
-  "https://assets.awwwards.com/awards/submissions/2026/03/69b11a0406d6b617931025.jpg",
+  "/assets/img.png",
 ];
 
 export const highlightCards: HighlightCard[] = [

@@ -160,6 +160,11 @@
   gap: var(--gutter);
 }
 
+.head-site .gallery-site {
+  justify-items: center;
+  padding-top: 1.4rem;
+}
+
 .gallery-site--two-cols {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -171,6 +176,18 @@
   aspect-ratio: var(--img-resizing-site);
   object-fit: cover;
   border-radius: var(--rounded-large);
+}
+
+.head-site .box-figure {
+  border-radius: var(--rounded-large);
+  overflow: hidden;
+  width: min(100%, 880px);
+  margin: 0 auto;
+}
+
+.head-site .gallery-site__img {
+  transform: translateY(0) scale(1.12);
+  transform-origin: center center;
 }
 
 .gallery-site--two-cols .figure-rollover {
