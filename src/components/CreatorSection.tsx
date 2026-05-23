@@ -1,17 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 
 import { creatorCredits, heroGallery, siteMeta } from "../data/portfolio";
-import { getCurrentDateParts } from "../utils/currentDate";
 
 function SpriteIcon({ id }: { id: string }) {
   return (
     <svg className="ico-svg" viewBox="0 0 20 20" width="20">
-      <use href={`https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#${id}`} />
+      <use
+        href={`https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#${id}`}
+      />
     </svg>
   );
 }
 
-function CreditBadge({ name, role, badge }: { name: string; role: string; badge?: string }) {
+function CreditBadge({
+  name,
+  role,
+  badge,
+}: {
+  name: string;
+  role: string;
+  badge?: string;
+}) {
   const initials = badge ?? name.slice(0, 2).toUpperCase();
 
   return (
@@ -19,7 +28,9 @@ function CreditBadge({ name, role, badge }: { name: string; role: string; badge?
       <div className="users-credits__item">
         <figure className="avatar-name">
           <div className="avatar-name__link">
-            <div className="avatar-name__img avatar-name__img--placeholder">{initials}</div>
+            <div className="avatar-name__img avatar-name__img--placeholder">
+              {initials}
+            </div>
             <figcaption className="avatar-name__name">
               <strong className="link-underlined">{name}</strong>
               <span>{role}</span>
@@ -43,21 +54,12 @@ type StickyLetter = {
 };
 
 export function CreatorSection() {
-  const [currentDate, setCurrentDate] = useState(() => getCurrentDateParts());
   const [stickyLetters, setStickyLetters] = useState<StickyLetter[]>([]);
   const [isBrandSticky, setIsBrandSticky] = useState(false);
   const [brandGatherProgress, setBrandGatherProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const letterRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const stickyLettersRef = useRef<StickyLetter[]>([]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCurrentDate(getCurrentDateParts());
-    }, 60 * 1000);
-
-    return () => window.clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const measureLetters = () => {
@@ -83,7 +85,10 @@ export function CreatorSection() {
         .filter((letter): letter is StickyLetter => Boolean(letter));
 
       if (measuredLetters.length > 0) {
-        const totalWidth = measuredLetters.reduce((sum, letter) => sum + letter.width, 0);
+        const totalWidth = measuredLetters.reduce(
+          (sum, letter) => sum + letter.width,
+          0,
+        );
         const groupedStart = window.innerWidth / 2 - totalWidth / 2;
         let nextLeft = groupedStart;
 
@@ -106,10 +111,13 @@ export function CreatorSection() {
       }
 
       const sectionRect = section.getBoundingClientRect();
-      const shouldStick = sectionRect.top < 0 && sectionRect.bottom > firstLetter.top + 20;
+      const shouldStick =
+        sectionRect.top < 0 && sectionRect.bottom > firstLetter.top + 20;
       const gatherDistance = Math.max(window.innerHeight * 0.52, 1);
       const isPastCreator = sectionRect.bottom <= firstLetter.top + 20;
-      const progress = isPastCreator ? 1 : Math.min(Math.max(-sectionRect.top / gatherDistance, 0), 1);
+      const progress = isPastCreator
+        ? 1
+        : Math.min(Math.max(-sectionRect.top / gatherDistance, 0), 1);
 
       setIsBrandSticky(shouldStick);
       setBrandGatherProgress(sectionRect.top >= 0 ? 0 : progress);
@@ -137,23 +145,28 @@ export function CreatorSection() {
 
   return (
     <section className="anchor-section" id="creator" ref={sectionRef}>
-      <div className={`brand-sticky-letters${isBrandSticky ? " is-visible" : ""}`} aria-hidden="true">
+      <div
+        className={`brand-sticky-letters${isBrandSticky ? " is-visible" : ""}`}
+        aria-hidden="true"
+      >
         {stickyLetters.map((letter) => (
-          <span
-            className="brand-sticky-letters__item"
-            key={`${letter.char}-${letter.index}`}
-            style={{
-              "--brand-letter-left": `${letter.left}px`,
-              "--brand-letter-target-left": `${letter.targetLeft}px`,
-              "--brand-letter-progress": brandGatherProgress,
-              "--brand-letter-opacity": isBrandSticky ? 1 : 0,
-              left: `${letter.left}px`,
-              top: `${letter.top}px`,
-              width: `${letter.width}px`,
-            } as React.CSSProperties}
-          >
-            {letter.char}
-          </span>
+            <span
+              className="brand-sticky-letters__item"
+              key={`${letter.char}-${letter.index}`}
+              style={
+                {
+                  "--brand-letter-left": `${letter.left}px`,
+                  "--brand-letter-target-left": `${letter.targetLeft}px`,
+                  "--brand-letter-progress": brandGatherProgress,
+                  "--brand-letter-opacity": isBrandSticky ? 1 : 0,
+                  left: `${letter.left}px`,
+                  top: `${letter.top}px`,
+                  width: `${letter.width}px`,
+                } as React.CSSProperties
+              }
+            >
+              {letter.char}
+            </span>
         ))}
       </div>
       <div className="content-header">
@@ -161,20 +174,6 @@ export function CreatorSection() {
           <div className="inner">
             <div className="head-site">
               <div className="head-toolbar">
-                <div className="head-toolbar__left">
-                  <div className="box-score">
-                    <div className="box-score__top">
-                      <strong>{siteMeta.date}</strong>
-                    </div>
-                    <div className="box-score__bottom">
-                      <div className="box-score__note">
-                        <strong>{currentDate.dayMonth}</strong>
-                        <sub>{currentDate.year}</sub>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="head-toolbar__right">
                   <ul className="toolbar-bts">
                     <li>
@@ -188,7 +187,10 @@ export function CreatorSection() {
                       </span>
                     </li>
                     <li>
-                      <a className="toolbar-bts__item" href={siteMeta.visitHref}>
+                      <a
+                        className="toolbar-bts__item"
+                        href={siteMeta.visitHref}
+                      >
                         <SpriteIcon id="link" />
                       </a>
                     </li>
@@ -198,22 +200,33 @@ export function CreatorSection() {
 
               <div className="c-heading text-center">
                 <div className="c-heading__top">
-                  <h2 className="text-default">Site of the Day - {currentDate.longDate}</h2>
+                  <h2 className="text-default">{siteMeta.title}</h2>
                 </div>
                 <div className="c-heading__middle">
                   <h1 className="heading-1 hero-brand-title">
                     <a href={siteMeta.visitHref} aria-label={siteMeta.brand}>
                       {siteMeta.brand.split("").map((char, index) => (
                         <span
-                          className={stickyBrandIndexes.has(index) && isBrandSticky ? "hero-brand-title__letter is-hidden" : "hero-brand-title__letter"}
+                          className={
+                            stickyBrandIndexes.has(index) && isBrandSticky
+                              ? "hero-brand-title__letter is-hidden"
+                              : "hero-brand-title__letter"
+                          }
                           key={`${char}-${index}`}
                           ref={(element) => {
                             letterRefs.current[index] = element;
                           }}
                           style={
                             stickyBrandIndexes.has(index)
-                              ? { opacity: 1 - Math.min(brandGatherProgress * 2.5, 1) }
-                              : undefined
+                              ? {
+                                  opacity:
+                                    1 - Math.min(brandGatherProgress * 2.5, 1),
+                                }
+                              : {
+                                  color: `rgb(${34 + (255 - 34) * brandGatherProgress} ${34 + (255 - 34) * brandGatherProgress} ${34 + (255 - 34) * brandGatherProgress})`,
+                                  opacity:
+                                    1 - Math.min(brandGatherProgress * 1.35, 1),
+                                }
                           }
                         >
                           {char}
@@ -223,7 +236,9 @@ export function CreatorSection() {
                   </h1>
                 </div>
                 <div className="c-heading__bottom">
-                  <p className="c-heading__description">{siteMeta.description}</p>
+                  <p className="c-heading__description">
+                    {siteMeta.description}
+                  </p>
                   <div className="head-site__credits">
                     <div className="users-credits">
                       <ul className="users-credits__details">
@@ -240,7 +255,11 @@ export function CreatorSection() {
                 {heroGallery.map((image) => (
                   <li key={image}>
                     <div className="box-figure">
-                      <img className="gallery-site__img" src={image} alt="Portfolio preview" />
+                      <img
+                        className="gallery-site__img"
+                        src={image}
+                        alt="Portfolio preview"
+                      />
                     </div>
                   </li>
                 ))}
