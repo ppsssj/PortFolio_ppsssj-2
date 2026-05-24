@@ -909,6 +909,12 @@
   height: 18px;
   border-radius: 50%;
   background: #ededed;
+  opacity: 0.52;
+  transition: opacity 0.2s ease;
+}
+
+.github-activity__summary:hover .github-activity__avatar {
+  opacity: 0.9;
 }
 
 .github-activity__viewport {
