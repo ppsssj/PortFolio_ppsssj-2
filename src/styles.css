@@ -1014,14 +1014,19 @@
 
 .github-activity__cell[data-neighbor="true"] {
   z-index: 1;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
-  transform: translateY(-0.25px) scale(1.025);
+  box-shadow:
+    0 2px 7px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.16);
+  transform: translateY(-0.75px) scale(1.045);
 }
 
 .github-activity__cell[data-active="true"] {
   z-index: 2;
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1.5px) scale(1.09);
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.22),
+    0 2px 5px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px) scale(1.16);
 }
 
 .github-activity__cell[data-level="1"] {
@@ -1038,6 +1043,28 @@
 
 .github-activity__cell[data-level="4"] {
   background: #2b2b2b;
+}
+
+.github-activity__tooltip {
+  position: fixed;
+  left: var(--tooltip-x);
+  top: var(--tooltip-y);
+  z-index: 20;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: rgba(24, 24, 24, 0.28);
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 9px;
+  font-weight: var(--font-normal);
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 18px));
+  white-space: nowrap;
+}
+
+.github-activity__tooltip::after {
+  content: none;
 }
 
 .votes-table {
@@ -1329,13 +1356,18 @@
   }
 
   .github-activity__cell[data-neighbor="true"] {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
-    transform: translateY(-0.25px) scale(1.03);
+    box-shadow:
+      0 1px 5px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.14);
+    transform: translateY(-0.5px) scale(1.04);
   }
 
   .github-activity__cell[data-active="true"] {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
-    transform: translateY(-1px) scale(1.1);
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.2),
+      0 1px 4px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px) scale(1.15);
   }
 
   .github-activity__summary {

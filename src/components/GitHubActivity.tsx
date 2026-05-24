@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { githubUsername } from "../data/portfolio";
 
 type ContributionDay = {
@@ -21,6 +21,14 @@ type GitHubUser = {
 type ActivityState = {
   avatarUrl: string;
   days: ContributionDay[];
+};
+
+type HoveredCell = {
+  week: number;
+  day: number;
+  label: string;
+  x: number;
+  y: number;
 };
 
 const fallbackDays = Array.from({ length: 371 }, (_, index) => {
@@ -99,7 +107,7 @@ export function GitHubActivity() {
     avatarUrl: "",
     days: fallbackDays,
   });
-  const [hoveredCell, setHoveredCell] = useState<{ week: number; day: number } | null>(null);
+  const [hoveredCell, setHoveredCell] = useState<HoveredCell | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -136,6 +144,17 @@ export function GitHubActivity() {
   const activeMonth = hoveredCell
     ? months.findLast((month, index) => hoveredCell.week >= month.week && hoveredCell.week < (months[index + 1]?.week ?? 53))
     : null;
+  const updateHoveredCell = (event: ReactMouseEvent, day: ContributionDay | null, weekIndex: number, dayIndex: number) => {
+    const count = day?.count ?? 0;
+
+    setHoveredCell({
+      week: weekIndex,
+      day: dayIndex,
+      label: `${count} ${count === 1 ? "contribution" : "contributions"} on ${day?.date ?? "empty day"}`,
+      x: event.clientX,
+      y: event.clientY,
+    });
+  };
 
   return (
     <div className="github-activity" aria-label="GitHub activity">
@@ -176,9 +195,9 @@ export function GitHubActivity() {
                         data-level={day?.level ?? 0}
                         data-neighbor={isNeighbor || undefined}
                         key={`${weekIndex}-${dayIndex}`}
-                        onMouseEnter={() => setHoveredCell({ week: weekIndex, day: dayIndex })}
+                        onMouseEnter={(event) => updateHoveredCell(event, day, weekIndex, dayIndex)}
+                        onMouseMove={(event) => updateHoveredCell(event, day, weekIndex, dayIndex)}
                         onMouseLeave={() => setHoveredCell(null)}
-                        title={day ? `${day.count} contributions on ${day.date}` : undefined}
                       />
                     );
                   })}
@@ -193,6 +212,18 @@ export function GitHubActivity() {
         {activity.avatarUrl ? <img className="github-activity__avatar" src={activity.avatarUrl} alt="" /> : <span className="github-activity__avatar" />}
         <span>@{githubUsername}</span>
       </a>
+
+      {hoveredCell ? (
+        <div
+          className="github-activity__tooltip"
+          style={{
+            "--tooltip-x": `${hoveredCell.x}px`,
+            "--tooltip-y": `${hoveredCell.y}px`,
+          } as React.CSSProperties}
+        >
+          {hoveredCell.label}
+        </div>
+      ) : null}
     </div>
   );
 }
