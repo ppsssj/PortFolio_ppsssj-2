@@ -75,7 +75,10 @@
   line-height: 100%;
   transform: translateX(-50%);
   transition: top 0.28s ease;
-  pointer-events: none;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
 }
 
 .scroll-progress.is-scrolled {
@@ -88,6 +91,13 @@
   border-radius: 999px;
   background: rgba(var(--color-primary-rgb), 0.12);
   overflow: visible;
+  transition: height 0.2s ease, background 0.2s ease;
+}
+
+.scroll-progress:hover .scroll-progress__track,
+.scroll-progress.is-dragging .scroll-progress__track {
+  height: 4px;
+  background: rgba(var(--color-primary-rgb), 0.2);
 }
 
 .scroll-progress__thumb {
@@ -100,7 +110,16 @@
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28);
   transform: translate(-50%, -50%);
-  transition: left 0.12s linear, background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+  transition: left 0.12s linear, background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
+}
+
+.scroll-progress:hover .scroll-progress__thumb,
+.scroll-progress.is-dragging .scroll-progress__thumb {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+
+.scroll-progress.is-dragging .scroll-progress__thumb {
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
 }
 
 .scroll-progress__thumb.is-on-dark {
@@ -899,6 +918,8 @@
 }
 
 .github-activity__chart {
+  --activity-cell: 24px;
+  --activity-gap: 0px;
   width: max-content;
   padding: 4px 8px 6px;
   overflow: visible;
@@ -906,8 +927,8 @@
 
 .github-activity__months {
   display: grid;
-  grid-template-columns: repeat(53, 16px);
-  gap: 6px;
+  grid-template-columns: repeat(53, var(--activity-cell));
+  gap: var(--activity-gap);
   min-width: max-content;
   margin-left: 30px;
   margin-bottom: 7px;
@@ -932,18 +953,18 @@
 
 .github-activity__body {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   min-width: max-content;
 }
 
 .github-activity__days {
   display: grid;
-  grid-template-rows: repeat(7, 16px);
-  gap: 6px;
+  grid-template-rows: repeat(7, var(--activity-cell));
+  gap: var(--activity-gap);
   width: 22px;
   color: #b2b2b2;
   font-size: 9px;
-  line-height: 16px;
+  line-height: var(--activity-cell);
 }
 
 .github-activity__days span {
@@ -966,37 +987,41 @@
 
 .github-activity__grid {
   display: grid;
-  grid-template-columns: repeat(53, 16px);
-  gap: 6px;
+  grid-template-columns: repeat(53, var(--activity-cell));
+  gap: var(--activity-gap);
 }
 
 .github-activity__week {
   display: grid;
-  grid-template-rows: repeat(7, 16px);
-  gap: 6px;
+  grid-template-rows: repeat(7, var(--activity-cell));
+  gap: var(--activity-gap);
 }
 
 .github-activity__cell {
   position: relative;
   display: block;
-  width: 16px;
-  height: 16px;
+  width: var(--activity-cell);
+  height: var(--activity-cell);
   border-radius: 1px;
   background: #ededed;
   transform: translateZ(0);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease;
+  will-change: transform;
 }
 
 .github-activity__cell[data-neighbor="true"] {
   z-index: 1;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px) scale(1.08);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  transform: translateY(-0.25px) scale(1.025);
 }
 
 .github-activity__cell[data-active="true"] {
   z-index: 2;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18);
-  transform: translateY(-3px) scale(1.18);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1.5px) scale(1.09);
 }
 
 .github-activity__cell[data-level="1"] {
@@ -1262,8 +1287,8 @@
   }
 
   .github-activity__chart {
-    --activity-cell: clamp(4px, 1.35vw, 5px);
-    --activity-gap: clamp(1px, 0.55vw, 2px);
+    --activity-cell: clamp(5px, 1.55vw, 6px);
+    --activity-gap: 0px;
     width: 100%;
     padding: 4px 0 6px;
   }
@@ -1304,13 +1329,13 @@
   }
 
   .github-activity__cell[data-neighbor="true"] {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transform: translateY(-0.5px) scale(1.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
+    transform: translateY(-0.25px) scale(1.03);
   }
 
   .github-activity__cell[data-active="true"] {
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
-    transform: translateY(-1.5px) scale(1.16);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px) scale(1.1);
   }
 
   .github-activity__summary {

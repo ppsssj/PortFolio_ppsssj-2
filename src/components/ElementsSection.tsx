@@ -45,7 +45,7 @@ function ProjectDetailPanel({
         transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
       >
         <div className="project-detail__media">
-          <ProjectPreviewImage card={card} autoPlay />
+          <ProjectPreviewImage card={card} />
         </div>
         <div className="project-detail__content">
           <div className="project-detail__top">
