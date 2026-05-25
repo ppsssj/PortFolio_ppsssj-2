@@ -43,10 +43,57 @@ export function SiteHeader() {
   const [isDraggingProgress, setIsDraggingProgress] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const isDraggingProgressRef = useRef(false);
+  const isProgressNavigationRef = useRef(false);
+  const moveFrameRef = useRef<number | null>(null);
+  const contrastFrameRef = useRef<number | null>(null);
+  const settleFrameRef = useRef<number | null>(null);
+  const settleTimeoutRef = useRef<number | null>(null);
+  const pendingClientXRef = useRef(0);
+  const targetScrollTopRef = useRef(0);
   const isScrolled = scrollProgress > 0.5;
 
+  const getScrollableHeight = () =>
+    Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight;
+
+  const clearSettleChecks = () => {
+    if (settleFrameRef.current !== null) {
+      window.cancelAnimationFrame(settleFrameRef.current);
+      settleFrameRef.current = null;
+    }
+
+    if (settleTimeoutRef.current !== null) {
+      window.clearTimeout(settleTimeoutRef.current);
+      settleTimeoutRef.current = null;
+    }
+  };
+
+  const finishProgressNavigation = () => {
+    clearSettleChecks();
+    isProgressNavigationRef.current = false;
+  };
+
+  const scheduleProgressNavigationRelease = () => {
+    clearSettleChecks();
+
+    const checkIfSettled = () => {
+      if (Math.abs(window.scrollY - targetScrollTopRef.current) < 2) {
+        finishProgressNavigation();
+        return;
+      }
+
+      settleFrameRef.current = window.requestAnimationFrame(checkIfSettled);
+    };
+
+    settleFrameRef.current = window.requestAnimationFrame(checkIfSettled);
+    settleTimeoutRef.current = window.setTimeout(finishProgressNavigation, 1400);
+  };
+
   const updateThumbContrast = (progress: number) => {
-    window.requestAnimationFrame(() => {
+    if (contrastFrameRef.current !== null) {
+      window.cancelAnimationFrame(contrastFrameRef.current);
+    }
+
+    contrastFrameRef.current = window.requestAnimationFrame(() => {
       const track = trackRef.current;
 
       if (!track) {
@@ -60,10 +107,28 @@ export function SiteHeader() {
       const background = getElementBackground(elementBehindThumb);
 
       setIsThumbOnDark(isDarkColor(background));
+      contrastFrameRef.current = null;
     });
   };
 
-  const moveScrollToClientX = (clientX: number) => {
+  const setProgress = (nextProgress: number, shouldScroll: boolean) => {
+    const clampedProgress = Math.min(100, Math.max(0, nextProgress));
+
+    setScrollProgress(clampedProgress);
+    updateThumbContrast(clampedProgress);
+
+    if (shouldScroll) {
+      const scrollableHeight = getScrollableHeight();
+      const targetScrollTop = scrollableHeight * (clampedProgress / 100);
+
+      targetScrollTopRef.current = targetScrollTop;
+      isProgressNavigationRef.current = true;
+      window.scrollTo({ top: targetScrollTop, behavior: "smooth" });
+      scheduleProgressNavigationRelease();
+    }
+  };
+
+  const moveScrollToClientX = () => {
     const track = trackRef.current;
 
     if (!track) {
@@ -71,13 +136,20 @@ export function SiteHeader() {
     }
 
     const rect = track.getBoundingClientRect();
-    const rawProgress = ((clientX - rect.left) / rect.width) * 100;
-    const nextProgress = Math.min(100, Math.max(0, rawProgress));
-    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const rawProgress = ((pendingClientXRef.current - rect.left) / rect.width) * 100;
 
-    setScrollProgress(nextProgress);
-    updateThumbContrast(nextProgress);
-    window.scrollTo({ top: scrollableHeight * (nextProgress / 100), behavior: "auto" });
+    setProgress(rawProgress, true);
+    moveFrameRef.current = null;
+  };
+
+  const scheduleScrollMove = (clientX: number) => {
+    pendingClientXRef.current = clientX;
+
+    if (moveFrameRef.current !== null) {
+      return;
+    }
+
+    moveFrameRef.current = window.requestAnimationFrame(moveScrollToClientX);
   };
 
   const handleProgressPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -85,7 +157,7 @@ export function SiteHeader() {
     event.currentTarget.setPointerCapture(event.pointerId);
     isDraggingProgressRef.current = true;
     setIsDraggingProgress(true);
-    moveScrollToClientX(event.clientX);
+    scheduleScrollMove(event.clientX);
   };
 
   const handleProgressPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -93,7 +165,7 @@ export function SiteHeader() {
       return;
     }
 
-    moveScrollToClientX(event.clientX);
+    scheduleScrollMove(event.clientX);
   };
 
   const handleProgressPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -107,21 +179,45 @@ export function SiteHeader() {
 
   useEffect(() => {
     const updateScrollProgress = () => {
-      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const nextProgress = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
-      const clampedProgress = Math.min(100, Math.max(0, nextProgress));
+      if (isDraggingProgressRef.current || isProgressNavigationRef.current) {
+        return;
+      }
 
-      setScrollProgress(clampedProgress);
-      updateThumbContrast(clampedProgress);
+      const scrollableHeight = getScrollableHeight();
+      const nextProgress = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
+
+      setProgress(nextProgress, false);
+    };
+
+    const cancelProgressNavigation = () => {
+      if (!isDraggingProgressRef.current) {
+        finishProgressNavigation();
+      }
     };
 
     updateScrollProgress();
     window.addEventListener("scroll", updateScrollProgress, { passive: true });
     window.addEventListener("resize", updateScrollProgress);
+    window.addEventListener("wheel", cancelProgressNavigation, { passive: true });
+    window.addEventListener("touchmove", cancelProgressNavigation, { passive: true });
+    window.addEventListener("keydown", cancelProgressNavigation);
 
     return () => {
       window.removeEventListener("scroll", updateScrollProgress);
       window.removeEventListener("resize", updateScrollProgress);
+      window.removeEventListener("wheel", cancelProgressNavigation);
+      window.removeEventListener("touchmove", cancelProgressNavigation);
+      window.removeEventListener("keydown", cancelProgressNavigation);
+
+      if (moveFrameRef.current !== null) {
+        window.cancelAnimationFrame(moveFrameRef.current);
+      }
+
+      if (contrastFrameRef.current !== null) {
+        window.cancelAnimationFrame(contrastFrameRef.current);
+      }
+
+      clearSettleChecks();
     };
   }, []);
 
