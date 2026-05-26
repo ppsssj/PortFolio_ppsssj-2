@@ -74,11 +74,18 @@
   color: var(--color-primary);
   line-height: 100%;
   transform: translateX(-50%);
-  transition: top 0.28s ease;
+  opacity: 0.72;
+  transition: top 0.28s ease, opacity 0.25s ease;
   cursor: pointer;
   pointer-events: auto;
   touch-action: none;
   user-select: none;
+}
+
+.scroll-progress:hover,
+.scroll-progress:focus-within,
+.scroll-progress.is-dragging {
+  opacity: 1;
 }
 
 .scroll-progress.is-scrolled {
@@ -1110,6 +1117,16 @@
 
 .menu-float__wrapper {
   pointer-events: auto;
+}
+
+.menu-float__bottom {
+  opacity: 0.72;
+  transition: opacity 0.25s ease;
+}
+
+.menu-float__bottom:hover,
+.menu-float__bottom:focus-within {
+  opacity: 1;
 }
 
 .menu-float__logo {
