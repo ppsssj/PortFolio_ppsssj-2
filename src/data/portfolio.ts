@@ -67,7 +67,7 @@ export type ProfileTableTab = {
 
 export const siteMeta = {
   brand: "PPsssJ",
-  title: "PPsssJ Developer Portfolio",
+  title: "PPsssJ FE Developer Portfolio",
   eyebrow: "Site of the Day",
   date: "Date",
   score: "88%",

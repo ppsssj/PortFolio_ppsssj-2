@@ -1,3 +1,4 @@
+import { GitHubIcon, GmailIcon, NaverMailIcon } from "./ContactIcons";
 import { connectLinks, footerGroups, siteMeta } from "../data/portfolio";
 
 const footerLinkMap: Record<string, string> = {
@@ -8,6 +9,18 @@ const footerLinkMap: Record<string, string> = {
   "Build Index": "#score",
   Details: "#details",
 };
+
+function getContactIcon(label: string) {
+  if (label === "GitHub") {
+    return <GitHubIcon />;
+  }
+
+  if (label === "Naver Mail") {
+    return <NaverMailIcon />;
+  }
+
+  return <GmailIcon />;
+}
 
 export function FooterSection() {
   return (
@@ -33,7 +46,12 @@ export function FooterSection() {
           <div className="footer__left">
             <ul className="footer__nav">
               <li>
-                <a href="mailto:ppssjj020222@gmail.com">ppssjj020222@gmail.com</a>
+                <a className="footer-contact-link" href="mailto:ppssjj020222@gmail.com" aria-label="Gmail">
+                  <span className="footer-contact-link__text">ppssjj020222@gmail.com</span>
+                  <span className="footer-contact-link__icon">
+                    <GmailIcon />
+                  </span>
+                </a>
               </li>
             </ul>
           </div>
@@ -44,8 +62,15 @@ export function FooterSection() {
               </li>
               {connectLinks.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel="noreferrer">
-                    {item.label}
+                  <a
+                    className="footer-contact-link"
+                    href={item.href}
+                    target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel="noreferrer"
+                    aria-label={item.label}
+                  >
+                    <span className="footer-contact-link__text">{item.label}</span>
+                    <span className="footer-contact-link__icon">{getContactIcon(item.label)}</span>
                   </a>
                 </li>
               ))}

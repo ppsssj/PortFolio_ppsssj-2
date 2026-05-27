@@ -58,6 +58,44 @@
   min-height: var(--sf-height);
 }
 
+.header-action-button {
+  position: relative;
+  justify-content: center;
+  min-width: 86px;
+  overflow: hidden;
+}
+
+.header-action-button__text,
+.header-action-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.header-action-button__icon {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.header-action-button__icon .ico-svg {
+  width: 18px;
+}
+
+.header-action-button:hover .header-action-button__text,
+.header-action-button:focus-visible .header-action-button__text {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.header-action-button:hover .header-action-button__icon,
+.header-action-button:focus-visible .header-action-button__icon {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .scroll-progress {
   position: fixed;
   top: calc(var(--header-mt, 8px) + 58px);
@@ -80,6 +118,43 @@
   pointer-events: auto;
   touch-action: none;
   user-select: none;
+}
+
+.gmail-icon {
+  fill: none;
+}
+
+.gmail-icon__back {
+  fill: #fff;
+}
+
+.gmail-icon__left {
+  fill: #f4b400;
+}
+
+.gmail-icon__right {
+  fill: #34a853;
+}
+
+.gmail-icon__fold {
+  fill: none;
+  stroke: #ea4335;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.naver-mail-icon {
+  fill: none;
+  stroke: #03c75a;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.naver-mail-icon path:last-child {
+  fill: #03c75a;
+  stroke: none;
 }
 
 .scroll-progress:hover,
@@ -1163,16 +1238,46 @@
   gap: 8px;
 }
 
+.menu-float__layout--tertiary .floating-action-button {
+  position: relative;
+  justify-content: center;
+  min-width: 96px;
+  overflow: hidden;
+}
+
 .menu-float__layout--tertiary .ico-svg {
   flex: 0 0 auto;
 }
 
-.menu-float__layout--tertiary .button[href^="mailto"] .ico-svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.floating-action-button__icon,
+.floating-action-button__text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.floating-action-button__icon {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.floating-action-button__text {
+  white-space: nowrap;
+}
+
+.floating-action-button:hover .floating-action-button__icon,
+.floating-action-button:focus-visible .floating-action-button__icon {
+  opacity: 1;
+  transform: translateY(0) scale(1.08);
+}
+
+.floating-action-button:hover .floating-action-button__text,
+.floating-action-button:focus-visible .floating-action-button__text {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 .cookies-popup p {
@@ -1181,6 +1286,64 @@
 
 .cookies-popup .button {
   margin-top: 12px;
+}
+
+.footer-contact-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--footer-contact-link-width, auto);
+  overflow: hidden;
+  line-height: 140%;
+}
+
+.footer-contact-link__text,
+.footer-contact-link__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-contact-link__icon {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.footer-contact-link__icon .ico-svg {
+  width: 18px;
+}
+
+.footer-contact-link:hover,
+.footer-contact-link:focus-visible {
+  opacity: 1 !important;
+}
+
+.footer-contact-link:hover .footer-contact-link__text,
+.footer-contact-link:focus-visible .footer-contact-link__text {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.footer-contact-link:hover .footer-contact-link__icon,
+.footer-contact-link:focus-visible .footer-contact-link__icon {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer__left .footer-contact-link {
+  --footer-contact-link-width: 182px;
+}
+
+.footer__right .footer-contact-link {
+  --footer-contact-link-width: 76px;
+}
+
+.footer__right .footer-contact-link[aria-label="Naver Mail"] {
+  --footer-contact-link-width: 96px;
 }
 
 @keyframes marquee-slide {

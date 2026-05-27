@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
+import { GitHubIcon, GmailIcon } from "./ContactIcons";
+
 const headerItems = [
   { label: "Home", href: "#creator" },
   { label: "Projects", href: "#highlights" },
@@ -280,11 +282,21 @@ export function SiteHeader() {
 
               <div className="header-main__right">
                 <div className="header-main__bts">
-                  <a className="button button--small--rounded" href="https://github.com/ppsssj">
-                    GitHub
+                  <a className="button button--small--rounded header-action-button" href="https://github.com/ppsssj" aria-label="GitHub">
+                    <span className="header-action-button__text">GitHub</span>
+                    <span className="header-action-button__icon">
+                      <GitHubIcon />
+                    </span>
                   </a>
-                  <a className="button button--small--outline--rounded" href="mailto:ppssjj020222@gmail.com">
-                    Send mail
+                  <a
+                    className="button button--small--outline--rounded header-action-button"
+                    href="mailto:ppssjj020222@gmail.com"
+                    aria-label="Send mail"
+                  >
+                    <span className="header-action-button__text">Send mail</span>
+                    <span className="header-action-button__icon">
+                      <GmailIcon />
+                    </span>
                   </a>
                 </div>
               </div>
