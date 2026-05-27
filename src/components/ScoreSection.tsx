@@ -164,7 +164,10 @@ export function ScoreSection() {
   const [scoreProgress, setScoreProgress] = useState(0);
   const scoreSectionRef = useRef<HTMLElement>(null);
   const currentTab = profileTableTabs.find((tab) => tab.label === activeTab) ?? profileTableTabs[0];
-  const levelColumnLabel = dateColumnTabs.has(currentTab.label) ? "Date" : "Level";
+  const activeTabIndex = Math.max(
+    0,
+    profileTableTabs.findIndex((tab) => tab.label === currentTab.label),
+  );
   const buildScore = Number.parseInt(siteMeta.score, 10);
 
   useEffect(() => {
@@ -264,7 +267,12 @@ export function ScoreSection() {
               <ul className="menu-tabs">
                 {profileTableTabs.map((tab) => (
                   <li className={tab.label === currentTab.label ? "active" : undefined} key={tab.label}>
-                    <button type="button" className="menu-tabs__button" onClick={() => setActiveTab(tab.label)}>
+                    <button
+                      type="button"
+                      className="menu-tabs__button"
+                      onClick={() => setActiveTab(tab.label)}
+                      aria-pressed={tab.label === currentTab.label}
+                    >
                       {tab.label}
                     </button>
                   </li>
@@ -273,45 +281,66 @@ export function ScoreSection() {
             </div>
           </div>
 
-          <div className="content-tabs">
-            <div className="content-tabs__item active">
-              <div className="stack-table-header">
-                <div className="stack-table-header__name">Name</div>
-                <div className="grid-score" style={profileRowGridStyle}>
-                  <div className="grid-score__item">Focus</div>
-                  <div className="grid-score__item">Stack</div>
-                  <div className="grid-score__item">{levelColumnLabel}</div>
-                  <div className="grid-score__item">Note</div>
-                </div>
-              </div>
-              <ul className="list-jury-notes">
-                {currentTab.rows.map((row) => (
-                  <li className="list-jury-notes__item" key={`${currentTab.label}-${row.name}`}>
-                    <div className="list-jury-notes__info">
-                      <figure>
-                        <div className="avatar-name__img avatar-name__img--placeholder profile-mark">
-                          <ProfileMark name={row.name} />
-                        </div>
-                      </figure>
-                      <div className="info">
-                        <div>
-                          <strong>{row.name}</strong>
-                          <span className="list-jury-notes__from"> from <strong>{row.source}</strong></span>
-                        </div>
-                        <div className="hidden-sm">{row.role}</div>
-                      </div>
-                    </div>
-                    <div className="list-jury-notes__score">
+          <div className="content-tabs stack-content-stage">
+            <div
+              className="stack-content-prism"
+              style={
+                {
+                  "--active-tab-index": activeTabIndex,
+                  "--stack-row-count": currentTab.rows.length,
+                } as CSSProperties
+              }
+            >
+              {profileTableTabs.map((tab, index) => {
+                const tabLevelColumnLabel = dateColumnTabs.has(tab.label) ? "Date" : "Level";
+
+                return (
+                  <div
+                    className={`content-tabs__item active stack-panel-face${tab.label === currentTab.label ? " is-active" : ""}`}
+                    key={tab.label}
+                    style={{ "--tab-index": index } as CSSProperties}
+                    aria-hidden={tab.label === currentTab.label ? undefined : true}
+                  >
+                    <div className="stack-table-header">
+                      <div className="stack-table-header__name">Name</div>
                       <div className="grid-score" style={profileRowGridStyle}>
-                        <div className="grid-score__item">{row.focus}</div>
-                        <div className="grid-score__item">{row.stack}</div>
-                        <div className="grid-score__item">{row.level}</div>
-                        <div className="grid-score__item grid-score__item--wide">{row.note}</div>
+                        <div className="grid-score__item">Focus</div>
+                        <div className="grid-score__item">Stack</div>
+                        <div className="grid-score__item">{tabLevelColumnLabel}</div>
+                        <div className="grid-score__item">Note</div>
                       </div>
                     </div>
-                  </li>
-                ))}
-              </ul>
+                    <ul className="list-jury-notes">
+                      {tab.rows.map((row) => (
+                        <li className="list-jury-notes__item" key={`${tab.label}-${row.name}`}>
+                          <div className="list-jury-notes__info">
+                            <figure>
+                              <div className="avatar-name__img avatar-name__img--placeholder profile-mark">
+                                <ProfileMark name={row.name} />
+                              </div>
+                            </figure>
+                            <div className="info">
+                              <div>
+                                <strong>{row.name}</strong>
+                                <span className="list-jury-notes__from"> from <strong>{row.source}</strong></span>
+                              </div>
+                              <div className="hidden-sm">{row.role}</div>
+                            </div>
+                          </div>
+                          <div className="list-jury-notes__score">
+                            <div className="grid-score" style={profileRowGridStyle}>
+                              <div className="grid-score__item">{row.focus}</div>
+                              <div className="grid-score__item">{row.stack}</div>
+                              <div className="grid-score__item">{row.level}</div>
+                              <div className="grid-score__item grid-score__item--wide">{row.note}</div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
