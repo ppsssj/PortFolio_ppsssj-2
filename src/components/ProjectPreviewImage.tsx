@@ -2,13 +2,14 @@ import type { HighlightCard } from "../data/portfolio";
 
 type ProjectPreviewImageProps = {
   card: HighlightCard;
+  image?: string;
 };
 
-export function ProjectPreviewImage({ card }: ProjectPreviewImageProps) {
+export function ProjectPreviewImage({ card, image = card.image }: ProjectPreviewImageProps) {
   return (
     <img
       className="figure-rollover__file"
-      src={card.image}
+      src={image}
       alt={card.title}
     />
   );

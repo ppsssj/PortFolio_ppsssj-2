@@ -16,6 +16,7 @@ export type HighlightCard = {
   description: string;
   image: string;
   previewImage?: string;
+  detailImages?: string[];
   href: string;
   detail: {
     role: string;
@@ -142,6 +143,13 @@ export const highlightCards: HighlightCard[] = [
     description: "Node-based interaction flow with animated clicks and structured exploration.",
     image: "/assets/Cogic-NodeClick.gif",
     previewImage: "/assets/Cogic-NodeClick-poster.png",
+    detailImages: [
+      "/assets/Cogic-NodeClick.gif",
+      "/assets/Cogic_ScaffoldLab.gif",
+      "/assets/Cogic-DebugMode.gif",
+      "/assets/Cogic-NodeClick-poster.png",
+      "/assets/Cogic-TraceMode.gif",
+    ],
     href: "#creator",
     detail: {
       role: "Interaction prototyping, motion detail, frontend UI",
@@ -183,6 +191,12 @@ export const highlightCards: HighlightCard[] = [
     typeLabel: "Web",
     description: "3D graph interface for exploring mathematical structures through visual and natural language control.",
     image: "/assets/GraphMind.png",
+    detailImages: [
+      "/assets/GraphMind.png",
+      "/assets/GraphMind_graph.png",
+      "/assets/GraphMind_surface3d.png",
+      "/assets/GraphMind_vault.png",
+    ],
     href: "#typography",
     detail: {
       role: "3D graph interaction, math visualization, natural language control flow",

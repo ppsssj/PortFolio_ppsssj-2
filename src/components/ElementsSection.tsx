@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { highlightCards } from "../data/portfolio";
@@ -22,6 +22,13 @@ function ProjectDetailPanel({
   card: HighlightCard;
   onClose: () => void;
 }) {
+  const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
+  const [activeImage, setActiveImage] = useState(detailImages[0]);
+
+  useEffect(() => {
+    setActiveImage(detailImages[0]);
+  }, [detailImages, card.title]);
+
   return (
     <motion.div
       className="project-detail-overlay"
@@ -45,7 +52,29 @@ function ProjectDetailPanel({
         transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
       >
         <div className="project-detail__media">
-          <ProjectPreviewImage card={card} />
+          <div className="project-detail__main-image">
+            <ProjectPreviewImage card={card} image={activeImage} />
+          </div>
+          {detailImages.length > 1 ? (
+            <div className="project-detail__previews" aria-label={`${card.title} image previews`}>
+              {detailImages.map((image, index) => {
+                const isActive = activeImage === image;
+
+                return (
+                  <button
+                    key={image}
+                    className={`project-detail__preview${isActive ? " is-active" : ""}`}
+                    type="button"
+                    onClick={() => setActiveImage(image)}
+                    aria-label={`Show ${card.title} preview ${index + 1}`}
+                    aria-pressed={isActive}
+                  >
+                    <img src={image} alt="" />
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
         <div className="project-detail__content">
           <div className="project-detail__top">
