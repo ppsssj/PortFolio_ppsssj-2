@@ -112,7 +112,7 @@ export const creatorCredits: CreditItem[] = [
 ];
 
 export const heroGallery = [
-  "/assets/img.png",
+  "/assets/Hero/img.png",
 ];
 
 export const highlightCards: HighlightCard[] = [
@@ -121,7 +121,7 @@ export const highlightCards: HighlightCard[] = [
     category: "Code Visualization",
     typeLabel: "VS Extension",
     description: "Repository structure and code relationships presented as a visual graph experience.",
-    image: "/assets/CodeGraph.png",
+    image: "/assets/CodeGraph/CodeGraph.png",
     href: "#contact",
     detail: {
       role: "Frontend implementation, graph layout, interaction design",
@@ -141,14 +141,14 @@ export const highlightCards: HighlightCard[] = [
     category: "Code Visualization",
     typeLabel: "VS Extension",
     description: "Node-based interaction flow with animated clicks and structured exploration.",
-    image: "/assets/Cogic-NodeClick.gif",
-    previewImage: "/assets/Cogic-NodeClick-poster.png",
+    image: "/assets/Cogic/Cogic-NodeClick.gif",
+    previewImage: "/assets/Cogic/Cogic-NodeClick-poster.png",
     detailImages: [
-      "/assets/Cogic-NodeClick.gif",
-      "/assets/Cogic_ScaffoldLab.gif",
-      "/assets/Cogic-DebugMode.gif",
-      "/assets/Cogic-NodeClick-poster.png",
-      "/assets/Cogic-TraceMode.gif",
+      "/assets/Cogic/Cogic-NodeClick.gif",
+      "/assets/Cogic/Cogic_ScaffoldLab.gif",
+      "/assets/Cogic/Cogic-DebugMode.gif",
+      "/assets/Cogic/Cogic-NodeClick-poster.png",
+      "/assets/Cogic/Cogic-TraceMode.gif",
     ],
     href: "#creator",
     detail: {
@@ -169,8 +169,8 @@ export const highlightCards: HighlightCard[] = [
     category: "Developer Tooling",
     typeLabel: "VS Extension",
     description: "A motion-focused Git workflow concept that makes code changes easier to scan.",
-    image: "/assets/git_effects.gif",
-    previewImage: "/assets/git_effects-poster.png",
+    image: "/assets/GitEffects/git_effects.gif",
+    previewImage: "/assets/GitEffects/git_effects-poster.png",
     href: "#creator",
     detail: {
       role: "Developer experience design, interface motion, frontend prototype",
@@ -190,12 +190,12 @@ export const highlightCards: HighlightCard[] = [
     category: "Math Graph Control",
     typeLabel: "Web",
     description: "3D graph interface for exploring mathematical structures through visual and natural language control.",
-    image: "/assets/GraphMind.png",
+    image: "/assets/GraphMind/GraphMind.png",
     detailImages: [
-      "/assets/GraphMind.png",
-      "/assets/GraphMind_graph.png",
-      "/assets/GraphMind_surface3d.png",
-      "/assets/GraphMind_vault.png",
+      "/assets/GraphMind/GraphMind.png",
+      "/assets/GraphMind/GraphMind_graph.png",
+      "/assets/GraphMind/GraphMind_surface3d.png",
+      "/assets/GraphMind/GraphMind_vault.png",
     ],
     href: "#typography",
     detail: {
@@ -216,8 +216,8 @@ export const highlightCards: HighlightCard[] = [
     category: "Design System",
     typeLabel: "Web",
     description: "Color, layout, and component exploration shaped into a polished interface system.",
-    image: "/assets/PrismDesign.gif",
-    previewImage: "/assets/PrismDesign-poster.png",
+    image: "/assets/PrismDesign/PrismDesign.gif",
+    previewImage: "/assets/PrismDesign/PrismDesign-poster.png",
     href: "#details",
     detail: {
       role: "Design system exploration, UI composition, frontend implementation",
@@ -237,7 +237,7 @@ export const highlightCards: HighlightCard[] = [
     category: "Data Prediction",
     typeLabel: "Web",
     description: "Prediction dashboard for reading traffic noise patterns through clear visual output.",
-    image: "/assets/Traffic Noise Prediction System.png",
+    image: "/assets/TrafficNoisePredictionSystem/Traffic Noise Prediction System.png",
     href: "#score",
     detail: {
       role: "Dashboard UI, data presentation, product planning",
