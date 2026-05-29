@@ -23,11 +23,41 @@ function ProjectDetailPanel({
   onClose: () => void;
 }) {
   const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
-  const [activeImage, setActiveImage] = useState(detailImages[0]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const activeImage = detailImages[activeImageIndex] ?? detailImages[0];
+  const visiblePreviewItems = useMemo(() => {
+    if (detailImages.length <= 1) {
+      return [];
+    }
+
+    const previousIndex = (activeImageIndex - 1 + detailImages.length) % detailImages.length;
+    const nextIndex = (activeImageIndex + 1) % detailImages.length;
+
+    if (detailImages.length === 2) {
+      return [
+        { image: detailImages[activeImageIndex], imageIndex: activeImageIndex, position: "active" },
+        { image: detailImages[nextIndex], imageIndex: nextIndex, position: "after" },
+      ];
+    }
+
+    return [
+      { image: detailImages[previousIndex], imageIndex: previousIndex, position: "before" },
+      { image: detailImages[activeImageIndex], imageIndex: activeImageIndex, position: "active" },
+      { image: detailImages[nextIndex], imageIndex: nextIndex, position: "after" },
+    ];
+  }, [activeImageIndex, detailImages]);
 
   useEffect(() => {
-    setActiveImage(detailImages[0]);
+    setActiveImageIndex(0);
   }, [detailImages, card.title]);
+
+  const showPreviousImage = () => {
+    setActiveImageIndex((index) => (index - 1 + detailImages.length) % detailImages.length);
+  };
+
+  const showNextImage = () => {
+    setActiveImageIndex((index) => (index + 1) % detailImages.length);
+  };
 
   return (
     <motion.div
@@ -56,23 +86,45 @@ function ProjectDetailPanel({
             <ProjectPreviewImage card={card} image={activeImage} />
           </div>
           {detailImages.length > 1 ? (
-            <div className="project-detail__previews" aria-label={`${card.title} image previews`}>
-              {detailImages.map((image, index) => {
-                const isActive = activeImage === image;
+            <div className="project-detail__preview-bar">
+              <button
+                className="project-detail__preview-nav"
+                type="button"
+                onClick={showPreviousImage}
+                aria-label={`Show previous ${card.title} image`}
+              >
+                &lt;
+              </button>
+              <div className="project-detail__previews" aria-label={`${card.title} image previews`}>
+                {visiblePreviewItems.map(({ image, imageIndex, position }) => {
+                  const isActive = activeImageIndex === imageIndex;
 
-                return (
-                  <button
-                    key={image}
-                    className={`project-detail__preview${isActive ? " is-active" : ""}`}
-                    type="button"
-                    onClick={() => setActiveImage(image)}
-                    aria-label={`Show ${card.title} preview ${index + 1}`}
-                    aria-pressed={isActive}
-                  >
-                    <img src={image} alt="" />
-                  </button>
-                );
-              })}
+                  return (
+                    <motion.button
+                      layout
+                      key={`${image}-${imageIndex}`}
+                      className={`project-detail__preview-shell is-${position}${isActive ? " is-active" : ""}`}
+                      type="button"
+                      onClick={() => setActiveImageIndex(imageIndex)}
+                      aria-label={`Show ${card.title} preview ${imageIndex + 1}`}
+                      aria-pressed={isActive}
+                      transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <span className="project-detail__preview">
+                        <img src={image} alt="" />
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+              <button
+                className="project-detail__preview-nav"
+                type="button"
+                onClick={showNextImage}
+                aria-label={`Show next ${card.title} image`}
+              >
+                &gt;
+              </button>
             </div>
           ) : null}
         </div>

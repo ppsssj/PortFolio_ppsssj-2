@@ -548,30 +548,60 @@
   box-shadow: none;
 }
 
-.project-detail__previews {
+.project-detail__preview-bar {
+  --preview-side-width: clamp(58px, 5vw, 78px);
+  --preview-active-width: clamp(84px, 6.6vw, 112px);
+  --preview-ease: cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-self: center;
-  width: fit-content;
-  max-width: 100%;
-  padding: 3px;
-  border-radius: calc(var(--rounded-large) - 4px);
-  background: #f7f7f5;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 0.8vw, 10px);
+  inline-size: 100%;
+  perspective: 680px;
 }
 
-.project-detail__preview {
+.project-detail__previews {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 14px);
+  min-inline-size: calc((var(--preview-side-width) * 2) + var(--preview-active-width) + 28px);
+  padding: 4px 0;
+  overflow: hidden;
+  scrollbar-width: none;
+}
+
+.project-detail__previews::-webkit-scrollbar {
+  display: none;
+}
+
+.project-detail__preview-shell {
   position: relative;
-  flex: 0 0 clamp(64px, 5.8vw, 86px);
+  flex: 0 0 var(--preview-side-width);
   aspect-ratio: 16 / 10;
   min-width: 0;
   padding: 0;
-  border: 1px solid rgba(26, 26, 26, 0.12);
-  border-radius: 6px;
-  background: #ffffff;
-  overflow: hidden;
+  border: 0;
+  background: transparent;
   cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.project-detail__preview {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1px solid rgba(245, 241, 234, 0.22);
+  border-radius: 7px;
+  opacity: 0.66;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition:
+    border-color 1.2s ease,
+    opacity 2.25s ease,
+    transform 3s var(--preview-ease);
+  will-change: transform, opacity;
 }
 
 .project-detail__preview::after {
@@ -588,23 +618,72 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.74;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0.76;
+  transition: opacity 2.25s ease, transform 2.8s var(--preview-ease);
 }
 
-.project-detail__preview:hover img,
-.project-detail__preview:focus-visible img,
-.project-detail__preview.is-active img {
+.project-detail__preview-shell:hover img,
+.project-detail__preview-shell:focus-visible img,
+.project-detail__preview-shell.is-active img {
   opacity: 1;
 }
 
-.project-detail__preview:hover img,
-.project-detail__preview:focus-visible img {
+.project-detail__preview-shell:hover img,
+.project-detail__preview-shell:focus-visible img {
   transform: scale(1.04);
 }
 
-.project-detail__preview.is-active::after {
-  border-color: #1a1a1a;
+.project-detail__preview-shell:hover .project-detail__preview,
+.project-detail__preview-shell:focus-visible .project-detail__preview {
+  border-color: rgba(245, 241, 234, 0.55);
+  opacity: 0.9;
+}
+
+.project-detail__preview-shell.is-before .project-detail__preview {
+  transform: translateX(16px) translateZ(-34px) rotateY(42deg) scale(0.84);
+  transform-origin: right center;
+}
+
+.project-detail__preview-shell.is-after .project-detail__preview {
+  transform: translateX(-16px) translateZ(-34px) rotateY(-42deg) scale(0.84);
+  transform-origin: left center;
+}
+
+.project-detail__preview-shell.is-active {
+  flex-basis: var(--preview-active-width);
+  z-index: 1;
+}
+
+.project-detail__preview-shell.is-active .project-detail__preview {
+  opacity: 1;
+  transform: translateZ(26px) rotateY(0deg) scale(1);
+}
+
+.project-detail__preview-shell.is-active .project-detail__preview::after {
+  border-color: #f5f1ea;
+}
+
+.project-detail__preview-nav {
+  display: grid;
+  place-items: center;
+  flex: 0 0 22px;
+  inline-size: 22px;
+  block-size: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(245, 241, 234, 0.72);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-detail__preview-nav:hover,
+.project-detail__preview-nav:focus-visible {
+  color: #f5f1ea;
+  transform: translateY(-1px);
 }
 
 .project-detail__content {
