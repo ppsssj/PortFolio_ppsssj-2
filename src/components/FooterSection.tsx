@@ -4,7 +4,7 @@ import { connectLinks, footerGroups, siteMeta } from "../data/portfolio";
 const footerLinkMap: Record<string, string> = {
   Home: "#creator",
   Projects: "#highlights",
-  "Product Belief": "#typography",
+  "Product View": "#typography",
   "Tech Stack": "#details",
   "Build Index": "#score",
   Details: "#details",
@@ -27,7 +27,10 @@ export function FooterSection() {
     <footer id="footer">
       <div className="inner">
         <div className="footer__top">
-          <p className="footer__logo footer__logo--small">{siteMeta.brand}</p>
+          <div className="footer__identity">
+            <p className="footer__logo footer__logo--small">{siteMeta.brand}</p>
+            <p className="footer__signature">박성진 · Frontend Developer</p>
+          </div>
           <div className="footer__wrapper">
             <div className="footer__grid">
               {footerGroups.map((group, index) => (

@@ -43,12 +43,8 @@ export function PaletteSection() {
               role="button"
               tabIndex={0}
             >
-              <li
-                className={isBackCardPulled ? "is-pulled" : undefined}
-              >
-                <div
-                  className="list-palette__item belief-card belief-card--back"
-                >
+              <li className={isBackCardPulled ? "is-pulled" : undefined}>
+                <div className="list-palette__item belief-card belief-card--back">
                   <div className="list-palette__box belief-card__box">
                     <div className="list-palette__header">
                       <div className="list-palette__name">
@@ -57,11 +53,13 @@ export function PaletteSection() {
                     </div>
                     <div className="belief-card__body">
                       <p>
-                        I approach product building through rapid prototyping, interactive frontend development,
-                        and practical iteration.
+                        빠른 프로토타이핑, 인터랙티브한 프론트엔드 구현, 실제
+                        사용 흐름을 기준으로 제품을 만듭니다.
                       </p>
-                      <p> into clear, interactive products through frontend craft, rapid iteration,
-                      and a strong focus on usable experiences.</p>
+                      <p>
+                        아이디어가 멈춰 있지 않도록 작은 실험을 빠르게 만들고,
+                        사용자가 이해할 수 있는 화면과 흐름으로 정리합니다.
+                      </p>
                       <ul className="belief-tags">
                         {beliefTags.map((tag) => (
                           <li key={tag}>{tag}</li>
@@ -81,13 +79,12 @@ export function PaletteSection() {
                     </div>
                     <div className="belief-card__statement">
                       <span>A</span>
+                      <span>product-minded</span>
                       <span>frontend builder</span>
-                      <span>creating</span>
+                      <span>building interactive,</span>
                       <span>usable products.</span>
                     </div>
-                    <p className="belief-card__copy">
-                           
-                    </p>
+                    <p className="belief-card__copy"></p>
                   </div>
                 </div>
               </li>

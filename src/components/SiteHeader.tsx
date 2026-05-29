@@ -5,7 +5,7 @@ import { GitHubIcon, GmailIcon } from "./ContactIcons";
 const headerItems = [
   { label: "Home", href: "#creator" },
   { label: "Projects", href: "#highlights" },
-  { label: "Belief", href: "#typography" },
+  { label: "View", href: "#typography" },
   { label: "Details", href: "#details" },
   { label: "Index", href: "#score" },
 ];
