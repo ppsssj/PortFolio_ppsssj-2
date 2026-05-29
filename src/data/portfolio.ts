@@ -169,8 +169,13 @@ export const highlightCards: HighlightCard[] = [
     category: "Developer Tooling",
     typeLabel: "VS Extension",
     description: "A motion-focused Git workflow concept that makes code changes easier to scan.",
-    image: "/assets/GitEffects/git_effects.gif",
+    image: "/assets/GitEffects/git_effect.gif",
     previewImage: "/assets/GitEffects/git_effects-poster.png",
+    detailImages: [
+      "/assets/GitEffects/git_effect.gif",
+      "/assets/GitEffects/git_effect2.gif",
+      "/assets/GitEffects/Git_Effect_CharacterSelect.png",
+    ],
     href: "#creator",
     detail: {
       role: "Developer experience design, interface motion, frontend prototype",
@@ -218,6 +223,15 @@ export const highlightCards: HighlightCard[] = [
     description: "Color, layout, and component exploration shaped into a polished interface system.",
     image: "/assets/PrismDesign/PrismDesign.gif",
     previewImage: "/assets/PrismDesign/PrismDesign-poster.png",
+    detailImages: [
+      "/assets/PrismDesign/PrismDesign.gif",
+      "/assets/PrismDesign/PrisimDesign_main.png",
+      "/assets/PrismDesign/PrismDesign_main1.png",
+      "/assets/PrismDesign/PrismDesign_list.png",
+      "/assets/PrismDesign/PrismDesign_assets1.png",
+      "/assets/PrismDesign/PrismDesign_assets2.png",
+      "/assets/PrismDesign/PrismDesign_handtracking.gif",
+    ],
     href: "#details",
     detail: {
       role: "Design system exploration, UI composition, frontend implementation",
@@ -238,6 +252,13 @@ export const highlightCards: HighlightCard[] = [
     typeLabel: "Web",
     description: "Prediction dashboard for reading traffic noise patterns through clear visual output.",
     image: "/assets/TrafficNoisePredictionSystem/Traffic Noise Prediction System.png",
+    detailImages: [
+      "/assets/TrafficNoisePredictionSystem/Traffic Noise Prediction System.png",
+      "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System1.png",
+      "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System2.png",
+      "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System3.png",
+      "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System4.png",
+    ],
     href: "#score",
     detail: {
       role: "Dashboard UI, data presentation, product planning",
