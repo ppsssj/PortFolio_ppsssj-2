@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
-
-const headerItems = [
-  { label: "Home", href: "#creator" },
-  { label: "Projects", href: "#highlights" },
-  { label: "View", href: "#typography" },
-  { label: "Details", href: "#details" },
-  { label: "Index", href: "#score" },
-];
+import { navigationItems } from "../data/portfolio";
+import { scrollToAnchor } from "../utils/anchorScroll";
 
 function getElementBackground(element: Element | null) {
   let currentElement = element;
@@ -242,15 +236,14 @@ export function SiteHeader() {
 
               <nav className="nav-header-main" aria-label="Primary">
                 <ul className="nav-header-main__list">
-                  {headerItems.map((item) => (
+                  {navigationItems.map((item) => (
                     <li className="nav-header-main__item" key={item.label}>
-                      <a className="nav-header-main__link" href={item.href}>
+                      <a
+                        className="nav-header-main__link"
+                        href={item.href}
+                        onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
+                      >
                         {item.label}
-                        {item.badge ? (
-                          <span className="budget-tag budget-tag--small--solid--black anim-shiny">
-                            <span>{item.badge}</span>
-                          </span>
-                        ) : null}
                       </a>
                     </li>
                   ))}

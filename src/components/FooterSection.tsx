@@ -1,14 +1,15 @@
 import { GitHubIcon, GmailIcon, NaverMailIcon } from "./ContactIcons";
-import { connectLinks, footerGroups, siteMeta } from "../data/portfolio";
+import { connectLinks, footerGroups, navigationItems, siteMeta } from "../data/portfolio";
+import { scrollToAnchor } from "../utils/anchorScroll";
 
 const footerLinkMap: Record<string, string> = {
-  Home: "#creator",
-  Projects: "#highlights",
-  "Product View": "#typography",
-  "Tech Stack": "#details",
-  "Build Index": "#score",
-  Details: "#details",
+  ...Object.fromEntries(navigationItems.map((item) => [item.label, item.href])),
+  Contact: "#contact",
 };
+
+const footerScrollOffsetMap: Record<string, number | undefined> = Object.fromEntries(
+  navigationItems.map((item) => [item.label, item.scrollOffset]),
+);
 
 function getContactIcon(label: string) {
   if (label === "GitHub") {
@@ -37,7 +38,12 @@ export function FooterSection() {
                 <ul className="footer__menu" key={`group-${index}`}>
                   {group.map((item) => (
                     <li key={item}>
-                      <a href={footerLinkMap[item] ?? "#contact"}>{item}</a>
+                      <a
+                        href={footerLinkMap[item] ?? "#contact"}
+                        onClick={(event) => scrollToAnchor(event, footerLinkMap[item] ?? "#contact", footerScrollOffsetMap[item])}
+                      >
+                        {item}
+                      </a>
                     </li>
                   ))}
                 </ul>

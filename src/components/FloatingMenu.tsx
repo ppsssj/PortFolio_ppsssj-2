@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
 import { navigationItems, siteMeta } from "../data/portfolio";
+import { scrollToAnchor } from "../utils/anchorScroll";
 
 export function FloatingMenu() {
   const [activeHref, setActiveHref] = useState(navigationItems[0]?.href ?? "");
@@ -48,7 +49,11 @@ export function FloatingMenu() {
                   <ul className="menu-float__nav">
                     {navigationItems.map((item) => (
                       <li key={item.label}>
-                        <a className={`menu-float__item${activeHref === item.href ? " is-active" : ""}`} href={item.href}>
+                        <a
+                          className={`menu-float__item${activeHref === item.href ? " is-active" : ""}`}
+                          href={item.href}
+                          onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
+                        >
                           {item.label}
                         </a>
                       </li>

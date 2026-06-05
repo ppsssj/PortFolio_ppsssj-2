@@ -1,6 +1,7 @@
 export type LinkItem = {
   label: string;
   href: string;
+  scrollOffset?: number;
 };
 
 export type CreditItem = {
@@ -91,11 +92,11 @@ export const marqueeItems = [
 ];
 
 export const navigationItems: LinkItem[] = [
-  { label: "Home", href: "#creator" },
+  { label: "About", href: "#creator" },
   { label: "Projects", href: "#highlights" },
-  { label: "View", href: "#typography" },
-  { label: "Details", href: "#details" },
-  { label: "Index", href: "#score" },
+  { label: "Belief", href: "#typography" },
+  { label: "Skills", href: "#details", scrollOffset: 96 },
+  { label: "Records", href: "#score" },
 ];
 
 export const socialItems: LinkItem[] = [
@@ -488,22 +489,22 @@ export const profileTableTabs: ProfileTableTab[] = [
     label: "Awards",
     rows: [
       {
-        name: "BLEP Data Utilization Competition",
-        role: "데이터 기반 문제 해결과 서비스 기획",
+        name: "2025 BLEP 데이터 활용 경진대회",
+        role: "장려상",
         source: "Competition",
         focus: "Data Utilization",
-        stack: "Data Analysis, Service Ideation",
+        stack: "Data Analysis, Data Utilization",
         level: "25.11.20",
-        note: "실용적인 데이터 활용 프로젝트를 통해 수상",
+        note: "2025 BLEP 데이터 활용 경진대회 - 장려상",
       },
       {
-        name: "Best Paper Award, Korea Data Science Society",
-        role: "데이터 사이언스 분야 연구 기여",
+        name: "2025 한국 데이터 사이언스 학회",
+        role: "최우수 논문상",
         source: "Academic",
         focus: "Research",
         stack: "Data Science, Paper Presentation",
         level: "25.12.19",
-        note: "한국데이터사이언스학회에서 수상",
+        note: "2025 한국 데이터 사이언스 학회 - 최우수 논문상",
       },
     ],
   },
@@ -512,39 +513,39 @@ export const profileTableTabs: ProfileTableTab[] = [
     rows: [
       {
         name: "Leadership Staff, LikeLion Club",
-        role: "동아리 운영과 구성원 성장 지원",
-        source: "LikeLion",
+        role: "동아리 운영진으로 프론트엔드 교육, 프로젝트 진행, 구성원 멘토링을 지원하며 협업 중심의 개발 문화를 경험했습니다.",
+        source: "멋쟁이사자처럼",
         focus: "Leadership",
-        stack: "PM, FE, Planning, Mentoring, Collaboration",
-        level: "25.01 ~ 25.12",
-        note: "동아리 활동, 프로젝트 진행, 구성원 협업을 지원",
+        stack: "PM, Frontend, Mentoring, Collaboration",
+        level: "25.01 - 25.12",
+        note: "프론트엔드 교육, 프로젝트 진행, 구성원 멘토링",
       },
       {
         name: "AICS Undergraduate Researcher",
-        role: "AI 및 컴퓨팅 시스템 분야 학부 연구",
+        role: "AI 및 컴퓨팅 시스템 분야의 학부 연구생으로 논문 리뷰, 기술 탐색, 세미나 발표에 참여하며 연구 기반 문제 해결 역량을 확장했습니다.",
         source: "AICS",
         focus: "Research",
         stack: "Research, Data, AI Systems",
-        level: "25.09 ~ 26.12",
-        note: "연구 작업과 기술 탐색에 참여",
+        level: "25.09 - 26.12",
+        note: "논문 리뷰, 기술 탐색, 세미나 발표",
       },
       {
         name: "Startup Club Lead",
-        role: "팀 리딩과 스타트업 프로젝트 실행",
+        role: "팀 리더로 아이디어 구체화부터 MVP 기획, 역할 분배, 프로젝트 실행까지 주도하며 제품 중심 개발 경험을 쌓았습니다.",
         source: "Startup Club",
         focus: "Leadership",
-        stack: "PM, FE, Ideation, Product Planning, Team Leading",
-        level: "25.03 ~ 25.12",
-        note: "아이디어 구체화부터 실행까지 스타트업 활동을 주도",
+        stack: "PM, Frontend, Ideation, Product Planning",
+        level: "25.03 - 25.12",
+        note: "MVP 기획, 역할 분배, 프로젝트 실행",
       },
       {
-        name: "Innovation Intern",
-        role: "제품 및 혁신 프로젝트 실무 지원",
-        source: "Internship",
+        name: "Innovase Intern",
+        role: "제품 및 혁신 프로젝트 실무를 지원하며 리서치, 기획, 실행 과정을 경험하고 실무형 협업 프로세스에 참여했습니다.",
+        source: "Innovase Intern",
         focus: "Innovation",
-        stack: "PM, FE, Product Research, Execution, Collaboration",
-        level: "26.05 ~ 26.12",
-        note: "리서치, 기획, 실행을 통해 혁신 프로젝트 업무를 지원",
+        stack: "PM, Frontend, Product Research, Execution",
+        level: "26.05 - 26.12",
+        note: "리서치, 기획, 실행, 실무형 협업",
       },
     ],
   },
@@ -552,21 +553,21 @@ export const profileTableTabs: ProfileTableTab[] = [
     label: "Certification",
     rows: [
       {
-        name: "Information Processing Engineer",
-        role: "국가 기술 자격",
+        name: "정보처리기사",
+        role: "소프트웨어 개발, 데이터베이스, 운영체제, 시스템 설계 등 정보처리 기반 지식을 검증한 국가 기술 자격입니다.",
         source: "Certification",
         focus: "Software Engineering",
-        stack: "Programming, Database, System Design",
+        stack: "Software Engineering, Database, System Design",
         level: "26.05",
-        note: "소프트웨어 개발과 정보처리 지식 검증",
+        note: "정보처리 기반 지식 검증",
       },
     ],
   },
 ];
 
 export const footerGroups = [
-  ["Home", "Projects", "Product View"],
-  ["Tech Stack", "Build Index", "Details"],
+  ["About", "Projects", "Belief"],
+  ["Skills", "Records", "Contact"],
 ];
 
 export const connectLinks: LinkItem[] = [
