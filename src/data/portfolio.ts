@@ -22,6 +22,7 @@ export type HighlightCard = {
   detail: {
     role: string;
     stack: string[];
+    period?: string;
     overview: string;
     problem: string;
     solution: string;
@@ -141,10 +142,10 @@ export const highlightCards: HighlightCard[] = [
   },
   {
     title: "Cogic",
-    category: "Code Visualization",
+    category: "ELEMENT / Code Visualization",
     typeLabel: "VS Extension",
     description:
-      "노드 기반 흐름을 애니메이션 클릭과 구조적인 탐색 경험으로 풀어낸 인터랙션 프로토타입입니다.",
+      "TypeScript/JavaScript 코드베이스의 구조, 호출 관계, 데이터 흐름, 프레임워크 의미 정보를 VS Code 안에서 인터랙티브 그래프로 탐색할 수 있도록 만든 코드 시각화 확장입니다.",
     image: "/assets/Cogic/Cogic-NodeClick.gif",
     previewImage: "/assets/Cogic/Cogic-NodeClick-poster.png",
     detailImages: [
@@ -156,27 +157,36 @@ export const highlightCards: HighlightCard[] = [
     ],
     href: "#creator",
     detail: {
-      role: "Interaction prototyping, motion detail, frontend UI",
-      stack: ["React", "TypeScript", "Animation", "Node Interaction"],
-      overview:
-        "연결된 로직을 작은 시각 인터랙션으로 탐색할 수 있도록 만든 노드 클릭 프로토타입입니다.",
-      problem:
-        "복잡한 로직 흐름은 각 단계가 텍스트나 메뉴 뒤에 숨어 있으면 정적이고 따라가기 어렵게 느껴집니다.",
-      solution:
-        "애니메이션 노드 선택과 집중된 전환 효과를 사용해 관계를 직접적이고 확인 가능한 방식으로 보여줬습니다.",
-      highlights: [
-        "애니메이션 기반 노드 인터랙션 모델 제작",
-        "선택 상태 주변의 시각적 노이즈 축소",
-        "탐색이 즉각적으로 느껴지는 클릭 피드백 설계",
+      role: "Code analysis UX, graph interaction design, VS Code extension development, frontend implementation",
+      stack: [
+        "TypeScript",
+        "VS Code Extension API",
+        "React",
+        "Vite",
+        "AST Analysis",
+        "Webview",
       ],
+      period: "2026.02 - 2026.05",
+      overview:
+        "TypeScript/JavaScript 코드베이스의 구조, 호출 관계, 데이터 흐름, 프레임워크 의미 정보를 VS Code 안에서 인터랙티브 그래프로 탐색할 수 있도록 만든 코드 시각화 확장입니다.",
+      problem:
+        "코드 흐름은 파일, 함수, 타입, 호출 관계, 프레임워크 패턴에 흩어져 있어 텍스트 기반 탐색만으로는 전체 구조와 영향 범위를 빠르게 파악하기 어렵습니다. 특히 VS Code 안에서 작업을 이어가는 개발자는 문맥을 잃지 않고 현재 파일 주변의 호출 관계와 참조 범위를 즉시 확인할 수 있는 시각적 탐색 흐름이 필요했습니다.",
+      solution:
+        "활성 파일과 주변 워크스페이스를 분석해 file, function, class, type 등의 코드 엔티티와 calls, references, dataflow 관계를 그래프로 구성했습니다. 노드 선택, 더블클릭 코드 이동, Inspector, Trace, Runtime Debug를 연결해 그래프에서 발견한 맥락이 곧바로 코드 탐색과 디버깅 흐름으로 이어지도록 설계했습니다.",
+      highlights: [
+        "AST 기반 코드 엔티티·관계 그래프 생성",
+        "노드 선택, 코드 이동, Inspector 기반 탐색 UX",
+        "Trace / Runtime Debug / Export / Scaffold Lab 확장 기능",
+      ],
+      links: [{ label: "GitHub", href: "https://github.com/ppsssj/Cogic" }],
     },
   },
   {
     title: "Git Effects",
-    category: "Developer Tooling",
+    category: "ELEMENT / Developer Tooling",
     typeLabel: "VS Extension",
     description:
-      "코드 변경 흐름을 더 쉽게 훑어볼 수 있도록 모션을 활용한 Git 워크플로우 콘셉트입니다.",
+      "VS Code에서 Git push, pull, commit 결과를 텍스트 로그 대신 slide-in Webview 이펙트와 캐릭터 피드백으로 보여주는 개발자 경험 확장입니다.",
     image: "/assets/GitEffects/git_effect.gif",
     previewImage: "/assets/GitEffects/git_effects-poster.png",
     detailImages: [
@@ -186,27 +196,36 @@ export const highlightCards: HighlightCard[] = [
     ],
     href: "#creator",
     detail: {
-      role: "Developer experience design, interface motion, frontend prototype",
-      stack: ["React", "Git Workflow", "Motion UI", "CSS"],
-      overview:
-        "움직임과 시각적 강조를 통해 Git 변경 사항을 더 빠르게 검토할 수 있도록 만든 개발자 도구 콘셉트입니다.",
-      problem:
-        "Git 상태와 코드 변경은 실제로 무엇이 달라졌는지 이해하기 위해 많은 텍스트를 세밀하게 읽어야 하는 경우가 많습니다.",
-      solution:
-        "모션 단서, 대비, 변경 상태 그룹화를 활용해 개발자가 워크플로우 맥락을 빠르게 훑어볼 수 있도록 실험했습니다.",
-      highlights: [
-        "변경 검토를 위한 모션 상태 설계",
-        "워크플로우 정보를 읽기 쉬운 UI 단위로 그룹화",
-        "개발자용 인터페이스의 탐색 부담을 줄이는 데 집중",
+      role: "Developer experience design, VS Code extension development, motion UI, Webview interaction",
+      stack: [
+        "TypeScript",
+        "VS Code Extension API",
+        "Git CLI",
+        "Webview",
+        "Motion UI",
+        "CSS",
       ],
+      period: "2025.01",
+      overview:
+        "VS Code에서 Git push, pull, commit 결과를 텍스트 로그 대신 slide-in Webview 이펙트와 캐릭터 피드백으로 보여주는 개발자 경험 확장입니다.",
+      problem:
+        "Git 작업 결과는 대부분 터미널 로그나 Source Control 상태 변화로만 확인되기 때문에 성공·실패 여부를 빠르게 인지하기 어렵습니다. 특히 push, pull, commit처럼 반복적으로 수행하는 작업일수록 결과 피드백이 건조하면 실패 맥락을 다시 텍스트로 추적해야 하고, 작업 리듬도 끊기기 쉽습니다.",
+      solution:
+        "확장 커맨드가 Git CLI 실행 결과를 직접 받아 성공·실패 payload를 만들고, Webview 패널에서 slide-in 이펙트와 상태별 메시지로 보여주도록 구성했습니다. repo state change 기반 Auto Detect와 debounce를 적용해 터미널에서 발생한 성공 이벤트도 추정 감지할 수 있게 했고, 캐릭터 선택을 통해 반복 작업에 가벼운 보상감을 더했습니다.",
+      highlights: [
+        "Git 결과를 시각 피드백으로 전환",
+        "accurate mode 기반 성공·실패 명확화",
+        "캐릭터 선택, 자동 감지, debounce 기반 UX 개선",
+      ],
+      links: [{ label: "GitHub", href: "https://github.com/ppsssj/Git-Effects" }],
     },
   },
   {
     title: "GraphMind",
-    category: "Math Graph Control",
+    category: "ELEMENT / Math Visualization",
     typeLabel: "Web",
     description:
-      "수학적 구조를 3D 그래프와 자연어 제어로 탐색할 수 있게 만든 웹 인터페이스입니다.",
+      "수식과 구조화된 데이터를 2D/3D 그래프로 시각화하고, Studio에서 편집한 결과를 Vault에 저장해 다시 이어서 작업할 수 있도록 만든 인터랙티브 수학 워크스페이스입니다.",
     image: "/assets/GraphMind/GraphMind.png",
     detailImages: [
       "/assets/GraphMind/GraphMind.png",
@@ -216,27 +235,37 @@ export const highlightCards: HighlightCard[] = [
     ],
     href: "#typography",
     detail: {
-      role: "3D graph interaction, math visualization, natural language control flow",
-      stack: ["React", "Three.js", "Graph Theory", "Natural Language Control"],
-      overview:
-        "사용자가 그래프 구조를 확인하고 노드를 조작하며 자연어로 설명을 요청할 수 있는 3D 수학 그래프 인터페이스입니다.",
-      problem:
-        "수학 그래프는 관계, 공간 구조, 변환 규칙이 추상적인 표기 안에 숨어 있으면 직관적으로 이해하기 어렵습니다.",
-      solution:
-        "3D 그래프 시각화와 자연어 제어를 결합해 회전, 필터링, 변환, 상태 설명 요청이 가능한 탐색 흐름을 만들었습니다.",
-      highlights: [
-        "그래프 관계를 인터랙티브한 3D 구조로 시각화",
-        "자연어 명령과 그래프 조작 흐름 연결",
-        "노드, 엣지, 변환을 읽기 위한 설명 흐름 설계",
+      role: "Product concept design, interactive visualization, frontend architecture, full-stack MVP implementation",
+      stack: [
+        "React",
+        "Three.js",
+        "React Three Fiber",
+        "Math.js",
+        "KaTeX",
+        "Spring Boot",
+        "Java",
       ],
+      period: "2025.08 - 2025.12",
+      overview:
+        "수식과 구조화된 데이터를 2D/3D 그래프로 시각화하고, Studio에서 편집한 결과를 Vault에 저장해 다시 이어서 작업할 수 있도록 만든 인터랙티브 수학 워크스페이스입니다.",
+      problem:
+        "기존 수학 도구는 수식을 입력해 정적인 그래프를 확인하는 데 머무르거나, 저장된 그래프를 다시 편집 가능한 작업 흐름으로 연결하기 어렵습니다. 사용자는 그래프를 실험하고 저장하고 다시 불러오는 과정을 하나의 워크스페이스 안에서 이어가야 하지만, 수식 입력과 결과 관리가 분리되면 탐색의 연속성이 약해집니다.",
+      solution:
+        "Intro, Vault, Studio, AI Panel 흐름을 하나의 제품 구조로 묶고, 2D 함수 그래프, 3D 매개변수 곡선, 3D 곡면, 3차원 배열 데이터를 편집 가능한 수학 리소스로 관리하도록 구성했습니다. Studio에서 만든 결과를 Vault에 저장하고 다시 편집할 수 있게 하며, AI Panel을 통해 그래프 설명과 질문, 명령형 조작 가능성을 함께 실험했습니다.",
+      highlights: [
+        "2D/3D 수학 객체 시각화 및 편집",
+        "Vault 기반 그래프 리소스 저장·재사용",
+        "AI Panel을 통한 그래프 설명·질문·명령 UX 실험",
+      ],
+      links: [{ label: "GitHub", href: "https://github.com/ppsssj/GraphMind-monorepo" }],
     },
   },
   {
     title: "PrismDesign",
-    category: "Design System",
+    category: "ELEMENT / Visual Programming",
     typeLabel: "Web",
     description:
-      "색상, 레이아웃, 컴포넌트 탐색을 하나의 정돈된 인터페이스 시스템으로 구성한 프로젝트입니다.",
+      "TOP, CHOP, SOP 오퍼레이터 노드를 연결해 실시간 미디어 파이프라인과 비주얼 결과를 구성할 수 있는 브라우저 기반 노드 비주얼 프로그래밍 스튜디오입니다.",
     image: "/assets/PrismDesign/PrismDesign.gif",
     previewImage: "/assets/PrismDesign/PrismDesign-poster.png",
     detailImages: [
@@ -250,27 +279,29 @@ export const highlightCards: HighlightCard[] = [
     ],
     href: "#details",
     detail: {
-      role: "Design system exploration, UI composition, frontend implementation",
-      stack: ["React", "Design Systems", "CSS", "Figma"],
+      role: "PM, product structure design, UI/UX design, frontend implementation, interaction prototyping",
+      stack: ["React", "Vite", "ReactFlow", "Canvas 2D", "Express", "MediaPipe"],
+      period: "2026.02",
       overview:
-        "색상, 레이아웃 리듬, 재사용 가능한 컴포넌트 표현에 집중한 디자인 시스템 스터디입니다.",
+        "TOP, CHOP, SOP 오퍼레이터 노드를 연결해 실시간 미디어 파이프라인과 비주얼 결과를 구성할 수 있는 브라우저 기반 노드 비주얼 프로그래밍 스튜디오입니다.",
       problem:
-        "색상, 간격, 컴포넌트를 따로 탐색하면 시각 시스템이 쉽게 불일치해질 수 있습니다.",
+        "시각 표현을 만들 때 색상, 오디오, 웹캠, 시간, 지오메트리 같은 요소가 서로 분리되어 있으면 실시간으로 조합하고 실험하기 어렵습니다. 결과를 만들기 위해 코드와 미디어 입력, 프리뷰 화면을 계속 오가야 하면 창작 흐름이 끊기고, 각 요소가 결과에 미치는 영향도 직관적으로 파악하기 어렵습니다.",
       solution:
-        "인터페이스를 하나의 연결된 시스템으로 보고 컴포넌트 리듬, 대비, 레이아웃 구조를 함께 정렬했습니다.",
+        "ReactFlow 기반 그래프 에디터에서 TOP/CHOP/SOP 노드를 연결하고, Runtime/Evaluator가 데이터 흐름을 평가하며, Canvas 2D 프리뷰 렌더러가 노드별 미니 프리뷰와 최종 출력을 실시간으로 보여주도록 설계했습니다. MediaPipe Hands CHOP을 통해 웹캠 제스처를 데이터 노드로 다루며, 입력과 비주얼 출력이 같은 그래프 안에서 연결되는 경험을 실험했습니다.",
       highlights: [
-        "재사용 가능한 시각 언어 탐색",
-        "정돈된 컴포넌트와 레이아웃 상태 구현",
-        "디자인 결정을 프론트엔드 구현 방식과 연결",
+        "TOP/CHOP/SOP 기반 오퍼레이터 모델 설계",
+        "Canvas 2D 기반 실시간 노드 프리뷰",
+        "MediaPipe Hands CHOP을 활용한 제스처 인터랙션",
       ],
+      links: [{ label: "GitHub", href: "https://github.com/ppsssj/PrismDesign" }],
     },
   },
   {
     title: "Traffic Noise Prediction System",
-    category: "Data Prediction",
+    category: "ELEMENT / Data Prediction",
     typeLabel: "Web",
     description:
-      "교통 소음 패턴을 명확한 시각 출력으로 해석할 수 있도록 만든 예측 대시보드입니다.",
+      "도시 교통 소음 메타데이터를 기반으로 자동차, 이륜자동차, 열차별 소음 수준을 예측하고, 지도 UI에서 24시간 소음 프로파일과 주요 영향 요인을 시각화하는 예측 시스템입니다.",
     image:
       "/assets/TrafficNoisePredictionSystem/Traffic Noise Prediction System.png",
     detailImages: [
@@ -282,23 +313,32 @@ export const highlightCards: HighlightCard[] = [
     ],
     href: "#score",
     detail: {
-      role: "Dashboard UI, data presentation, product planning",
+      role: "Dashboard UI, data visualization, prediction result presentation, product planning",
       stack: [
+        "React",
+        "Flask",
+        "Python",
+        "CatBoost",
         "Data Visualization",
-        "Dashboard UI",
-        "Prediction Model",
-        "Frontend",
+        "Map UI",
       ],
+      period: "2025.11",
       overview:
-        "상태, 예측 결과, 비교 화면을 통해 교통 소음 패턴을 해석할 수 있도록 만든 예측 대시보드입니다.",
+        "도시 교통 소음 메타데이터를 기반으로 자동차, 이륜자동차, 열차별 소음 수준을 예측하고, 지도 UI에서 24시간 소음 프로파일과 주요 영향 요인을 시각화하는 예측 시스템입니다.",
       problem:
-        "예측 결과가 맥락이나 시각적 위계 없이 원시 값으로만 제공되면 사용자가 다음 행동을 판단하기 어렵습니다.",
+        "교통 소음 예측 결과가 단일 수치로만 제공되면 사용자는 시간대별 변화, 교통수단별 차이, 주요 원인 요인을 함께 이해하기 어렵습니다. 소음은 시간, 위치, 도로 환경, 교통수단의 영향을 함께 받기 때문에 예측값만 보여주는 화면으로는 실제 의사결정에 필요한 맥락이 부족합니다.",
       solution:
-        "추세, 출력, 판단 지점을 쉽게 읽을 수 있도록 대시보드 섹션을 나누고 소음 패턴을 시각적으로 구성했습니다.",
+        "CatBoost 회귀 모델을 Flask API로 서빙하고, React 기반 지도 UI에서 좌표와 환경값을 입력하면 0~23시 기준 예측값과 Feature Importance를 즉시 갱신해 보여주도록 구성했습니다. 자동차, 이륜자동차, 열차별 모델 결과를 구분하고 24시간 프로파일로 펼쳐 보여주어 사용자가 언제, 어떤 요인이 소음 수준에 영향을 주는지 읽을 수 있게 했습니다.",
       highlights: [
-        "빠른 해석을 위한 예측 결과 구조화",
-        "실제 읽기 흐름을 기준으로 대시보드 섹션 설계",
-        "데이터 결과를 사용자 판단 맥락과 연결",
+        "교통수단별 CatBoost 회귀 모델 설계",
+        "24시간 소음 프로파일 자동 생성",
+        "지도 기반 입력과 원인 기여도 시각화",
+      ],
+      links: [
+        {
+          label: "GitHub",
+          href: "https://github.com/ppsssj/Traffic-Noise-Prediction-System",
+        },
       ],
     },
   },

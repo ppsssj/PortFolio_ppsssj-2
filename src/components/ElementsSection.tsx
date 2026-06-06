@@ -15,6 +15,14 @@ function ProjectOpenMark() {
   );
 }
 
+function GitHubIcon() {
+  return (
+    <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+      <path d="M12 2.3c-5.5 0-9.9 4.4-9.9 9.9 0 4.4 2.8 8.1 6.7 9.4.5.1.7-.2.7-.5v-1.8c-2.7.6-3.3-1.2-3.3-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.8.1-.7.4-1.1.7-1.3-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1 .8-.2 1.6-.3 2.5-.3s1.7.1 2.5.3c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.4.3.8 1 .8 2v3c0 .3.2.6.7.5 3.9-1.3 6.7-5 6.7-9.4 0-5.5-4.4-9.9-9.9-9.9Z" />
+    </svg>
+  );
+}
+
 function ProjectDetailPanel({
   card,
   onClose,
@@ -23,6 +31,8 @@ function ProjectDetailPanel({
   onClose: () => void;
 }) {
   const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
+  const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
+  const categoryLabel = card.category.startsWith("ELEMENT /") ? card.category : `ELEMENT / ${card.category}`;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const activeImage = detailImages[activeImageIndex] ?? detailImages[0];
   const visiblePreviewItems = useMemo(() => {
@@ -131,45 +141,67 @@ function ProjectDetailPanel({
         <div className="project-detail__content">
           <div className="project-detail__top">
             <div>
-              <small>ELEMENT / {card.category}</small>
+              <small>{categoryLabel}</small>
               <h3>{card.title}</h3>
             </div>
-            <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
-              <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
-                <path d="M6 6l12 12M18 6 6 18" />
-              </svg>
-            </button>
+            <div className="project-detail__actions">
+              {githubLink ? (
+                <a
+                  className="project-detail__github"
+                  href={githubLink.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open ${card.title} GitHub repository`}
+                  title="Open GitHub repository"
+                >
+                  <GitHubIcon />
+                </a>
+              ) : null}
+              <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
+                <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          <p className="project-detail__overview">{card.detail.overview}</p>
+          <div className="project-detail__body">
+            <p className="project-detail__overview">{card.detail.overview}</p>
 
-          <dl className="project-detail__meta">
-            <div>
-              <dt>Role</dt>
-              <dd>{card.detail.role}</dd>
+            <div className="project-detail__grid">
+              <section>
+                <h4>Problem</h4>
+                <p>{card.detail.problem}</p>
+              </section>
+              <section>
+                <h4>Solution</h4>
+                <p>{card.detail.solution}</p>
+              </section>
             </div>
-            <div>
-              <dt>Stack</dt>
-              <dd>{card.detail.stack.join(", ")}</dd>
-            </div>
-          </dl>
 
-          <div className="project-detail__grid">
-            <section>
-              <h4>Problem</h4>
-              <p>{card.detail.problem}</p>
-            </section>
-            <section>
-              <h4>Solution</h4>
-              <p>{card.detail.solution}</p>
-            </section>
+            <ul className="project-detail__highlights">
+              {card.detail.highlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+
+            <dl className="project-detail__meta">
+              {card.detail.period ? (
+                <div>
+                  <dt>Period</dt>
+                  <dd>{card.detail.period}</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt>Role</dt>
+                <dd>{card.detail.role}</dd>
+              </div>
+              <div>
+                <dt>Stack</dt>
+                <dd>{card.detail.stack.join(", ")}</dd>
+              </div>
+            </dl>
           </div>
-
-          <ul className="project-detail__highlights">
-            {card.detail.highlights.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
       </motion.aside>
     </motion.div>
