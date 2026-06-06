@@ -843,6 +843,11 @@
   line-height: 150%;
 }
 
+.project-detail strong {
+  color: #fffaf0;
+  font-weight: var(--font-semibold);
+}
+
 .project-detail__highlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

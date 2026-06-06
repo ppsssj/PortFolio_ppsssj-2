@@ -5,6 +5,49 @@ import { highlightCards } from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
 
+const emphasisTerms = [
+  "TypeScript/JavaScript",
+  "VS Code",
+  "Git push, pull, commit",
+  "slide-in Webview",
+  "TOP/CHOP/SOP",
+  "ReactFlow",
+  "Runtime/Evaluator",
+  "Canvas 2D",
+  "MediaPipe Hands CHOP",
+  "2D/3D",
+  "Vault",
+  "Studio",
+  "AI Panel",
+  "CatBoost",
+  "Flask API",
+  "Feature Importance",
+  "24시간 프로파일",
+  "텍스트 기반 탐색",
+  "호출 관계",
+  "데이터 흐름",
+  "프레임워크 패턴",
+  "성공·실패",
+  "시각적 피드백",
+  "실시간",
+  "원인 요인",
+];
+
+const emphasisPattern = new RegExp(
+  `(${emphasisTerms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+  "g",
+);
+
+function renderEmphasis(text: string) {
+  return text.split(emphasisPattern).map((part, index) =>
+    emphasisTerms.includes(part) ? (
+      <strong key={`${part}-${index}`}>{part}</strong>
+    ) : (
+      part
+    ),
+  );
+}
+
 function ProjectOpenMark() {
   return (
     <span className="project-open-mark" aria-hidden="true">
@@ -166,22 +209,22 @@ function ProjectDetailPanel({
           </div>
 
           <div className="project-detail__body">
-            <p className="project-detail__overview">{card.detail.overview}</p>
+            <p className="project-detail__overview">{renderEmphasis(card.detail.overview)}</p>
 
             <div className="project-detail__grid">
               <section>
                 <h4>Problem</h4>
-                <p>{card.detail.problem}</p>
+                <p>{renderEmphasis(card.detail.problem)}</p>
               </section>
               <section>
                 <h4>Solution</h4>
-                <p>{card.detail.solution}</p>
+                <p>{renderEmphasis(card.detail.solution)}</p>
               </section>
             </div>
 
             <ul className="project-detail__highlights">
               {card.detail.highlights.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>{renderEmphasis(item)}</li>
               ))}
             </ul>
 
@@ -194,11 +237,11 @@ function ProjectDetailPanel({
               ) : null}
               <div>
                 <dt>Role</dt>
-                <dd>{card.detail.role}</dd>
+                <dd>{renderEmphasis(card.detail.role)}</dd>
               </div>
               <div>
                 <dt>Stack</dt>
-                <dd>{card.detail.stack.join(", ")}</dd>
+                <dd>{renderEmphasis(card.detail.stack.join(", "))}</dd>
               </div>
             </dl>
           </div>
