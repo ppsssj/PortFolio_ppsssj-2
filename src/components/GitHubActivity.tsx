@@ -31,6 +31,20 @@ type HoveredCell = {
   y: number;
 };
 
+function getTodayDateString() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const year = parts.find((part) => part.type === "year")?.value ?? "";
+  const month = parts.find((part) => part.type === "month")?.value ?? "";
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+
+  return `${year}-${month}-${day}`;
+}
+
 const fallbackDays = Array.from({ length: 371 }, (_, index) => {
   const today = new Date();
   const date = new Date(today);
@@ -141,6 +155,7 @@ export function GitHubActivity() {
 
   const weeks = useMemo(() => buildWeeks(activity.days), [activity.days]);
   const months = useMemo(() => buildMonths(activity.days), [activity.days]);
+  const todayDate = useMemo(() => getTodayDateString(), []);
   const activeMonth = hoveredCell
     ? months.findLast((month, index) => hoveredCell.week >= month.week && hoveredCell.week < (months[index + 1]?.week ?? 53))
     : null;
@@ -182,6 +197,7 @@ export function GitHubActivity() {
                 <div className="github-activity__week" key={weekIndex}>
                   {week.map((day, dayIndex) => {
                     const isActive = hoveredCell?.week === weekIndex && hoveredCell.day === dayIndex;
+                    const isToday = day?.date === todayDate;
                     const isNeighbor =
                       hoveredCell !== null &&
                       !isActive &&
@@ -194,6 +210,7 @@ export function GitHubActivity() {
                         data-active={isActive || undefined}
                         data-level={day?.level ?? 0}
                         data-neighbor={isNeighbor || undefined}
+                        data-today={isToday || undefined}
                         key={`${weekIndex}-${dayIndex}`}
                         onMouseEnter={(event) => updateHoveredCell(event, day, weekIndex, dayIndex)}
                         onMouseMove={(event) => updateHoveredCell(event, day, weekIndex, dayIndex)}

@@ -1404,6 +1404,11 @@
   background: #2b2b2b;
 }
 
+.github-activity__cell[data-today="true"] {
+  background: #ff8a00;
+  box-shadow: 0 0 0 1px rgba(255, 138, 0, 0.28);
+}
+
 .github-activity__tooltip {
   position: fixed;
   left: var(--tooltip-x);
