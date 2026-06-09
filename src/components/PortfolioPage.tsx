@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { AnimatedFavicon } from "./AnimatedFavicon";
 import { FooterSection } from "./FooterSection";
 import { CreatorSection } from "./CreatorSection";
 import { DetailsSection } from "./DetailsSection";
@@ -20,6 +21,7 @@ export function PortfolioPage() {
 
   return (
     <div className="page-shell">
+      <AnimatedFavicon />
       <div className="eu-location" data-eu="0" />
       <MarqueeBar />
       <SiteHeader />
