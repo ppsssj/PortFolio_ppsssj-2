@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { GitHubIcon } from "./ContactIcons";
 import { githubUsername } from "../data/portfolio";
 
 type ContributionDay = {
@@ -225,9 +226,14 @@ export function GitHubActivity() {
         </div>
       </div>
 
-      <a className="github-activity__summary" href={`https://github.com/${githubUsername}`} target="_blank" rel="noreferrer">
-        {activity.avatarUrl ? <img className="github-activity__avatar" src={activity.avatarUrl} alt="" /> : <span className="github-activity__avatar" />}
-        <span>@{githubUsername}</span>
+      <a className="github-activity__summary" href={`https://github.com/${githubUsername}`} target="_blank" rel="noreferrer" aria-label={`Open @${githubUsername} on GitHub`}>
+        <span className="github-activity__profile" aria-hidden="true">
+          {activity.avatarUrl ? <img className="github-activity__avatar" src={activity.avatarUrl} alt="" /> : <span className="github-activity__avatar" />}
+          <span>@{githubUsername}</span>
+        </span>
+        <span className="github-activity__mark" aria-hidden="true">
+          <GitHubIcon />
+        </span>
       </a>
 
       {hoveredCell ? (
