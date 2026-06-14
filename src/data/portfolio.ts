@@ -178,7 +178,10 @@ export const highlightCards: HighlightCard[] = [
         "노드 선택, 코드 이동, Inspector 기반 탐색 UX",
         "Trace / Runtime Debug / Export / Scaffold Lab 확장 기능",
       ],
-      links: [{ label: "GitHub", href: "https://github.com/ppsssj/Cogic" }],
+      links: [
+        { label: "Marketplace", href: "https://marketplace.visualstudio.com/items?itemName=ppsssj.cogic" },
+        { label: "GitHub", href: "https://github.com/ppsssj/Cogic" },
+      ],
     },
   },
   {
@@ -217,7 +220,10 @@ export const highlightCards: HighlightCard[] = [
         "accurate mode 기반 성공·실패 명확화",
         "캐릭터 선택, 자동 감지, debounce 기반 UX 개선",
       ],
-      links: [{ label: "GitHub", href: "https://github.com/ppsssj/Git-Effects" }],
+      links: [
+        { label: "Marketplace", href: "https://marketplace.visualstudio.com/items?itemName=ppsssj.git-effects" },
+        { label: "GitHub", href: "https://github.com/ppsssj/Git-Effects" },
+      ],
     },
   },
   {

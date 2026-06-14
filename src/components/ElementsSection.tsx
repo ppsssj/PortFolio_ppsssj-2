@@ -66,6 +66,16 @@ function GitHubIcon() {
   );
 }
 
+function MarketplaceIcon() {
+  return (
+    <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+      <path d="M6.2 8.5h11.6l1 11H5.2l1-11Z" />
+      <path d="M9 9V7.4a3 3 0 0 1 6 0V9" />
+      <path d="m9 14.4 2-2 2 1.6 2-1.6v5.2l-2-1.6-2 1.6-2-2Z" />
+    </svg>
+  );
+}
+
 function ProjectDetailPanel({
   card,
   onClose,
@@ -74,6 +84,7 @@ function ProjectDetailPanel({
   onClose: () => void;
 }) {
   const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
+  const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const categoryLabel = card.category.startsWith("ELEMENT /") ? card.category : `ELEMENT / ${card.category}`;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -188,6 +199,18 @@ function ProjectDetailPanel({
               <h3>{card.title}</h3>
             </div>
             <div className="project-detail__actions">
+              {marketplaceLink ? (
+                <a
+                  className="project-detail__marketplace"
+                  href={marketplaceLink.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open ${card.title} Visual Studio Marketplace page`}
+                  title="Open Visual Studio Marketplace"
+                >
+                  <MarketplaceIcon />
+                </a>
+              ) : null}
               {githubLink ? (
                 <a
                   className="project-detail__github"

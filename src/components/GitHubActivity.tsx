@@ -46,6 +46,23 @@ function getTodayDateString() {
   return `${year}-${month}-${day}`;
 }
 
+function ensureToday(days: ContributionDay[]) {
+  const todayDate = getTodayDateString();
+
+  if (days.some((day) => day.date === todayDate)) {
+    return days;
+  }
+
+  return [
+    ...days,
+    {
+      date: todayDate,
+      count: 0,
+      level: 0,
+    },
+  ];
+}
+
 const fallbackDays = Array.from({ length: 371 }, (_, index) => {
   const today = new Date();
   const date = new Date(today);
@@ -120,7 +137,7 @@ function buildMonths(days: ContributionDay[]) {
 export function GitHubActivity() {
   const [activity, setActivity] = useState<ActivityState>({
     avatarUrl: "",
-    days: fallbackDays,
+    days: ensureToday(fallbackDays),
   });
   const [hoveredCell, setHoveredCell] = useState<HoveredCell | null>(null);
 
@@ -143,7 +160,7 @@ export function GitHubActivity() {
 
       setActivity({
         avatarUrl: user?.avatar_url ?? "",
-        days,
+        days: ensureToday(days),
       });
     }
 
