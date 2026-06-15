@@ -31,6 +31,26 @@ export type HighlightCard = {
   };
 };
 
+export type CaseStudyMetric = {
+  label: string;
+  value: string;
+  note: string;
+};
+
+export type CaseStudySection = {
+  title: string;
+  body: string;
+  points?: string[];
+};
+
+export type ProjectCaseStudy = {
+  metrics: CaseStudyMetric[];
+  outcome: string[];
+  approach: CaseStudySection[];
+  learnings: string[];
+  nextSteps: string[];
+};
+
 export type PaletteItem = {
   value: string;
   text: string;
@@ -98,6 +118,15 @@ export const navigationItems: LinkItem[] = [
   { label: "Belief", href: "#typography" },
   { label: "Skills", href: "#details", scrollOffset: 96 },
   { label: "Records", href: "#score" },
+];
+
+export const projectNavigationItems: LinkItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Overview", href: "#overview", scrollOffset: 96 },
+  { label: "Result", href: "#result", scrollOffset: 96 },
+  { label: "Approach", href: "#approach", scrollOffset: 96 },
+  { label: "Screens", href: "#screens", scrollOffset: 96 },
+  { label: "Learning", href: "#learning", scrollOffset: 96 },
 ];
 
 export const socialItems: LinkItem[] = [
@@ -349,6 +378,216 @@ export const highlightCards: HighlightCard[] = [
     },
   },
 ];
+
+export function getProjectSlug(card: Pick<HighlightCard, "title">) {
+  return card.title
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
+  codegraph: {
+    metrics: [
+      { label: "Project Type", value: "VS Extension", note: "Code structure visualization" },
+      { label: "Core Output", value: "Graph UI", note: "Repository relationships mapped into nodes and edges" },
+      { label: "Focus", value: "DX", note: "Faster codebase exploration inside the editor" },
+    ],
+    outcome: [
+      "Built a visual exploration model for repository folders, files, and code relationships.",
+      "Designed the interface around graph grouping, node hierarchy, and quick structural scanning.",
+      "Validated a reusable direction for later developer-tool projects such as Cogic.",
+    ],
+    approach: [
+      {
+        title: "Structure First",
+        body: "The project treats a codebase as a navigable map instead of a flat file list. The UI prioritizes hierarchy, relationship density, and readable node grouping.",
+        points: ["Folder/file relationship modeling", "Graph-first navigation", "Readable visual grouping rules"],
+      },
+      {
+        title: "Editor-Native Flow",
+        body: "The interaction was planned for developers who are already inside VS Code, so the graph view needed to be useful without becoming a separate heavy product.",
+      },
+    ],
+    learnings: [
+      "Graph interfaces need strict visual rules or they become harder to read than text.",
+      "Developer tools are strongest when they reduce context switching.",
+      "A clear data model matters more than decorative graph motion.",
+    ],
+    nextSteps: [
+      "Add measurable parsing benchmarks.",
+      "Document graph layout decisions with before/after examples.",
+      "Connect nodes to concrete source locations and usage traces.",
+    ],
+  },
+  cogic: {
+    metrics: [
+      { label: "Published", value: "Marketplace", note: "Distributed as a VS Code extension" },
+      { label: "Modes", value: "4+", note: "Inspector, Trace, Runtime Debug, Scaffold Lab" },
+      { label: "Core Tech", value: "AST", note: "TypeScript/JavaScript code entity analysis" },
+    ],
+    outcome: [
+      "Expanded code visualization from static graph browsing into inspection, tracing, and debugging workflows.",
+      "Connected node selection, code navigation, and runtime-oriented views in one editor experience.",
+      "Shaped the project as a stronger case for complex frontend tooling rather than a standard web page.",
+    ],
+    approach: [
+      {
+        title: "Analysis Pipeline",
+        body: "Cogic starts from TypeScript/JavaScript source analysis and turns files, functions, classes, and references into graph entities that can be explored visually.",
+        points: ["AST-based entity extraction", "Calls and references modeling", "Workspace-aware indexing"],
+      },
+      {
+        title: "Interactive Graph UX",
+        body: "The graph is designed as a working surface: selecting nodes reveals details, double-clicking supports navigation, and separate modes expose deeper behavior.",
+        points: ["Node inspector", "Trace mode", "Runtime debug mode", "Scaffold Lab"],
+      },
+    ],
+    learnings: [
+      "Code visualization needs a strong bridge back to the source file.",
+      "A VS Code Webview behaves like a small product inside another product, so layout and state must stay compact.",
+      "Complex tools need named modes so users understand what kind of question each screen answers.",
+    ],
+    nextSteps: [
+      "Track extension install/download numbers.",
+      "Add sample repositories and benchmark screenshots.",
+      "Collect user feedback from Marketplace or GitHub issues.",
+    ],
+  },
+  "git-effects": {
+    metrics: [
+      { label: "Published", value: "Marketplace", note: "Git feedback extension for VS Code" },
+      { label: "Events", value: "Push/Pull/Commit", note: "Git operations converted into visual feedback" },
+      { label: "UX Pattern", value: "Webview", note: "Slide-in feedback with selectable characters" },
+    ],
+    outcome: [
+      "Turned dry Git terminal results into immediate visual feedback inside the editor.",
+      "Designed success/failure states and character feedback to make repeated Git actions easier to notice.",
+      "Added auto-detection and debounce logic to avoid noisy feedback.",
+    ],
+    approach: [
+      {
+        title: "Command Feedback",
+        body: "Git command results are interpreted as structured success/failure payloads, then rendered through a lightweight slide-in Webview.",
+      },
+      {
+        title: "Experience Layer",
+        body: "The project focuses on developer emotion and rhythm: frequent Git actions become more visible without requiring users to read logs every time.",
+        points: ["Character selection", "Accurate mode", "Debounced auto detect"],
+      },
+    ],
+    learnings: [
+      "Small DX tools still need precise state handling to avoid becoming distracting.",
+      "Visual delight works best when the underlying command result is reliable.",
+      "Editor extensions need careful constraints because screen space is limited.",
+    ],
+    nextSteps: [
+      "Add Marketplace download data.",
+      "Show command-state examples for success and failure.",
+      "Add settings documentation for feedback intensity.",
+    ],
+  },
+  graphmind: {
+    metrics: [
+      { label: "Views", value: "2D/3D", note: "Function, surface, and data visualization" },
+      { label: "Workspace", value: "Vault", note: "Saved graph resources for reuse" },
+      { label: "Integration", value: "AI Panel", note: "Question, explanation, and command experiments" },
+    ],
+    outcome: [
+      "Built an interactive math workspace where graph creation, storage, and editing live in one flow.",
+      "Combined 2D and 3D visualization with a product structure that supports repeated exploration.",
+      "Prototyped AI-assisted explanation and command flows around graph objects.",
+    ],
+    approach: [
+      {
+        title: "Visualization Surface",
+        body: "The frontend separates graph types and rendering needs while keeping the user flow centered on Studio and Vault.",
+        points: ["2D function graph", "3D parametric curve", "3D surface", "Array data view"],
+      },
+      {
+        title: "Reusable Work",
+        body: "Vault turns generated graphs into reusable resources, which makes the product closer to a workspace than a one-off graph renderer.",
+      },
+    ],
+    learnings: [
+      "3D interfaces need strong defaults because users can get lost quickly.",
+      "Saving and reopening work changes a visualization demo into a usable product.",
+      "AI features are clearest when attached to a concrete object on screen.",
+    ],
+    nextSteps: [
+      "Measure render performance by graph type.",
+      "Add demo scenarios with saved Vault examples.",
+      "Document AI Panel command coverage.",
+    ],
+  },
+  prismdesign: {
+    metrics: [
+      { label: "Editor Model", value: "Nodes", note: "TOP/CHOP/SOP visual programming structure" },
+      { label: "Runtime", value: "Evaluator", note: "Real-time node graph execution" },
+      { label: "Input", value: "MediaPipe", note: "Hand tracking as a creative data source" },
+    ],
+    outcome: [
+      "Created a browser-based visual programming studio for real-time media and visual composition.",
+      "Connected node graph editing, runtime evaluation, and Canvas preview into one workflow.",
+      "Proved that frontend architecture can support creative-tool style interfaces, not only document pages.",
+    ],
+    approach: [
+      {
+        title: "Node System",
+        body: "PrismDesign models creative operations as connected nodes. TOP, CHOP, and SOP categories help separate visual, channel, and geometry-like responsibilities.",
+        points: ["ReactFlow editor", "Node previews", "Runtime evaluation"],
+      },
+      {
+        title: "Live Preview",
+        body: "Canvas output gives immediate feedback, while MediaPipe input makes body interaction part of the graph rather than a separate feature.",
+      },
+    ],
+    learnings: [
+      "Visual programming tools need predictable data flow more than many node types.",
+      "Tiny previews inside nodes help users understand changes without losing the full canvas.",
+      "Creative tools benefit from direct manipulation and fast feedback loops.",
+    ],
+    nextSteps: [
+      "Add sample patches as portfolio artifacts.",
+      "Record performance data for large node graphs.",
+      "Document the runtime data model.",
+    ],
+  },
+  "traffic-noise-prediction-system": {
+    metrics: [
+      { label: "Model", value: "CatBoost", note: "Traffic-noise prediction by vehicle type" },
+      { label: "API", value: "Flask", note: "Prediction results served to the dashboard" },
+      { label: "Result View", value: "24h", note: "Hourly noise profile and feature importance" },
+    ],
+    outcome: [
+      "Built a dashboard that turns prediction output into map, chart, and explanation views.",
+      "Separated vehicle-type prediction results and made feature contribution easier to inspect.",
+      "Presented model results in a decision-support interface rather than a raw numeric output.",
+    ],
+    approach: [
+      {
+        title: "Prediction to Interface",
+        body: "The frontend receives prediction values from Flask and translates them into a 24-hour profile that users can scan quickly.",
+        points: ["Map-based input", "Hourly profile", "Feature importance display"],
+      },
+      {
+        title: "Explainable Result",
+        body: "The dashboard emphasizes why the result changed, not only what the predicted value is.",
+      },
+    ],
+    learnings: [
+      "Data products need explanation layers to be useful to non-model users.",
+      "Maps and charts should answer different questions instead of duplicating the same value.",
+      "A dashboard is stronger when it guides interpretation, not only displays results.",
+    ],
+    nextSteps: [
+      "Add model accuracy and validation metrics.",
+      "Show example input/output scenarios.",
+      "Document the data source and preprocessing pipeline.",
+    ],
+  },
+};
 
 export const palette: PaletteItem[] = [
   { value: "#EDE7DE", text: "#222222" },

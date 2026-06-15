@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
-import { navigationItems } from "../data/portfolio";
+import { navigationItems, projectNavigationItems } from "../data/portfolio";
 import { scrollToAnchor } from "../utils/anchorScroll";
 
 function getElementBackground(element: Element | null) {
@@ -47,6 +47,8 @@ export function SiteHeader() {
   const pendingClientXRef = useRef(0);
   const targetScrollTopRef = useRef(0);
   const isScrolled = scrollProgress > 0.5;
+  const isProjectPage = window.location.pathname.startsWith("/projects/");
+  const headerNavigationItems = isProjectPage ? projectNavigationItems : navigationItems;
 
   const getScrollableHeight = () =>
     Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight;
@@ -148,6 +150,30 @@ export function SiteHeader() {
     moveFrameRef.current = window.requestAnimationFrame(moveScrollToClientX);
   };
 
+  const navigateHome = () => {
+    window.history.pushState(null, "", "/");
+    window.dispatchEvent(new Event("pushstate"));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const navigateToProjects = () => {
+    window.history.pushState(null, "", "/#highlights");
+    window.dispatchEvent(new Event("pushstate"));
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const target = document.getElementById("highlights");
+
+        if (!target) {
+          return;
+        }
+
+        const targetTop = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      });
+    });
+  };
+
   const handleProgressPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -230,18 +256,26 @@ export function SiteHeader() {
                 </svg>
               </div>
 
-              <a className="header-main__logo" href="#creator" aria-label="Portfolio home">
+              <a className="header-main__logo" href={isProjectPage ? "/" : "#creator"} aria-label="Portfolio home">
                 PPsssJ
               </a>
 
               <nav className="nav-header-main" aria-label="Primary">
                 <ul className="nav-header-main__list">
-                  {navigationItems.map((item) => (
+                  {headerNavigationItems.map((item) => (
                     <li className="nav-header-main__item" key={item.label}>
                       <a
                         className="nav-header-main__link"
                         href={item.href}
-                        onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
+                        onClick={(event) => {
+                          if (item.href === "/") {
+                            event.preventDefault();
+                            navigateHome();
+                            return;
+                          }
+
+                          scrollToAnchor(event, item.href, item.scrollOffset);
+                        }}
                       >
                         {item.label}
                       </a>
@@ -252,23 +286,39 @@ export function SiteHeader() {
 
               <div className="header-main__search">
                 <div
-                  className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
-                  role="slider"
-                  aria-label="Page scroll position"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={Math.round(scrollProgress)}
-                  tabIndex={0}
-                  onPointerDown={handleProgressPointerDown}
-                  onPointerMove={handleProgressPointerMove}
-                  onPointerUp={handleProgressPointerUp}
-                  onPointerCancel={handleProgressPointerUp}
+                  className={`scroll-progress-shell${isProjectPage ? " is-project-page" : ""}${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
                 >
-                  <div className="scroll-progress__track" ref={trackRef}>
-                    <div
-                      className={`scroll-progress__thumb${isThumbOnDark ? " is-on-dark" : ""}`}
-                      style={{ left: `${scrollProgress}%` }}
-                    />
+                  {isProjectPage ? (
+                    <a
+                      className="scroll-progress-back"
+                      href="/#highlights"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        navigateToProjects();
+                      }}
+                    >
+                      Back
+                    </a>
+                  ) : null}
+                  <div
+                    className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
+                    role="slider"
+                    aria-label="Page scroll position"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={Math.round(scrollProgress)}
+                    tabIndex={0}
+                    onPointerDown={handleProgressPointerDown}
+                    onPointerMove={handleProgressPointerMove}
+                    onPointerUp={handleProgressPointerUp}
+                    onPointerCancel={handleProgressPointerUp}
+                  >
+                    <div className="scroll-progress__track" ref={trackRef}>
+                      <div
+                        className={`scroll-progress__thumb${isThumbOnDark ? " is-on-dark" : ""}`}
+                        style={{ left: `${scrollProgress}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

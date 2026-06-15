@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { highlightCards } from "../data/portfolio";
+import { getProjectSlug, highlightCards } from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
 
@@ -83,6 +83,7 @@ function ProjectDetailPanel({
   card: HighlightCard;
   onClose: () => void;
 }) {
+  const caseStudyHref = `/projects/${getProjectSlug(card)}`;
   const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
@@ -121,6 +122,12 @@ function ProjectDetailPanel({
 
   const showNextImage = () => {
     setActiveImageIndex((index) => (index + 1) % detailImages.length);
+  };
+
+  const openCaseStudy = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.history.pushState(null, "", caseStudyHref);
+    window.dispatchEvent(new Event("pushstate"));
   };
 
   return (
@@ -199,6 +206,17 @@ function ProjectDetailPanel({
               <h3>{card.title}</h3>
             </div>
             <div className="project-detail__actions">
+              <a
+                className="project-detail__case-link project-detail__case-link--top"
+                href={caseStudyHref}
+                onClick={openCaseStudy}
+                aria-label={`Open ${card.title} case study page`}
+              >
+                <span>View Case</span>
+                <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
+                  <path d="M6 18 18 6M9 6h9v9" />
+                </svg>
+              </a>
               {marketplaceLink ? (
                 <a
                   className="project-detail__marketplace"

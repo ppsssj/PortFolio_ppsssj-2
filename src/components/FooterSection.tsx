@@ -24,6 +24,8 @@ function getContactIcon(label: string) {
 }
 
 export function FooterSection() {
+  const isProjectPage = window.location.pathname.startsWith("/projects/");
+
   return (
     <footer id="footer">
       <div className="inner">
@@ -39,7 +41,7 @@ export function FooterSection() {
                   {group.map((item) => (
                     <li key={item}>
                       <a
-                        href={footerLinkMap[item] ?? "#contact"}
+                        href={isProjectPage ? `/${footerLinkMap[item] ?? "#contact"}` : footerLinkMap[item] ?? "#contact"}
                         onClick={(event) => scrollToAnchor(event, footerLinkMap[item] ?? "#contact", footerScrollOffsetMap[item])}
                       >
                         {item}
