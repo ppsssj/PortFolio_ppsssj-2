@@ -27,6 +27,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const heroRef = useRef<HTMLElement | null>(null);
   const heroMediaWrapRef = useRef<HTMLDivElement | null>(null);
+  const heroMediaBaseLeftRef = useRef<number | null>(null);
   const [heroMediaProgress, setHeroMediaProgress] = useState(0);
   const [heroMediaShift, setHeroMediaShift] = useState(0);
 
@@ -55,10 +56,14 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
 
       if (mediaWrap) {
         const mediaRect = mediaWrap.getBoundingClientRect();
-        const viewportCenter = window.innerWidth / 2;
-        const mediaCenter = mediaRect.left + mediaRect.width / 2;
-        const leftBias = window.innerWidth * 0.3 * nextProgress;
-        const nextShift = ((viewportCenter - mediaCenter) - leftBias) * nextProgress;
+
+        if (heroMediaBaseLeftRef.current === null || nextProgress < 0.02) {
+          heroMediaBaseLeftRef.current = mediaRect.left;
+        }
+
+        const baseLeft = heroMediaBaseLeftRef.current ?? mediaRect.left;
+        const targetLeft = Math.max(16, (window.innerWidth - mediaRect.width) / 2);
+        const nextShift = (targetLeft - baseLeft) * nextProgress;
 
         setHeroMediaShift(nextShift);
       }
