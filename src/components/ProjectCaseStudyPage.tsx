@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { getProjectSlug, projectCaseStudies, type HighlightCard } from "../data/portfolio";
 import { AnimatedFavicon } from "./AnimatedFavicon";
@@ -25,6 +25,10 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const galleryImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
+  const heroRef = useRef<HTMLElement | null>(null);
+  const heroMediaWrapRef = useRef<HTMLDivElement | null>(null);
+  const [heroMediaProgress, setHeroMediaProgress] = useState(0);
+  const [heroMediaShift, setHeroMediaShift] = useState(0);
 
   useEffect(() => {
     document.body.classList.add("has-content-header");
@@ -32,6 +36,43 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
 
     return () => {
       document.body.classList.remove("has-content-header");
+    };
+  }, [slug]);
+
+  useEffect(() => {
+    const updateHeroMediaProgress = () => {
+      const hero = heroRef.current;
+
+      if (!hero) {
+        return;
+      }
+
+      const heroRect = hero.getBoundingClientRect();
+      const scrollableRange = Math.max(1, hero.offsetHeight - window.innerHeight * 0.92);
+      const travelled = Math.min(scrollableRange, Math.max(0, -heroRect.top));
+      const nextProgress = Math.min(1, travelled / scrollableRange);
+      const mediaWrap = heroMediaWrapRef.current;
+
+      if (mediaWrap) {
+        const mediaRect = mediaWrap.getBoundingClientRect();
+        const viewportCenter = window.innerWidth / 2;
+        const mediaCenter = mediaRect.left + mediaRect.width / 2;
+        const leftBias = window.innerWidth * 0.3 * nextProgress;
+        const nextShift = ((viewportCenter - mediaCenter) - leftBias) * nextProgress;
+
+        setHeroMediaShift(nextShift);
+      }
+
+      setHeroMediaProgress(nextProgress);
+    };
+
+    updateHeroMediaProgress();
+    window.addEventListener("scroll", updateHeroMediaProgress, { passive: true });
+    window.addEventListener("resize", updateHeroMediaProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateHeroMediaProgress);
+      window.removeEventListener("resize", updateHeroMediaProgress);
     };
   }, [slug]);
 
@@ -45,7 +86,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       <MarqueeBar />
       <SiteHeader />
       <main className="wrapper project-case" id="content">
-        <section className="project-case-hero" id="overview">
+        <section className="project-case-hero" id="overview" ref={heroRef}>
           <div className="inner">
             <div className="project-case-hero__grid">
               <div className="project-case-hero__copy">
@@ -65,7 +106,14 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                   ) : null}
                 </div>
               </div>
-              <div className="project-case-hero__media-wrap">
+              <div
+                className="project-case-hero__media-wrap"
+                ref={heroMediaWrapRef}
+                style={{
+                  ["--hero-media-progress" as string]: String(heroMediaProgress),
+                  ["--hero-media-shift" as string]: `${heroMediaShift}px`,
+                }}
+              >
                 <div className="project-case-hero__media">
                   <ProjectPreviewImage card={card} />
                 </div>
