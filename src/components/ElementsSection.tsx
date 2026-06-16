@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { getProjectSlug, highlightCards } from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
+import { resetWindowScrollToTop } from "../utils/scrollReset";
 
 const emphasisTerms = [
   "TypeScript/JavaScript",
@@ -126,6 +127,8 @@ function ProjectDetailPanel({
 
   const openCaseStudy = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+    document.body.style.overflow = "";
+    resetWindowScrollToTop();
     window.history.pushState(null, "", caseStudyHref);
     window.dispatchEvent(new Event("pushstate"));
   };

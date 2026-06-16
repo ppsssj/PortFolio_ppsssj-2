@@ -1031,11 +1031,44 @@
 }
 
 .project-case-hero {
+  --hero-media-progress: 0;
+  --hero-media-base-left: 0px;
+  --hero-media-base-top: 0px;
+  --hero-media-base-width: auto;
+  --hero-media-stack-left: 0px;
+  --hero-media-stack-top: 0px;
+  --hero-media-stack-width: auto;
+  --hero-media-shift: 0px;
+  --hero-media-shift-y: 0px;
+  --hero-media-scale: 1;
+  --hero-copy-opacity: 1;
+  --hero-copy-y: 0px;
+  --hero-result-progress: 0;
+  --hero-surface-blend: 0;
+  --hero-carousel-opacity: 0;
   position: relative;
-  min-height: clamp(1500px, 190vh, 1900px);
+  z-index: 2;
+  min-height: clamp(1500px, 205vh, 2080px);
   padding-block: clamp(54px, 8vw, 132px) clamp(180px, 26vh, 360px);
   background: linear-gradient(to bottom, var(--bg-primary) 0 58%, #1a1a1a 82%, #1a1a1a 100%);
   overflow-x: clip;
+}
+
+.project-case-hero::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 46%;
+  background: linear-gradient(to bottom, rgba(26, 26, 26, 0), #1a1a1a 56%, #1a1a1a);
+  opacity: calc(0.52 + (var(--hero-result-progress) * 0.48));
+  pointer-events: none;
+}
+
+.project-case-hero > .inner {
+  position: relative;
+  z-index: 1;
 }
 
 .project-case-section,
@@ -1057,6 +1090,15 @@
 .project-case-approach__item,
 .project-case-metric {
   min-width: 0;
+}
+
+.project-case-hero__copy {
+  position: sticky;
+  top: calc(var(--header-height) + 38px);
+  opacity: var(--hero-copy-opacity);
+  transform: translate3d(0, var(--hero-copy-y), 0);
+  transition: opacity 0.08s linear, transform 0.08s linear;
+  will-change: opacity, transform;
 }
 
 .project-case-kicker,
@@ -1128,29 +1170,54 @@
 }
 
 .project-case-hero__media-wrap {
-  --hero-media-progress: 0;
-  --hero-media-shift: 0px;
   position: sticky;
   top: calc(var(--header-height) + 34px);
   z-index: 2;
   justify-self: center;
-  width: min(calc(100% + (var(--hero-media-progress) * 74vw)), calc(100vw - 32px));
-  transform: translateX(var(--hero-media-shift));
+  width: 100%;
+  transform: translate3d(var(--hero-media-shift), var(--hero-media-shift-y), 0) scale(var(--hero-media-scale));
   transform-origin: center center;
-  transition: width 0.14s linear, transform 0.14s linear;
+  will-change: transform;
+}
+
+.project-case-hero.is-media-fixed .project-case-hero__media-wrap {
+  position: fixed;
+  top: var(--hero-media-base-top);
+  left: var(--hero-media-base-left);
+  width: var(--hero-media-base-width);
+}
+
+.project-case-hero.is-media-stacked .project-case-hero__media-wrap {
+  position: absolute;
+  top: var(--hero-media-stack-top);
+  left: var(--hero-media-stack-left);
+  width: var(--hero-media-stack-width);
+  transform: none;
 }
 
 .project-case-hero__media {
   position: relative;
-  padding: calc(30px - (var(--hero-media-progress) * 18px));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: calc((30px + (var(--hero-media-progress) * 10px)) * (1 - var(--hero-surface-blend)));
+  border: 1px solid rgba(255, 255, 255, calc(0.1 * (1 - var(--hero-surface-blend))));
   border-radius: calc(16px - (var(--hero-media-progress) * 10px));
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.14), transparent 28%),
-    linear-gradient(135deg, #151515 0%, #252525 46%, #111 100%);
-  box-shadow: 0 26px 80px rgba(0, 0, 0, calc(0.12 + (var(--hero-media-progress) * 0.22)));
-  overflow: hidden;
-  transition: padding 0.14s linear, border-radius 0.14s linear, box-shadow 0.14s linear;
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(255, 255, 255, calc(0.14 * (1 - var(--hero-surface-blend)))),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(21, 21, 21, calc(1 - var(--hero-surface-blend))) 0%,
+      rgba(37, 37, 37, calc(1 - var(--hero-surface-blend))) 46%,
+      rgba(17, 17, 17, calc(1 - var(--hero-surface-blend))) 100%
+    );
+  box-shadow:
+    0 26px 80px rgba(0, 0, 0, calc((0.12 + (var(--hero-media-progress) * 0.2)) * (1 - var(--hero-surface-blend)))),
+    0 1px 0 rgba(255, 255, 255, calc(0.1 * (1 - var(--hero-surface-blend)))) inset;
+  overflow: visible;
+  transition: padding 0.08s linear, border-radius 0.08s linear, box-shadow 0.08s linear;
+  will-change: padding, border-radius, box-shadow;
 }
 
 .project-case-hero__media::before {
@@ -1158,8 +1225,15 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(
+      rgba(255, 255, 255, calc(0.035 * (1 - var(--hero-surface-blend)))) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, calc(0.035 * (1 - var(--hero-surface-blend)))) 1px,
+      transparent 1px
+    );
   background-size: 28px 28px;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
   pointer-events: none;
@@ -1169,17 +1243,135 @@
   position: relative;
   aspect-ratio: 16 / 10;
   object-fit: contain;
-  padding: calc(20px - (var(--hero-media-progress) * 10px));
-  background: #f7f7f5;
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  padding: calc((20px - (var(--hero-media-progress) * 2px)) * (1 - var(--hero-surface-blend)));
+  background: rgba(247, 247, 245, calc(1 - var(--hero-surface-blend)));
+  border: 1px solid rgba(255, 255, 255, calc(0.32 * (1 - var(--hero-surface-blend))));
   border-radius: calc(12px - (var(--hero-media-progress) * 8px));
   box-shadow:
-    0 22px 60px rgba(0, 0, 0, 0.42),
-    0 1px 0 rgba(255, 255, 255, 0.7) inset;
-  transition: padding 0.14s linear, border-radius 0.14s linear;
+    0 22px 60px rgba(0, 0, 0, calc(0.42 * (1 - var(--hero-surface-blend)))),
+    0 1px 0 rgba(255, 255, 255, calc(0.7 * (1 - var(--hero-surface-blend)))) inset;
+  transition: padding 0.08s linear, border-radius 0.08s linear;
+}
+
+.project-case-hero__image-stage {
+  position: relative;
+  z-index: 1;
+}
+
+.project-case-hero__image-stage .figure-rollover__file {
+  animation: project-hero-image-in 0.28s ease both;
+}
+
+.project-case-hero__carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: var(--hero-carousel-opacity);
+  transform: translate3d(0, calc((1 - var(--hero-carousel-opacity)) * 10px), 0);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  pointer-events: none;
+}
+
+.project-case-hero.is-media-stacked .project-case-hero__carousel {
+  pointer-events: auto;
+}
+
+.project-case-hero__nav {
+  position: absolute;
+  top: 50%;
+  display: inline-grid;
+  place-items: center;
+  width: clamp(34px, 3vw, 46px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.84);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.project-case-hero__nav:hover,
+.project-case-hero__nav:focus-visible {
+  color: #fff;
+  transform: translateY(-50%) scale(1.04);
+}
+
+.project-case-hero__nav .ico-svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.project-case-hero__nav--prev {
+  left: clamp(-76px, -4vw, -48px);
+}
+
+.project-case-hero__nav--next {
+  right: clamp(-76px, -4vw, -48px);
+}
+
+.project-case-hero__thumbs {
+  position: absolute;
+  right: clamp(16px, 2.4vw, 34px);
+  bottom: clamp(-86px, -5.4vw, -54px);
+  left: clamp(16px, 2.4vw, 34px);
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 0.8vw, 10px);
+}
+
+.project-case-hero__thumb {
+  width: clamp(54px, 5.8vw, 88px);
+  aspect-ratio: 16 / 10;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 7px;
+  background: rgba(14, 14, 14, 0.48);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  opacity: 0.72;
+  overflow: hidden;
+  transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.project-case-hero__thumb:hover,
+.project-case-hero__thumb:focus-visible,
+.project-case-hero__thumb.is-active {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.14);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.project-case-hero__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+@keyframes project-hero-image-in {
+  from {
+    opacity: 0.84;
+    filter: saturate(0.92);
+  }
+
+  to {
+    opacity: 1;
+    filter: saturate(1);
+  }
 }
 
 .project-case-section--dark {
+  position: relative;
+  z-index: 1;
+  margin-top: -1px;
   background: #1a1a1a;
   color: #f5f1ea;
 }
@@ -1380,9 +1572,6 @@
     max-width: 220px;
   }
 
-  .project-case-hero__media-wrap {
-    width: min(calc(100% + (var(--hero-media-progress) * 58vw)), calc(100vw - 28px));
-  }
 }
 
 @media (max-width: 1280px) {
@@ -1404,6 +1593,17 @@
     min-height: auto;
     padding-block: clamp(54px, 8vw, 132px);
     background: var(--bg-primary);
+  }
+
+  .project-case-hero::after {
+    content: none;
+  }
+
+  .project-case-hero__copy {
+    position: relative;
+    top: auto;
+    opacity: 1;
+    transform: none;
   }
 
   .project-case-hero__media-wrap {
@@ -2272,6 +2472,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .project-case-hero__copy,
+  .project-case-hero__media-wrap,
+  .project-case-hero__media,
+  .project-case-hero__media .figure-rollover__file {
+    transition: none;
+    transform: none;
+  }
+
+  .project-case-hero__copy {
+    opacity: 1;
+  }
+
   .stack-content-prism,
   .stack-panel-face {
     transition: none;
