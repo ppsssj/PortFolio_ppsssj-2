@@ -209,17 +209,6 @@ function ProjectDetailPanel({
               <h3>{card.title}</h3>
             </div>
             <div className="project-detail__actions">
-              <a
-                className="project-detail__case-link project-detail__case-link--top"
-                href={caseStudyHref}
-                onClick={openCaseStudy}
-                aria-label={`Open ${card.title} case study page`}
-              >
-                <span>View Case</span>
-                <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
-                  <path d="M6 18 18 6M9 6h9v9" />
-                </svg>
-              </a>
               {marketplaceLink ? (
                 <a
                   className="project-detail__marketplace"
@@ -244,6 +233,17 @@ function ProjectDetailPanel({
                   <GitHubIcon />
                 </a>
               ) : null}
+              <a
+                className="project-detail__case-link project-detail__case-link--top"
+                href={caseStudyHref}
+                onClick={openCaseStudy}
+                aria-label={`Open ${card.title} case study page`}
+              >
+                <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
+                  <path d="M6 18 18 6M9 6h9v9" />
+                </svg>
+                <span>View Case</span>
+              </a>
               <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
                 <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
                   <path d="M6 6l12 12M18 6 6 18" />
