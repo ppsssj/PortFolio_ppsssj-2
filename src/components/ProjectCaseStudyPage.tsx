@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { getProjectSlug, projectCaseStudies, type HighlightCard } from "../data/portfolio";
+import { getProjectSlug, projectCaseStudies, projectNavigationItems, siteMeta, type HighlightCard } from "../data/portfolio";
 import { AnimatedFavicon } from "./AnimatedFavicon";
+import { FloatingMenu } from "./FloatingMenu";
 import { FooterSection } from "./FooterSection";
 import { MarqueeBar } from "./MarqueeBar";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
@@ -397,6 +398,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
           </div>
         </section>
       </main>
+      <FloatingMenu items={projectNavigationItems} githubHref={githubLink?.href ?? siteMeta.visitHref} showMail={false} />
       <FooterSection />
     </div>
   );
