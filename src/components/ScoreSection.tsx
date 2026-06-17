@@ -239,23 +239,21 @@ export function ScoreSection() {
 
         <div className="layout-overall">
           {scoreBreakdown.map((item) => (
-            <div className="layout-overall__type" key={`${item.label}-type`}>
-              {item.label}
-              <strong>{item.weight}</strong>
-            </div>
-          ))}
-
-          {scoreBreakdown.map((item) => (
-            <div className="layout-overall__chart" key={`${item.label}-chart`}>
-              <div className="layout-overall__progress">
-                <div className="layout-overall__progressbar" style={{ width: `${item.value * scoreProgress}%` }} />
+            <div className="layout-overall__item" key={item.label}>
+              <div className="layout-overall__type">
+                {item.label}
+                <strong>{item.weight}</strong>
               </div>
-            </div>
-          ))}
-
-          {scoreBreakdown.map((item) => (
-            <div className="layout-overall__score" key={`${item.label}-score`}>
-              <strong>{Math.round(item.value * scoreProgress)}%</strong>
+              <div className="layout-overall__metric">
+                <div className="layout-overall__chart">
+                  <div className="layout-overall__progress">
+                    <div className="layout-overall__progressbar" style={{ width: `${item.value * scoreProgress}%` }} />
+                  </div>
+                </div>
+                <div className="layout-overall__score">
+                  <strong>{Math.round(item.value * scoreProgress)}%</strong>
+                </div>
+              </div>
             </div>
           ))}
         </div>

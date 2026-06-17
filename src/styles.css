@@ -570,6 +570,7 @@
 }
 
 .project-detail {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(320px, 1.05fr) minmax(0, 0.95fr);
   align-items: center;
@@ -1716,12 +1717,25 @@
   margin-bottom: clamp(24px, 4vw, 60px);
 }
 
+.layout-overall__item {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
 .layout-overall__type {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 14px;
   font-weight: var(--font-medium);
+}
+
+.layout-overall__metric {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
 }
 
 .layout-overall__chart {
@@ -1746,7 +1760,9 @@
 }
 
 .layout-overall__score {
-  margin-top: 14px;
+  min-width: 42px;
+  text-align: right;
+  line-height: 1;
 }
 
 .c-heading-score {
@@ -2543,7 +2559,60 @@
   }
 
   .project-detail__top {
-    padding-right: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-right: 48px;
+  }
+
+  .project-detail__top h3 {
+    font-size: clamp(30px, 9vw, 46px);
+  }
+
+  .project-detail__actions {
+    flex: none;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;
+    gap: 10px;
+  }
+
+  .project-detail__case-link--top {
+    min-width: auto;
+    height: 40px;
+    gap: 8px;
+    padding: 0 6px;
+    border-color: transparent;
+    background: transparent;
+    color: #f5f1ea;
+    font-size: 11px;
+  }
+
+  .project-detail__case-link--top span {
+    max-width: 96px;
+    margin-right: 0;
+    opacity: 1;
+  }
+
+  .project-detail__marketplace,
+  .project-detail__github {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+  }
+
+  .project-detail__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(245, 241, 234, 0.18);
+    border-radius: 999px;
+    background: rgba(26, 26, 26, 0.72);
+    backdrop-filter: blur(8px);
   }
 
   .project-case {
