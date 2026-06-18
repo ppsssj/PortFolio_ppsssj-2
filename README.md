@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/favicon.svg" alt="PPsssJ favicon" width="96" height="64" />
+</p>
+
 # PPsssJ Developer Portfolio
 
 Frontend developer portfolio built with React, TypeScript, and Vite.
