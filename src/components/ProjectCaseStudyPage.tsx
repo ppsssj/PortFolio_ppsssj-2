@@ -1,11 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 
 import { getProjectSlug, projectCaseStudies, projectNavigationItems, siteMeta, type HighlightCard } from "../data/portfolio";
 import { AnimatedFavicon } from "./AnimatedFavicon";
 import { FloatingMenu } from "./FloatingMenu";
 import { FooterSection } from "./FooterSection";
 import { MarqueeBar } from "./MarqueeBar";
-import { ProjectPreviewImage } from "./ProjectPreviewImage";
+import { ProjectHeroImageStack } from "./ProjectHeroImageStack";
 import { SiteHeader } from "./SiteHeader";
 import { resetWindowScrollToTop } from "../utils/scrollReset";
 
@@ -21,21 +21,25 @@ function ArrowIcon() {
   );
 }
 
+function DownIcon() {
+  return (
+    <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
+      <path d="M12 5v14M6 13l6 6 6-6" />
+    </svg>
+  );
+}
+
 export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const slug = getProjectSlug(card);
   const caseStudy = projectCaseStudies[slug];
   const galleryImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const activeImage = galleryImages[activeImageIndex] ?? galleryImages[0];
-  const hasMultipleImages = galleryImages.length > 1;
+  const heroStackCount = Math.min(galleryImages.length, 5);
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const heroRef = useRef<HTMLElement | null>(null);
   const heroMediaWrapRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setActiveImageIndex(0);
-  }, [slug]);
+  const heroStackTargetRef = useRef(0);
+  const heroStackScrollFrameRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     document.body.classList.add("has-content-header");
@@ -54,12 +58,13 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
     hero?.style.setProperty("--hero-result-progress", "0");
     hero?.style.setProperty("--hero-surface-blend", "0");
     hero?.style.setProperty("--hero-carousel-opacity", "0");
+    hero?.style.setProperty("--hero-stack-extra", `${Math.max(0, heroStackCount - 1) * 1200}px`);
     mediaWrap?.style.removeProperty("inline-size");
 
     return () => {
       document.body.classList.remove("has-content-header");
     };
-  }, [slug]);
+  }, [slug, heroStackCount]);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -71,6 +76,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       shift: 0,
       shiftY: 0,
       releasePoint: 1,
+      stackReleasePoint: 1,
       scale: 1,
     };
 
@@ -84,6 +90,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
 
       return nextValue * nextValue * (3 - 2 * nextValue);
     };
+    const lerp = (start: number, end: number, progress: number) => start + (end - start) * progress;
     const smootherstep = (value: number) => {
       const nextValue = clamp(value);
 
@@ -131,19 +138,23 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       const finalTop = targetCenterY - finalHeight / 2;
       const finalBottom = targetCenterY + finalHeight / 2;
       const releasePoint = Math.max(1, resultDocumentTop - finalBottom);
+      const stackReleasePoint = releasePoint;
+      const stackJumpPoint = heroStackCount > 1 ? releasePoint * 0.96 : releasePoint;
 
       layout = {
         shift: targetCenter - currentCenter,
         shiftY: targetCenterY - currentCenterY,
         releasePoint,
+        stackReleasePoint,
         scale: targetScale,
       };
+      heroStackTargetRef.current = stackJumpPoint;
 
       hero.style.setProperty("--hero-media-base-left", `${wrapRect.left.toFixed(2)}px`);
       hero.style.setProperty("--hero-media-base-top", `${wrapRect.top.toFixed(2)}px`);
       hero.style.setProperty("--hero-media-base-width", `${wrapWidth.toFixed(2)}px`);
       hero.style.setProperty("--hero-media-stack-left", `${(finalLeft - positionParentLeft).toFixed(2)}px`);
-      hero.style.setProperty("--hero-media-stack-top", `${(releasePoint + finalTop - positionParentDocumentTop).toFixed(2)}px`);
+      hero.style.setProperty("--hero-media-stack-top", `${(stackReleasePoint + finalTop - positionParentDocumentTop).toFixed(2)}px`);
       hero.style.setProperty("--hero-media-stack-width", `${finalWidth.toFixed(2)}px`);
       mediaWrap.style.inlineSize = `${wrapWidth.toFixed(2)}px`;
       hero.classList.add("is-media-fixed");
@@ -157,11 +168,12 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       }
 
       const rawProgress = clamp(window.scrollY / layout.releasePoint);
-      const mediaProgress = smootherstep(rawProgress);
+      const hasHeroStack = heroStackCount > 1;
+      const mediaProgress = smootherstep(hasHeroStack ? rawProgress / 0.38 : rawProgress);
       const copyProgress = smoothstep(rawProgress / 0.34);
-      const resultProgress = smoothstep((rawProgress - 0.56) / 0.36);
-      const surfaceBlendProgress = smootherstep((rawProgress - 0.68) / 0.32);
-      const carouselProgress = rawProgress >= 1 ? 1 : 0;
+      const resultProgress = smoothstep((rawProgress - (hasHeroStack ? 0.82 : 0.56)) / (hasHeroStack ? 0.16 : 0.36));
+      const surfaceBlendProgress = smootherstep((rawProgress - (hasHeroStack ? 0.48 : 0.68)) / (hasHeroStack ? 0.28 : 0.32));
+      const carouselProgress = 0;
 
       hero.style.setProperty("--hero-media-progress", mediaProgress.toFixed(4));
       hero.style.setProperty("--hero-media-shift", `${(layout.shift * mediaProgress).toFixed(2)}px`);
@@ -172,8 +184,29 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       hero.style.setProperty("--hero-result-progress", resultProgress.toFixed(4));
       hero.style.setProperty("--hero-surface-blend", surfaceBlendProgress.toFixed(4));
       hero.style.setProperty("--hero-carousel-opacity", carouselProgress.toFixed(4));
+      hero.classList.toggle("is-stack-complete", window.scrollY >= layout.stackReleasePoint);
 
-      if (rawProgress >= 1) {
+      const stackCards = Array.from(hero.querySelectorAll<HTMLElement>(".project-case-hero__stack-card"));
+      const stackTotal = stackCards.length;
+
+      stackCards.forEach((stackCard, index) => {
+        const stackStart = index === 0 ? 0.66 : Math.min(0.72 + (index - 1) * 0.08, 0.96);
+        const stackEnd = Math.min(stackStart + 0.04, 0.985);
+        const isLast = index === stackTotal - 1;
+        const targetScale = isLast ? 1 : Math.max(0.5, 1 - (stackTotal - index - 1) * 0.1);
+        const settleProgress = smoothstep((rawProgress - stackStart) / (0.985 - stackStart));
+        const enterProgress = smoothstep((rawProgress - stackStart) / (stackEnd - stackStart));
+        const startY = index === 0 ? 0 : 360 + index * 120;
+        const settledY = index === 0 ? 0 : index * 16;
+        const y = lerp(startY, settledY, enterProgress);
+        const scale = lerp(1, targetScale, settleProgress);
+        const opacity = index === 0 || stackTotal === 1 ? 1 : enterProgress;
+
+        stackCard.style.opacity = opacity.toFixed(4);
+        stackCard.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+      });
+
+      if (window.scrollY >= layout.stackReleasePoint) {
         hero.classList.remove("is-media-fixed");
         hero.classList.add("is-media-stacked");
         mediaWrap.style.removeProperty("inline-size");
@@ -218,18 +251,48 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
       hero.classList.remove("is-media-stacked");
       mediaWrap.style.removeProperty("inline-size");
     };
-  }, [slug]);
+  }, [slug, heroStackCount]);
 
   if (!caseStudy) {
     return null;
   }
 
-  const showPreviousImage = () => {
-    setActiveImageIndex((index) => (index - 1 + galleryImages.length) % galleryImages.length);
-  };
+  const scrollToHeroStack = () => {
+    const targetY = heroStackTargetRef.current;
 
-  const showNextImage = () => {
-    setActiveImageIndex((index) => (index + 1) % galleryImages.length);
+    if (!targetY) {
+      return;
+    }
+
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const duration = Math.min(6200, Math.max(3400, Math.abs(distance) * 0.95));
+    const startTime = window.performance.now();
+    const easeOutSine = (value: number) => Math.sin((value * Math.PI) / 2);
+
+    if (heroStackScrollFrameRef.current) {
+      window.cancelAnimationFrame(heroStackScrollFrameRef.current);
+    }
+
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+
+    const step = (currentTime: number) => {
+      const progress = Math.min(1, (currentTime - startTime) / duration);
+      const easedProgress = easeOutSine(progress);
+
+      window.scrollTo({ top: startY + distance * easedProgress, behavior: "auto" });
+
+      if (progress < 1) {
+        heroStackScrollFrameRef.current = window.requestAnimationFrame(step);
+      } else {
+        heroStackScrollFrameRef.current = null;
+        root.style.scrollBehavior = previousScrollBehavior;
+      }
+    };
+
+    heroStackScrollFrameRef.current = window.requestAnimationFrame(step);
   };
 
   return (
@@ -260,51 +323,16 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
               </div>
               <div className="project-case-hero__media-wrap" ref={heroMediaWrapRef}>
                 <div className="project-case-hero__media">
-                  <div className="project-case-hero__image-stage">
-                    <ProjectPreviewImage key={activeImage} card={card} image={activeImage} />
-                  </div>
-                  {hasMultipleImages ? (
-                    <div className="project-case-hero__carousel" aria-label={`${card.title} image gallery`}>
-                      <button
-                        className="project-case-hero__nav project-case-hero__nav--prev"
-                        type="button"
-                        onClick={showPreviousImage}
-                        aria-label="Show previous project image"
-                      >
-                        <svg className="ico-svg" viewBox="0 0 24 24" width="22" aria-hidden="true">
-                          <path d="m15 5-7 7 7 7" />
-                        </svg>
-                      </button>
-                      <div className="project-case-hero__thumbs">
-                        {galleryImages.map((image, index) => (
-                          <button
-                            className={`project-case-hero__thumb${index === activeImageIndex ? " is-active" : ""}`}
-                            type="button"
-                            key={image}
-                            onClick={() => setActiveImageIndex(index)}
-                            aria-label={`Show project image ${index + 1}`}
-                            aria-pressed={index === activeImageIndex}
-                          >
-                            <img src={image} alt="" />
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        className="project-case-hero__nav project-case-hero__nav--next"
-                        type="button"
-                        onClick={showNextImage}
-                        aria-label="Show next project image"
-                      >
-                        <svg className="ico-svg" viewBox="0 0 24 24" width="22" aria-hidden="true">
-                          <path d="m9 5 7 7-7 7" />
-                        </svg>
-                      </button>
-                    </div>
-                  ) : null}
+                  <ProjectHeroImageStack card={card} images={galleryImages} />
                 </div>
               </div>
             </div>
           </div>
+          {heroStackCount > 1 ? (
+            <button className="project-case-hero__stack-jump" type="button" onClick={scrollToHeroStack}>
+              View stack <DownIcon />
+            </button>
+          ) : null}
         </section>
 
         <section className="project-case-section project-case-section--dark" id="result">
