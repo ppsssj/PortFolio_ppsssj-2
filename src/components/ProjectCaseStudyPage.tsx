@@ -6,6 +6,7 @@ import { FloatingMenu } from "./FloatingMenu";
 import { FooterSection } from "./FooterSection";
 import { MarqueeBar } from "./MarqueeBar";
 import { ProjectHeroImageStack } from "./ProjectHeroImageStack";
+import { ProjectScreenFlowCamera } from "./ProjectScreenFlowCamera";
 import { SiteHeader } from "./SiteHeader";
 import { resetWindowScrollToTop } from "../utils/scrollReset";
 
@@ -385,21 +386,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
           </div>
         </section>
 
-        <section className="project-case-gallery" id="screens">
-          <div className="inner">
-            <div className="project-case-section__heading">
-              <p>Screen Flow</p>
-              <h2>Selected project screens.</h2>
-            </div>
-            <div className="project-case-gallery__grid">
-              {galleryImages.slice(0, 6).map((image) => (
-                <figure className="project-case-gallery__item" key={image}>
-                  <img src={image} alt={`${card.title} screen`} />
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ProjectScreenFlowCamera card={card} images={galleryImages} />
 
         <section className="project-case-section project-case-section--split" id="learning">
           <div className="inner">
