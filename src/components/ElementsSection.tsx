@@ -61,7 +61,7 @@ function ProjectOpenMark() {
 
 function GitHubIcon() {
   return (
-    <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+    <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
       <path d="M12 2.3c-5.5 0-9.9 4.4-9.9 9.9 0 4.4 2.8 8.1 6.7 9.4.5.1.7-.2.7-.5v-1.8c-2.7.6-3.3-1.2-3.3-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.8.1-.7.4-1.1.7-1.3-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1 .8-.2 1.6-.3 2.5-.3s1.7.1 2.5.3c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.4.3.8 1 .8 2v3c0 .3.2.6.7.5 3.9-1.3 6.7-5 6.7-9.4 0-5.5-4.4-9.9-9.9-9.9Z" />
     </svg>
   );
@@ -69,7 +69,7 @@ function GitHubIcon() {
 
 function MarketplaceIcon() {
   return (
-    <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+    <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
       <path d="M6.2 8.5h11.6l1 11H5.2l1-11Z" />
       <path d="M9 9V7.4a3 3 0 0 1 6 0V9" />
       <path d="m9 14.4 2-2 2 1.6 2-1.6v5.2l-2-1.6-2 1.6-2-2Z" />
@@ -89,41 +89,8 @@ function ProjectDetailPanel({
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const categoryLabel = card.category.startsWith("ELEMENT /") ? card.category : `ELEMENT / ${card.category}`;
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const activeImage = detailImages[activeImageIndex] ?? detailImages[0];
-  const visiblePreviewItems = useMemo(() => {
-    if (detailImages.length <= 1) {
-      return [];
-    }
-
-    const previousIndex = (activeImageIndex - 1 + detailImages.length) % detailImages.length;
-    const nextIndex = (activeImageIndex + 1) % detailImages.length;
-
-    if (detailImages.length === 2) {
-      return [
-        { image: detailImages[activeImageIndex], imageIndex: activeImageIndex, position: "active" },
-        { image: detailImages[nextIndex], imageIndex: nextIndex, position: "after" },
-      ];
-    }
-
-    return [
-      { image: detailImages[previousIndex], imageIndex: previousIndex, position: "before" },
-      { image: detailImages[activeImageIndex], imageIndex: activeImageIndex, position: "active" },
-      { image: detailImages[nextIndex], imageIndex: nextIndex, position: "after" },
-    ];
-  }, [activeImageIndex, detailImages]);
-
-  useEffect(() => {
-    setActiveImageIndex(0);
-  }, [detailImages, card.title]);
-
-  const showPreviousImage = () => {
-    setActiveImageIndex((index) => (index - 1 + detailImages.length) % detailImages.length);
-  };
-
-  const showNextImage = () => {
-    setActiveImageIndex((index) => (index + 1) % detailImages.length);
-  };
+  const previewImage = card.previewImage ?? detailImages[0] ?? card.image;
+  const previewStack = detailImages.slice(0, 3);
 
   const openCaseStudy = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -157,48 +124,15 @@ function ProjectDetailPanel({
       >
         <div className="project-detail__media">
           <div className="project-detail__main-image">
-            <ProjectPreviewImage card={card} image={activeImage} />
+            <ProjectPreviewImage card={card} image={previewImage} />
           </div>
-          {detailImages.length > 1 ? (
-            <div className="project-detail__preview-bar">
-              <button
-                className="project-detail__preview-nav"
-                type="button"
-                onClick={showPreviousImage}
-                aria-label={`Show previous ${card.title} image`}
-              >
-                &lt;
-              </button>
-              <div className="project-detail__previews" aria-label={`${card.title} image previews`}>
-                {visiblePreviewItems.map(({ image, imageIndex, position }) => {
-                  const isActive = activeImageIndex === imageIndex;
-
-                  return (
-                    <motion.button
-                      layout
-                      key={`${image}-${imageIndex}`}
-                      className={`project-detail__preview-shell is-${position}${isActive ? " is-active" : ""}`}
-                      type="button"
-                      onClick={() => setActiveImageIndex(imageIndex)}
-                      aria-label={`Show ${card.title} preview ${imageIndex + 1}`}
-                      aria-pressed={isActive}
-                      transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <span className="project-detail__preview">
-                        <img src={image} alt="" />
-                      </span>
-                    </motion.button>
-                  );
-                })}
-              </div>
-              <button
-                className="project-detail__preview-nav"
-                type="button"
-                onClick={showNextImage}
-                aria-label={`Show next ${card.title} image`}
-              >
-                &gt;
-              </button>
+          {previewStack.length > 1 ? (
+            <div className="project-detail__mini-strip" aria-label={`${card.title} preview screens`}>
+              {previewStack.map((image, index) => (
+                <span className="project-detail__mini-frame" key={`${image}-${index}`}>
+                  <img src={image} alt="" />
+                </span>
+              ))}
             </div>
           ) : null}
         </div>
@@ -209,41 +143,6 @@ function ProjectDetailPanel({
               <h3>{card.title}</h3>
             </div>
             <div className="project-detail__actions">
-              {marketplaceLink ? (
-                <a
-                  className="project-detail__marketplace"
-                  href={marketplaceLink.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open ${card.title} Visual Studio Marketplace page`}
-                  title="Open Visual Studio Marketplace"
-                >
-                  <MarketplaceIcon />
-                </a>
-              ) : null}
-              {githubLink ? (
-                <a
-                  className="project-detail__github"
-                  href={githubLink.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open ${card.title} GitHub repository`}
-                  title="Open GitHub repository"
-                >
-                  <GitHubIcon />
-                </a>
-              ) : null}
-              <a
-                className="project-detail__case-link project-detail__case-link--top"
-                href={caseStudyHref}
-                onClick={openCaseStudy}
-                aria-label={`Open ${card.title} case study page`}
-              >
-                <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
-                  <path d="M6 18 18 6M9 6h9v9" />
-                </svg>
-                <span>View Case</span>
-              </a>
               <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
                 <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
                   <path d="M6 6l12 12M18 6 6 18" />
@@ -252,43 +151,74 @@ function ProjectDetailPanel({
             </div>
           </div>
 
-          <div className="project-detail__body">
-            <p className="project-detail__overview">{renderEmphasis(card.detail.overview)}</p>
+          <p className="project-detail__summary">{card.description}</p>
 
-            <div className="project-detail__grid">
-              <section>
-                <h4>Problem</h4>
-                <p>{renderEmphasis(card.detail.problem)}</p>
-              </section>
-              <section>
-                <h4>Solution</h4>
-                <p>{renderEmphasis(card.detail.solution)}</p>
-              </section>
-            </div>
-
-            <ul className="project-detail__highlights">
-              {card.detail.highlights.map((item) => (
+          <div className="project-detail__compact-details">
+            <p>{renderEmphasis(card.detail.overview)}</p>
+            <ul>
+              {card.detail.highlights.slice(0, 2).map((item) => (
                 <li key={item}>{renderEmphasis(item)}</li>
               ))}
             </ul>
-
-            <dl className="project-detail__meta">
-              {card.detail.period ? (
-                <div>
-                  <dt>Period</dt>
-                  <dd>{card.detail.period}</dd>
-                </div>
-              ) : null}
-              <div>
-                <dt>Role</dt>
-                <dd>{renderEmphasis(card.detail.role)}</dd>
-              </div>
-              <div>
-                <dt>Stack</dt>
-                <dd>{renderEmphasis(card.detail.stack.join(", "))}</dd>
-              </div>
-            </dl>
           </div>
+
+          <dl className="project-detail__meta project-detail__meta--preview">
+            {card.detail.period ? (
+              <div>
+                <dt>Period</dt>
+                <dd>{card.detail.period}</dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Role</dt>
+              <dd>{renderEmphasis(card.detail.role)}</dd>
+            </div>
+            <div>
+              <dt>Stack</dt>
+              <dd>{renderEmphasis(card.detail.stack.slice(0, 4).join(", "))}</dd>
+            </div>
+          </dl>
+        </div>
+        <div className="project-detail__tab-stack" aria-label={`${card.title} project links`}>
+          <a
+            className="project-detail__tab-button project-detail__tab-button--case"
+            href={caseStudyHref}
+            onClick={openCaseStudy}
+            aria-label={`Open ${card.title} case study page`}
+          >
+            <span>case</span>
+            <span className="project-detail__tab-chevron" aria-hidden="true">
+              &gt;
+            </span>
+          </a>
+          {marketplaceLink ? (
+            <a
+              className="project-detail__tab-button project-detail__tab-button--external"
+              href={marketplaceLink.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${card.title} Visual Studio Marketplace page`}
+            >
+              <span className="project-detail__tab-label">marketplace</span>
+              <span className="project-detail__tab-logo">
+                <MarketplaceIcon />
+              </span>
+            </a>
+          ) : null}
+          {githubLink ? (
+            <a
+              className="project-detail__tab-button project-detail__tab-button--external"
+              href={githubLink.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${card.title} GitHub repository`}
+            >
+              <span className="project-detail__tab-label">github</span>
+              <span className="project-detail__tab-logo">
+                <GitHubIcon />
+              </span>
+            </a>
+          ) : null}
         </div>
       </motion.aside>
     </motion.div>
