@@ -1957,6 +1957,16 @@
     transform: none;
   }
 
+  .project-case-hero__stack-card {
+    opacity: 0;
+    z-index: 0 !important;
+  }
+
+  .project-case-hero__stack-card.is-base {
+    opacity: 1;
+    z-index: 1 !important;
+  }
+
   .project-screen-flow-camera {
     height: auto;
     padding-block: clamp(54px, 8vw, 132px);
