@@ -590,19 +590,6 @@
   overflow: visible;
 }
 
-.project-detail::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  width: 12px;
-  border-radius: 0 var(--project-detail-radius) var(--project-detail-radius) 0;
-  background: #1a1a1a;
-  pointer-events: none;
-}
-
 .project-detail::-webkit-scrollbar {
   display: none;
 }
