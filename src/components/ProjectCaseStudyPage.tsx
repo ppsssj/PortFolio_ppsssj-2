@@ -409,7 +409,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
 
         <ProjectScreenFlowCamera card={card} images={galleryImages} />
 
-        <section className="project-case-section project-case-section--split" id="learning">
+        <section className="project-case-section project-case-section--split project-case-section--learning" id="learning">
           <div className="inner">
             <div className="project-case-split">
               <article>

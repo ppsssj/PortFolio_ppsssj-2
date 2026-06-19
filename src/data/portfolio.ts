@@ -146,27 +146,53 @@ export const heroGallery = ["/assets/Hero/img.png"];
 
 const highlightCardsSource: HighlightCard[] = [
   {
-    title: "CodeGraph",
-    category: "Code Visualization",
-    typeLabel: "VS Extension",
+    title: "Git Reflow",
+    category: "ELEMENT / Developer Workflow",
+    typeLabel: "Web / Extension",
     description:
       "레포지토리 구조와 코드 관계를 그래프 형태로 시각화한 VS Code 확장 프로젝트입니다.",
-    image: "/assets/CodeGraph/CodeGraph.png",
+    description:
+      "GitHub Home layout templates are created in a web app and applied to the real GitHub page through a Chrome Extension personalization flow.",
+    image: "/assets/git-reflow/gitreflow_home.png",
+    detailImages: [
+      "/assets/git-reflow/gitreflow_home.png",
+      "/assets/git-reflow/gitreflow_network_list.png",
+      "/assets/git-reflow/gitreflow_network_play.png",
+      "/assets/git-reflow/gitreflow_templates_edit.png",
+      "/assets/git-reflow/gitreflow_templates_list.png",
+      "/assets/git-reflow/extension.png",
+      "/assets/git-reflow/github_home.jpg",
+      "/assets/git-reflow/github_profile.png",
+      "/assets/git-reflow/github_repo.jpg",
+    ],
     href: "#contact",
     detail: {
-      role: "Frontend implementation, graph layout, interaction design",
-      stack: ["React", "TypeScript", "Graph UI", "CSS Architecture"],
+      role: "GitHub UI personalization, Chrome Extension content script, template editor UX, full-stack implementation",
+      stack: ["React 18", "TypeScript", "Vite", "Node.js", "Google Identity Services", "Chrome Extension MV3"],
+      period: "2026.06",
       overview:
         "레포지토리 구조를 읽기 쉬운 그래프로 바꿔 코드 관계를 더 빠르게 이해할 수 있도록 만든 시각화 인터페이스입니다.",
       problem:
         "큰 코드베이스는 폴더, 파일, 의존성이 중첩된 텍스트로만 보일 때 전체 구조를 파악하기 어렵습니다.",
       solution:
         "명확한 노드 계층, 그룹 규칙, 탐색 상태를 설계해 레포지토리를 시각적인 맵처럼 읽을 수 있게 구성했습니다.",
+      overview:
+        "Git Reflow lets users create GitHub Home layout templates in a web app, then applies the latest saved template to the real GitHub Home page through a Chrome Extension.",
+      problem:
+        "GitHub Home shows the same default feed and column structure to every user, even though each developer has different information priorities. Reordering that surface safely requires both a template editor and a way to apply the saved layout to GitHub itself.",
+      solution:
+        "The web app provides a default GitHub Home template that users can clone, edit, save, and browse in Grid/List views. The editor adjusts left, center, and right column widths, layout variants, and block visibility, while the Chrome Extension reads the latest template and applies it to GitHub DOM.",
       highlights: [
         "그래프 중심의 프로젝트 탐색 경험 구현",
         "노드 계층과 시각적 그룹 규칙 설계",
         "기술 구조를 한눈에 이해할 수 있는 표현 방식에 집중",
       ],
+      highlights: [
+        "Web app template editor for GitHub Home layout personalization",
+        "Chrome Extension Manifest V3 content script that applies saved templates",
+        "Shared TypeScript contract and runtime validation for template data",
+      ],
+      links: [{ label: "GitHub", href: "https://github.com/ppsssj/git-reflow" }],
     },
   },
   {
@@ -385,7 +411,7 @@ const highlightCardOrder = [
   "Git Effects",
   "PrismDesign",
   "Traffic Noise Prediction System",
-  "CodeGraph",
+  "Git Reflow",
 ];
 
 export const highlightCards: HighlightCard[] = highlightCardOrder
@@ -401,37 +427,37 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 }
 
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
-  codegraph: {
+  "git-reflow": {
     metrics: [
-      { label: "Project Type", value: "VS Extension", note: "Code structure visualization" },
-      { label: "Core Output", value: "Graph UI", note: "Repository relationships mapped into nodes and edges" },
-      { label: "Focus", value: "DX", note: "Faster codebase exploration inside the editor" },
+      { label: "Project Type", value: "Web + Extension", note: "GitHub Home personalization project" },
+      { label: "Core Output", value: "Layout Templates", note: "Saved templates applied to GitHub DOM" },
+      { label: "Focus", value: "UI Priority", note: "Custom GitHub Home information layout" },
     ],
     outcome: [
-      "Built a visual exploration model for repository folders, files, and code relationships.",
-      "Designed the interface around graph grouping, node hierarchy, and quick structural scanning.",
-      "Validated a reusable direction for later developer-tool projects such as Cogic.",
+      "Built a web app for cloning, editing, saving, and browsing GitHub Home layout templates.",
+      "Connected the saved template flow to a Chrome Extension content script that applies layout changes on GitHub.",
+      "Separated shared template types and runtime validation so frontend, backend, and extension can rely on the same contract.",
     ],
     approach: [
       {
-        title: "Structure First",
-        body: "The project treats a codebase as a navigable map instead of a flat file list. The UI prioritizes hierarchy, relationship density, and readable node grouping.",
-        points: ["Folder/file relationship modeling", "Graph-first navigation", "Readable visual grouping rules"],
+        title: "Template First",
+        body: "Git Reflow starts from a default GitHub Home template. Users clone it, adjust column widths, layout variants, and block visibility, then save the result as their own layout.",
+        points: ["Default template clone", "Column width editing", "Grid/List template browsing", "Card previews"],
       },
       {
-        title: "Editor-Native Flow",
-        body: "The interaction was planned for developers who are already inside VS Code, so the graph view needed to be useful without becoming a separate heavy product.",
+        title: "Extension Apply Flow",
+        body: "The Chrome Extension reads the latest saved template and applies it to the actual GitHub Home page using a Manifest V3 content script and Chrome Storage.",
       },
     ],
     learnings: [
-      "Graph interfaces need strict visual rules or they become harder to read than text.",
-      "Developer tools are strongest when they reduce context switching.",
-      "A clear data model matters more than decorative graph motion.",
+      "Personalization tools need safe layout constraints so users can change priority without breaking the page.",
+      "A shared contract between FE, BE, and extension reduces drift in template data.",
+      "Chrome Extension UX is strongest when the web app handles authoring and the extension focuses on applying state.",
     ],
     nextSteps: [
-      "Add measurable parsing benchmarks.",
-      "Document graph layout decisions with before/after examples.",
-      "Connect nodes to concrete source locations and usage traces.",
+      "Expand targets beyond GitHub Home after the first layout flow is stable.",
+      "Add stronger template versioning and migration handling.",
+      "Document extension behavior with before/after GitHub Home examples.",
     ],
   },
   cogic: {

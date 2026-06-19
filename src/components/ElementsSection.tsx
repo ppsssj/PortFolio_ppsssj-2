@@ -177,7 +177,7 @@ function ProjectDetailPanel({
     : selectedPreviewImage;
   const visiblePreviewItems = previewImages
     .map((image, index) => {
-      const rawOffset = index - selectedPreviewIndex;
+      const rawOffset = selectedPreviewIndex - index;
       const wrappedOffset =
         Math.abs(rawOffset) > previewImages.length / 2 ? rawOffset - Math.sign(rawOffset) * previewImages.length : rawOffset;
 
@@ -315,7 +315,7 @@ function ProjectDetailPanel({
                 <button
                   className="project-detail__preview-nav project-detail__preview-nav--prev"
                   type="button"
-                  onClick={() => movePreview(1)}
+                  onClick={() => movePreview(-1)}
                   aria-label="Previous preview"
                 >
                   {"<"}
@@ -348,7 +348,7 @@ function ProjectDetailPanel({
                 <button
                   className="project-detail__preview-nav project-detail__preview-nav--next"
                   type="button"
-                  onClick={() => movePreview(-1)}
+                  onClick={() => movePreview(1)}
                   aria-label="Next preview"
                 >
                   {">"}
