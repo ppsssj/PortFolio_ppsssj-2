@@ -144,7 +144,7 @@ export const creatorCredits: CreditItem[] = [
 
 export const heroGallery = ["/assets/Hero/img.png"];
 
-export const highlightCards: HighlightCard[] = [
+const highlightCardsSource: HighlightCard[] = [
   {
     title: "CodeGraph",
     category: "Code Visualization",
@@ -378,6 +378,19 @@ export const highlightCards: HighlightCard[] = [
     },
   },
 ];
+
+const highlightCardOrder = [
+  "Cogic",
+  "GraphMind",
+  "Git Effects",
+  "PrismDesign",
+  "Traffic Noise Prediction System",
+  "CodeGraph",
+];
+
+export const highlightCards: HighlightCard[] = highlightCardOrder
+  .map((title) => highlightCardsSource.find((card) => card.title === title))
+  .filter((card): card is HighlightCard => Boolean(card));
 
 export function getProjectSlug(card: Pick<HighlightCard, "title">) {
   return card.title

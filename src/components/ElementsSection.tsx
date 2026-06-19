@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { getProjectSlug, highlightCards } from "../data/portfolio";
@@ -77,6 +77,22 @@ function MarketplaceIcon() {
   );
 }
 
+function DetailIcon() {
+  return (
+    <svg className="ico-svg project-detail__detail-icon" viewBox="0 0 24 24" width="18" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="5.5" />
+      <path d="m15 15 5 5" />
+    </svg>
+  );
+}
+
+type FloatingIconPosition = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+};
+
 function ProjectDetailPanel({
   card,
   onClose,
@@ -90,8 +106,8 @@ function ProjectDetailPanel({
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const categoryLabel = card.category.startsWith("ELEMENT /") ? card.category : `ELEMENT / ${card.category}`;
   const previewImage = card.previewImage ?? detailImages[0] ?? card.image;
-  const previewStack = detailImages.slice(0, 3);
-
+  const modalImageSeedRef = useRef(Date.now());
+  const initialModalImage = detailImages[0] ?? previewImage;
   const openCaseStudy = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document.body.style.overflow = "";
@@ -99,6 +115,174 @@ function ProjectDetailPanel({
     window.history.pushState(null, "", caseStudyHref);
     window.dispatchEvent(new Event("pushstate"));
   };
+  const previewImages = useMemo(
+    () => [
+      initialModalImage,
+      ...detailImages.filter((image) => image !== initialModalImage),
+      ...(previewImage !== initialModalImage && !detailImages.includes(previewImage) ? [previewImage] : []),
+    ],
+    [detailImages, initialModalImage, previewImage],
+  );
+  const actionLinks = useMemo<Array<{
+    ariaLabel: string;
+    className: string;
+    href: string;
+    icon: ReactNode;
+    label: string;
+    onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+    external?: boolean;
+  }>>(
+    () => [
+      {
+        ariaLabel: `Open ${card.title} case study page`,
+        className: "project-detail__tab-button project-detail__tab-button--case",
+        href: caseStudyHref,
+        icon: <DetailIcon />,
+        label: "detail",
+        onClick: openCaseStudy,
+      },
+      ...(marketplaceLink
+        ? [
+            {
+              ariaLabel: `Open ${card.title} Visual Studio Marketplace page`,
+              className: "project-detail__tab-button project-detail__tab-button--external",
+              href: marketplaceLink.href,
+              icon: <MarketplaceIcon />,
+              label: "market",
+              external: true,
+            },
+          ]
+        : []),
+      ...(githubLink
+        ? [
+            {
+              ariaLabel: `Open ${card.title} GitHub repository`,
+              className: "project-detail__tab-button project-detail__tab-button--external",
+              href: githubLink.href,
+              icon: <GitHubIcon />,
+              label: "github",
+              external: true,
+            },
+          ]
+        : []),
+    ],
+    [card.title, caseStudyHref, githubLink, marketplaceLink],
+  );
+  const [selectedPreviewIndex, setSelectedPreviewIndex] = useState(0);
+  const [floatingIconPositions, setFloatingIconPositions] = useState<FloatingIconPosition[]>([]);
+  const isFloatingPausedRef = useRef(false);
+  const selectedPreviewImage = previewImages[selectedPreviewIndex] ?? previewImage;
+  const selectedDisplayImage = selectedPreviewImage.toLowerCase().endsWith(".gif")
+    ? `${selectedPreviewImage}?modal=${modalImageSeedRef.current}-${selectedPreviewIndex}`
+    : selectedPreviewImage;
+  const visiblePreviewItems = previewImages
+    .map((image, index) => {
+      const rawOffset = index - selectedPreviewIndex;
+      const wrappedOffset =
+        Math.abs(rawOffset) > previewImages.length / 2 ? rawOffset - Math.sign(rawOffset) * previewImages.length : rawOffset;
+
+      return {
+        image,
+        index,
+        offset: wrappedOffset,
+      };
+    })
+    .filter(({ offset }) => Math.abs(offset) <= 2)
+    .sort((a, b) => a.offset - b.offset);
+
+  useEffect(() => {
+    setSelectedPreviewIndex(0);
+  }, [previewImages]);
+
+  const movePreview = (direction: -1 | 1) => {
+    setSelectedPreviewIndex((currentIndex) => (currentIndex + direction + previewImages.length) % previewImages.length);
+  };
+
+  useEffect(() => {
+    const bounds = { width: 96, height: 228 };
+    const iconSize = 46;
+    const radius = iconSize * 0.52;
+    const maxX = bounds.width - iconSize;
+    const maxY = bounds.height - iconSize;
+
+    let positions = actionLinks.map((_, index) => ({
+      x: 18 + ((index * 19) % Math.max(1, maxX - 10)),
+      y: 10 + index * Math.min(72, maxY / Math.max(1, actionLinks.length - 1)),
+      vx: (index % 2 === 0 ? 0.23 : -0.2) + index * 0.025,
+      vy: (index % 2 === 0 ? 0.18 : 0.24) - index * 0.018,
+    }));
+
+    setFloatingIconPositions(positions);
+
+    let animationFrame = 0;
+    const tick = () => {
+      if (!isFloatingPausedRef.current) {
+        positions = positions.map((item) => ({
+          ...item,
+          x: item.x + item.vx,
+          y: item.y + item.vy,
+        }));
+
+        positions.forEach((item) => {
+          if (item.x <= 0 || item.x >= maxX) {
+            item.x = Math.min(Math.max(item.x, 0), maxX);
+            item.vx *= -1;
+          }
+
+          if (item.y <= 0 || item.y >= maxY) {
+            item.y = Math.min(Math.max(item.y, 0), maxY);
+            item.vy *= -1;
+          }
+        });
+
+        for (let i = 0; i < positions.length; i += 1) {
+          for (let j = i + 1; j < positions.length; j += 1) {
+            const first = positions[i];
+            const second = positions[j];
+            const dx = second.x - first.x;
+            const dy = second.y - first.y;
+            const distance = Math.hypot(dx, dy) || 1;
+            const minDistance = radius * 1.9;
+
+            if (distance < minDistance) {
+              const nx = dx / distance;
+              const ny = dy / distance;
+              const overlap = (minDistance - distance) / 2;
+
+              first.x -= nx * overlap;
+              first.y -= ny * overlap;
+              second.x += nx * overlap;
+              second.y += ny * overlap;
+
+              const firstAlongNormal = first.vx * nx + first.vy * ny;
+              const secondAlongNormal = second.vx * nx + second.vy * ny;
+              const impulse = secondAlongNormal - firstAlongNormal;
+
+              first.vx += impulse * nx;
+              first.vy += impulse * ny;
+              second.vx -= impulse * nx;
+              second.vy -= impulse * ny;
+            }
+          }
+        }
+
+        positions.forEach((item) => {
+          item.x = Math.min(Math.max(item.x, 0), maxX);
+          item.y = Math.min(Math.max(item.y, 0), maxY);
+          item.vx = Math.min(Math.max(item.vx, -0.42), 0.42);
+          item.vy = Math.min(Math.max(item.vy, -0.42), 0.42);
+        });
+
+        setFloatingIconPositions(positions.map((item) => ({ ...item })));
+      }
+
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    animationFrame = window.requestAnimationFrame(tick);
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [actionLinks.length]);
 
   return (
     <motion.div
@@ -110,117 +294,153 @@ function ProjectDetailPanel({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
     >
-      <motion.aside
-        className="project-detail"
-        aria-live="polite"
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${card.title} project detail`}
-        onClick={(event) => event.stopPropagation()}
-        initial={{ opacity: 0, y: 10, scale: 0.985 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 8, scale: 0.985 }}
-        transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
-      >
-        <div className="project-detail__media">
-          <div className="project-detail__main-image">
-            <ProjectPreviewImage card={card} image={previewImage} />
-          </div>
-          {previewStack.length > 1 ? (
-            <div className="project-detail__mini-strip" aria-label={`${card.title} preview screens`}>
-              {previewStack.map((image, index) => (
-                <span className="project-detail__mini-frame" key={`${image}-${index}`}>
-                  <img src={image} alt="" />
-                </span>
-              ))}
+      <div className="project-detail-stage" onClick={(event) => event.stopPropagation()}>
+        <motion.aside
+          className="project-detail"
+          aria-live="polite"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${card.title} project detail`}
+          initial={{ opacity: 0, y: 10, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 8, scale: 0.985 }}
+          transition={{ duration: 0.22, ease: [0.25, 0.8, 0.25, 1] }}
+        >
+          <div className="project-detail__media">
+            <div className="project-detail__main-image">
+              <ProjectPreviewImage card={card} image={selectedDisplayImage} />
             </div>
-          ) : null}
-        </div>
-        <div className="project-detail__content">
-          <div className="project-detail__top">
-            <div>
-              <small>{categoryLabel}</small>
-              <h3>{card.title}</h3>
-            </div>
-            <div className="project-detail__actions">
-              <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
-                <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
-                  <path d="M6 6l12 12M18 6 6 18" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <p className="project-detail__summary">{card.description}</p>
-
-          <div className="project-detail__compact-details">
-            <p>{renderEmphasis(card.detail.overview)}</p>
-            <ul>
-              {card.detail.highlights.slice(0, 2).map((item) => (
-                <li key={item}>{renderEmphasis(item)}</li>
-              ))}
-            </ul>
-          </div>
-
-          <dl className="project-detail__meta project-detail__meta--preview">
-            {card.detail.period ? (
-              <div>
-                <dt>Period</dt>
-                <dd>{card.detail.period}</dd>
+            {previewImages.length > 1 ? (
+              <div className="project-detail__preview-bar" aria-label={`${card.title} preview screens`}>
+                <button
+                  className="project-detail__preview-nav project-detail__preview-nav--prev"
+                  type="button"
+                  onClick={() => movePreview(1)}
+                  aria-label="Previous preview"
+                >
+                  {"<"}
+                </button>
+                <div className="project-detail__previews">
+                  {visiblePreviewItems.map(({ image, index, offset }) => (
+                    <button
+                      className={`project-detail__preview-shell${index === selectedPreviewIndex ? " is-active" : ""}${
+                        offset < 0 ? " is-before" : ""
+                      }${offset > 0 ? " is-after" : ""}`}
+                      type="button"
+                      key={`${image}-${index}`}
+                      onClick={() => setSelectedPreviewIndex(index)}
+                      aria-label={`Show preview ${index + 1}`}
+                      aria-pressed={index === selectedPreviewIndex}
+                      style={
+                        {
+                          "--preview-offset": offset,
+                          "--preview-distance": Math.abs(offset),
+                          zIndex: 10 - Math.abs(offset),
+                        } as CSSProperties
+                      }
+                    >
+                      <span className="project-detail__preview">
+                        <img src={image} alt="" />
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <button
+                  className="project-detail__preview-nav project-detail__preview-nav--next"
+                  type="button"
+                  onClick={() => movePreview(-1)}
+                  aria-label="Next preview"
+                >
+                  {">"}
+                </button>
               </div>
             ) : null}
-            <div>
-              <dt>Role</dt>
-              <dd>{renderEmphasis(card.detail.role)}</dd>
+          </div>
+          <div className="project-detail__content">
+            <div className="project-detail__top">
+              <div>
+                <small>{categoryLabel}</small>
+                <h3>{card.title}</h3>
+              </div>
+              <div className="project-detail__actions">
+                <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
+                  <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6 6 18" />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div>
-              <dt>Stack</dt>
-              <dd>{renderEmphasis(card.detail.stack.slice(0, 4).join(", "))}</dd>
+
+            <p className="project-detail__summary">{card.description}</p>
+
+            <div className="project-detail__compact-details">
+              <p>{renderEmphasis(card.detail.overview)}</p>
+              <ul>
+                {card.detail.highlights.slice(0, 2).map((item) => (
+                  <li key={item}>{renderEmphasis(item)}</li>
+                ))}
+              </ul>
             </div>
-          </dl>
-        </div>
-        <div className="project-detail__tab-stack" aria-label={`${card.title} project links`}>
-          <a
-            className="project-detail__tab-button project-detail__tab-button--case"
-            href={caseStudyHref}
-            onClick={openCaseStudy}
-            aria-label={`Open ${card.title} case study page`}
-          >
-            <span>case</span>
-            <span className="project-detail__tab-chevron" aria-hidden="true">
-              &gt;
-            </span>
-          </a>
-          {marketplaceLink ? (
+
+            <dl className="project-detail__meta project-detail__meta--preview">
+              {card.detail.period ? (
+                <div>
+                  <dt>Period</dt>
+                  <dd>{card.detail.period}</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt>Role</dt>
+                <dd>{renderEmphasis(card.detail.role)}</dd>
+              </div>
+              <div>
+                <dt>Stack</dt>
+                <dd>{renderEmphasis(card.detail.stack.slice(0, 4).join(", "))}</dd>
+              </div>
+            </dl>
+          </div>
+        </motion.aside>
+        <div
+          className="project-detail__tab-stack"
+          aria-label={`${card.title} project links`}
+          onMouseEnter={() => {
+            isFloatingPausedRef.current = true;
+          }}
+          onMouseLeave={() => {
+            isFloatingPausedRef.current = false;
+          }}
+          onFocus={() => {
+            isFloatingPausedRef.current = true;
+          }}
+          onBlur={() => {
+            isFloatingPausedRef.current = false;
+          }}
+        >
+          {actionLinks.map((action, index) => {
+            const position = floatingIconPositions[index] ?? { x: 0, y: index * 58 };
+
+            return (
             <a
-              className="project-detail__tab-button project-detail__tab-button--external"
-              href={marketplaceLink.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Open ${card.title} Visual Studio Marketplace page`}
+              className={action.className}
+              href={action.href}
+              target={action.external ? "_blank" : undefined}
+              rel={action.external ? "noreferrer" : undefined}
+              onClick={action.onClick}
+              aria-label={action.ariaLabel}
+              key={action.ariaLabel}
+              style={{ "--floating-icon-x": `${position.x}px`, "--floating-icon-y": `${position.y}px` } as CSSProperties}
             >
-              <span className="project-detail__tab-label">marketplace</span>
               <span className="project-detail__tab-logo">
-                <MarketplaceIcon />
+                {action.icon}
+              </span>
+              <span className="project-detail__tab-text" aria-hidden="true">
+                {action.label}
               </span>
             </a>
-          ) : null}
-          {githubLink ? (
-            <a
-              className="project-detail__tab-button project-detail__tab-button--external"
-              href={githubLink.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Open ${card.title} GitHub repository`}
-            >
-              <span className="project-detail__tab-label">github</span>
-              <span className="project-detail__tab-logo">
-                <GitHubIcon />
-              </span>
-            </a>
-          ) : null}
+            );
+          })}
         </div>
-      </motion.aside>
+      </div>
     </motion.div>
   );
 }
