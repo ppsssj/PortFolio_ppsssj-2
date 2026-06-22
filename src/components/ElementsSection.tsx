@@ -168,6 +168,11 @@ function ProjectDetailPanel({
     ],
     [card.title, caseStudyHref, githubLink, marketplaceLink],
   );
+  const mobileActionLinks = useMemo(() => {
+    const order = ["detail", "github", "market"];
+
+    return [...actionLinks].sort((first, second) => order.indexOf(first.label) - order.indexOf(second.label));
+  }, [actionLinks]);
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState(0);
   const [floatingIconPositions, setFloatingIconPositions] = useState<FloatingIconPosition[]>([]);
   const isFloatingPausedRef = useRef(false);
@@ -360,7 +365,24 @@ function ProjectDetailPanel({
             <div className="project-detail__top">
               <div>
                 <small>{categoryLabel}</small>
-                <h3>{card.title}</h3>
+                <div className="project-detail__title-row">
+                  <h3>{card.title}</h3>
+                  <div className="project-detail__mobile-links" aria-label={`${card.title} project links`}>
+                    {mobileActionLinks.map((action) => (
+                      <a
+                        className="project-detail__mobile-link"
+                        href={action.href}
+                        target={action.external ? "_blank" : undefined}
+                        rel={action.external ? "noreferrer" : undefined}
+                        onClick={action.onClick}
+                        aria-label={action.ariaLabel}
+                        key={action.ariaLabel}
+                      >
+                        {action.icon}
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
               <div className="project-detail__actions">
                 <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">

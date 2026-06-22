@@ -297,7 +297,7 @@ export function SiteHeader() {
                         navigateToProjects();
                       }}
                     >
-                      Back
+                      Home
                     </a>
                   ) : null}
                   <div
