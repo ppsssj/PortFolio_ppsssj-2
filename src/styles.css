@@ -1021,19 +1021,21 @@
 .project-detail__tab-stack {
   position: absolute;
   top: 50%;
-  right: -112px;
+  right: -72px;
   z-index: 3;
-  width: 96px;
-  height: 228px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: var(--project-detail-tab-size);
   transform: translateY(-50%);
 }
 
 .project-detail__tab-button {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   display: grid;
   place-items: center;
+  flex: 0 0 auto;
   width: var(--project-detail-tab-size);
   height: var(--project-detail-tab-size);
   border: 0;
@@ -1042,9 +1044,7 @@
   color: #111;
   line-height: 1;
   transform-origin: center;
-  transform: translate3d(var(--floating-icon-x, 0), var(--floating-icon-y, 0), 0);
-  transition: color 0.24s ease, filter 0.24s ease;
-  will-change: transform;
+  transition: color 0.24s ease, filter 0.24s ease, transform 0.24s ease;
 }
 
 .project-detail__tab-button::before {
@@ -1121,6 +1121,7 @@
 .project-detail__tab-button:focus-visible {
   color: #000;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.24));
+  transform: translateX(-4px);
 }
 
 .project-detail__tab-button:hover .project-detail__tab-logo,
@@ -3152,7 +3153,7 @@
 
   .project-detail__tab-button:hover,
   .project-detail__tab-button:focus-visible {
-    transform: translate3d(var(--floating-icon-x, 0), var(--floating-icon-y, 0), 0);
+    transform: none;
   }
 
   .project-detail__tab-button span,

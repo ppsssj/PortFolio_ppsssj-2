@@ -86,13 +86,6 @@ function DetailIcon() {
   );
 }
 
-type FloatingIconPosition = {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-};
-
 function ProjectDetailPanel({
   card,
   onClose,
@@ -174,8 +167,6 @@ function ProjectDetailPanel({
     return [...actionLinks].sort((first, second) => order.indexOf(first.label) - order.indexOf(second.label));
   }, [actionLinks]);
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState(0);
-  const [floatingIconPositions, setFloatingIconPositions] = useState<FloatingIconPosition[]>([]);
-  const isFloatingPausedRef = useRef(false);
   const selectedPreviewImage = previewImages[selectedPreviewIndex] ?? previewImage;
   const selectedDisplayImage = selectedPreviewImage.toLowerCase().endsWith(".gif")
     ? `${selectedPreviewImage}?modal=${modalImageSeedRef.current}-${selectedPreviewIndex}`
@@ -202,92 +193,6 @@ function ProjectDetailPanel({
   const movePreview = (direction: -1 | 1) => {
     setSelectedPreviewIndex((currentIndex) => (currentIndex + direction + previewImages.length) % previewImages.length);
   };
-
-  useEffect(() => {
-    const bounds = { width: 96, height: 228 };
-    const iconSize = 46;
-    const radius = iconSize * 0.52;
-    const maxX = bounds.width - iconSize;
-    const maxY = bounds.height - iconSize;
-
-    let positions = actionLinks.map((_, index) => ({
-      x: 18 + ((index * 19) % Math.max(1, maxX - 10)),
-      y: 10 + index * Math.min(72, maxY / Math.max(1, actionLinks.length - 1)),
-      vx: (index % 2 === 0 ? 0.23 : -0.2) + index * 0.025,
-      vy: (index % 2 === 0 ? 0.18 : 0.24) - index * 0.018,
-    }));
-
-    setFloatingIconPositions(positions);
-
-    let animationFrame = 0;
-    const tick = () => {
-      if (!isFloatingPausedRef.current) {
-        positions = positions.map((item) => ({
-          ...item,
-          x: item.x + item.vx,
-          y: item.y + item.vy,
-        }));
-
-        positions.forEach((item) => {
-          if (item.x <= 0 || item.x >= maxX) {
-            item.x = Math.min(Math.max(item.x, 0), maxX);
-            item.vx *= -1;
-          }
-
-          if (item.y <= 0 || item.y >= maxY) {
-            item.y = Math.min(Math.max(item.y, 0), maxY);
-            item.vy *= -1;
-          }
-        });
-
-        for (let i = 0; i < positions.length; i += 1) {
-          for (let j = i + 1; j < positions.length; j += 1) {
-            const first = positions[i];
-            const second = positions[j];
-            const dx = second.x - first.x;
-            const dy = second.y - first.y;
-            const distance = Math.hypot(dx, dy) || 1;
-            const minDistance = radius * 1.9;
-
-            if (distance < minDistance) {
-              const nx = dx / distance;
-              const ny = dy / distance;
-              const overlap = (minDistance - distance) / 2;
-
-              first.x -= nx * overlap;
-              first.y -= ny * overlap;
-              second.x += nx * overlap;
-              second.y += ny * overlap;
-
-              const firstAlongNormal = first.vx * nx + first.vy * ny;
-              const secondAlongNormal = second.vx * nx + second.vy * ny;
-              const impulse = secondAlongNormal - firstAlongNormal;
-
-              first.vx += impulse * nx;
-              first.vy += impulse * ny;
-              second.vx -= impulse * nx;
-              second.vy -= impulse * ny;
-            }
-          }
-        }
-
-        positions.forEach((item) => {
-          item.x = Math.min(Math.max(item.x, 0), maxX);
-          item.y = Math.min(Math.max(item.y, 0), maxY);
-          item.vx = Math.min(Math.max(item.vx, -0.42), 0.42);
-          item.vy = Math.min(Math.max(item.vy, -0.42), 0.42);
-        });
-
-        setFloatingIconPositions(positions.map((item) => ({ ...item })));
-      }
-
-      animationFrame = window.requestAnimationFrame(tick);
-    };
-
-    animationFrame = window.requestAnimationFrame(tick);
-
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [actionLinks.length]);
 
   return (
     <motion.div
@@ -422,26 +327,8 @@ function ProjectDetailPanel({
             </dl>
           </div>
         </motion.aside>
-        <div
-          className="project-detail__tab-stack"
-          aria-label={`${card.title} project links`}
-          onMouseEnter={() => {
-            isFloatingPausedRef.current = true;
-          }}
-          onMouseLeave={() => {
-            isFloatingPausedRef.current = false;
-          }}
-          onFocus={() => {
-            isFloatingPausedRef.current = true;
-          }}
-          onBlur={() => {
-            isFloatingPausedRef.current = false;
-          }}
-        >
-          {actionLinks.map((action, index) => {
-            const position = floatingIconPositions[index] ?? { x: 0, y: index * 58 };
-
-            return (
+        <div className="project-detail__tab-stack" aria-label={`${card.title} project links`}>
+          {actionLinks.map((action) => (
             <a
               className={action.className}
               href={action.href}
@@ -450,7 +337,6 @@ function ProjectDetailPanel({
               onClick={action.onClick}
               aria-label={action.ariaLabel}
               key={action.ariaLabel}
-              style={{ "--floating-icon-x": `${position.x}px`, "--floating-icon-y": `${position.y}px` } as CSSProperties}
             >
               <span className="project-detail__tab-logo">
                 {action.icon}
@@ -459,8 +345,7 @@ function ProjectDetailPanel({
                 {action.label}
               </span>
             </a>
-            );
-          })}
+          ))}
         </div>
       </div>
     </motion.div>
