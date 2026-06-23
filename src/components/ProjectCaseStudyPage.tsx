@@ -375,6 +375,12 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                 <strong>{card.detail.stack.slice(0, 4).join(", ")}</strong>
                 <p>{card.detail.stack.slice(4).join(", ") || "핵심 구현에 사용한 주요 기술입니다."}</p>
               </article>
+              {card.detail.awards?.length ? (
+                <article className="project-case-metric project-case-metric--award">
+                  <span>Award</span>
+                  <strong className="project-case-metric__body-text">{card.detail.awards.join("\n")}</strong>
+                </article>
+              ) : null}
             </div>
             <ul className="project-case-outcomes">
               {card.detail.highlights.map((item) => (

@@ -1798,6 +1798,20 @@
   line-height: 1.12;
 }
 
+.project-case-metric--award {
+  grid-column: span 2;
+}
+
+.project-case-metric--award strong {
+  max-width: 28em;
+  font-size: clamp(22px, 2.1vw, 34px);
+  line-height: 1.18;
+}
+
+.project-case-metric__body-text {
+  white-space: pre-line;
+}
+
 .project-case-outcomes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2833,6 +2847,46 @@
   color: #dedede;
 }
 
+.menu-float__item--home {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-float__item--home .menu-float__item-label,
+.menu-float__item--home .menu-float__item-icon {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.menu-float__item--home .menu-float__item-icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: translateY(4px) scale(0.86);
+}
+
+.menu-float__item--home .menu-float__home-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.menu-float__item--home:hover .menu-float__item-label,
+.menu-float__item--home:focus-visible .menu-float__item-label {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.92);
+}
+
+.menu-float__item--home:hover .menu-float__item-icon,
+.menu-float__item--home:focus-visible .menu-float__item-icon {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
 .menu-float__layout--secondary .menu-float__item.is-active {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
@@ -3035,6 +3089,10 @@
   .project-case-gallery__grid,
   .project-case-split {
     grid-template-columns: 1fr;
+  }
+
+  .project-case-metric--award {
+    grid-column: auto;
   }
 
   .project-detail-overlay {

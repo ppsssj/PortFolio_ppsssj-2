@@ -27,6 +27,7 @@ export type HighlightCard = {
     problem: string;
     solution: string;
     highlights: string[];
+    awards?: string[];
     links?: LinkItem[];
   };
 };
@@ -395,6 +396,10 @@ const highlightCardsSource: HighlightCard[] = [
         "24시간 소음 프로파일 자동 생성",
         "지도 기반 입력과 원인 기여도 시각화",
       ],
+      awards: [
+        "2025 한국 데이터 사이언스 학회 - 최우수 논문상",
+        "2025 BLEP 데이터 활용 경진대회 - 장려상",
+      ],
       links: [
         {
           label: "GitHub",
@@ -408,10 +413,10 @@ const highlightCardsSource: HighlightCard[] = [
 const highlightCardOrder = [
   "Cogic",
   "GraphMind",
-  "Git Effects",
   "PrismDesign",
   "Traffic Noise Prediction System",
   "Git Reflow",
+  "Git Effects",
 ];
 
 export const highlightCards: HighlightCard[] = highlightCardOrder

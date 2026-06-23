@@ -10,6 +10,14 @@ type FloatingMenuProps = {
   showMail?: boolean;
 };
 
+function HomeIcon() {
+  return (
+    <svg className="ico-svg menu-float__home-icon" viewBox="0 0 24 24" width="18" aria-hidden="true">
+      <path d="M3.4 11.1 12 3.8l8.6 7.3-1.3 1.5-1.2-1V20h-4.3v-5.2h-3.6V20H5.9v-8.4l-1.2 1-1.3-1.5Z" />
+    </svg>
+  );
+}
+
 export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.visitHref, showMail = true }: FloatingMenuProps) {
   const firstAnchorHref = items.find((item) => item.href.startsWith("#"))?.href ?? items[0]?.href ?? "";
   const [activeHref, setActiveHref] = useState(firstAnchorHref);
@@ -55,17 +63,31 @@ export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.vi
                     <div className="menu-float__bar" />
                   </div>
                   <ul className="menu-float__nav">
-                    {items.map((item) => (
-                      <li key={item.label}>
-                        <a
-                          className={`menu-float__item${activeHref === item.href ? " is-active" : ""}`}
-                          href={item.href}
-                          onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
+                    {items.map((item) => {
+                      const isHome = item.label.toLowerCase() === "home";
+
+                      return (
+                        <li key={item.label}>
+                          <a
+                            className={`menu-float__item${activeHref === item.href ? " is-active" : ""}${isHome ? " menu-float__item--home" : ""}`}
+                            href={item.href}
+                            aria-label={isHome ? "Home" : undefined}
+                            onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
+                          >
+                            {isHome ? (
+                              <>
+                                <span className="menu-float__item-label">{item.label}</span>
+                                <span className="menu-float__item-icon">
+                                  <HomeIcon />
+                                </span>
+                              </>
+                            ) : (
+                              item.label
+                            )}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
