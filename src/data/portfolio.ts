@@ -151,9 +151,7 @@ const highlightCardsSource: HighlightCard[] = [
     category: "ELEMENT / Developer Workflow",
     typeLabel: "Web / Extension",
     description:
-      "레포지토리 구조와 코드 관계를 그래프 형태로 시각화한 VS Code 확장 프로젝트입니다.",
-    description:
-      "GitHub Home layout templates are created in a web app and applied to the real GitHub page through a Chrome Extension personalization flow.",
+      "웹 앱에서 GitHub Home 레이아웃 템플릿을 만들고, Chrome Extension 개인화 플로우를 통해 실제 GitHub 페이지에 적용하는 프로젝트입니다.",
     image: "/assets/git-reflow/gitreflow_home.png",
     detailImages: [
       "/assets/git-reflow/gitreflow_home.png",
@@ -168,30 +166,19 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#contact",
     detail: {
-      role: "GitHub UI personalization, Chrome Extension content script, template editor UX, full-stack implementation",
+      role: "GitHub UI 개인화, Chrome Extension 콘텐츠 스크립트, 템플릿 에디터 UX, 풀스택 구현",
       stack: ["React 18", "TypeScript", "Vite", "Node.js", "Google Identity Services", "Chrome Extension MV3"],
       period: "2026.06",
       overview:
-        "레포지토리 구조를 읽기 쉬운 그래프로 바꿔 코드 관계를 더 빠르게 이해할 수 있도록 만든 시각화 인터페이스입니다.",
+        "Git Reflow는 사용자가 웹 앱에서 GitHub Home 레이아웃 템플릿을 만들고, 가장 최근에 저장한 템플릿을 Chrome Extension을 통해 실제 GitHub Home 페이지에 적용할 수 있게 합니다.",
       problem:
-        "큰 코드베이스는 폴더, 파일, 의존성이 중첩된 텍스트로만 보일 때 전체 구조를 파악하기 어렵습니다.",
+        "개발자마다 중요하게 보는 정보의 우선순위가 다르지만, GitHub Home은 모든 사용자에게 동일한 기본 피드와 컬럼 구조를 보여줍니다. 이 화면을 안전하게 재배치하려면 템플릿을 편집하는 도구와 저장된 레이아웃을 실제 GitHub에 적용하는 흐름이 함께 필요했습니다.",
       solution:
-        "명확한 노드 계층, 그룹 규칙, 탐색 상태를 설계해 레포지토리를 시각적인 맵처럼 읽을 수 있게 구성했습니다.",
-      overview:
-        "Git Reflow lets users create GitHub Home layout templates in a web app, then applies the latest saved template to the real GitHub Home page through a Chrome Extension.",
-      problem:
-        "GitHub Home shows the same default feed and column structure to every user, even though each developer has different information priorities. Reordering that surface safely requires both a template editor and a way to apply the saved layout to GitHub itself.",
-      solution:
-        "The web app provides a default GitHub Home template that users can clone, edit, save, and browse in Grid/List views. The editor adjusts left, center, and right column widths, layout variants, and block visibility, while the Chrome Extension reads the latest template and applies it to GitHub DOM.",
+        "웹 앱은 기본 GitHub Home 템플릿을 제공하고, 사용자는 이를 복제해 편집, 저장, Grid/List 뷰 탐색까지 할 수 있습니다. 에디터에서는 좌측, 중앙, 우측 컬럼 너비와 레이아웃 변형, 블록 표시 여부를 조정하며, Chrome Extension은 최신 템플릿을 읽어 GitHub DOM에 적용합니다.",
       highlights: [
-        "그래프 중심의 프로젝트 탐색 경험 구현",
-        "노드 계층과 시각적 그룹 규칙 설계",
-        "기술 구조를 한눈에 이해할 수 있는 표현 방식에 집중",
-      ],
-      highlights: [
-        "Web app template editor for GitHub Home layout personalization",
-        "Chrome Extension Manifest V3 content script that applies saved templates",
-        "Shared TypeScript contract and runtime validation for template data",
+        "GitHub Home 레이아웃 개인화를 위한 웹 앱 템플릿 에디터",
+        "저장된 템플릿을 적용하는 Chrome Extension Manifest V3 콘텐츠 스크립트",
+        "템플릿 데이터를 위한 공유 TypeScript 계약과 런타임 검증",
       ],
       links: [{ label: "GitHub", href: "https://github.com/ppsssj/git-reflow" }],
     },
@@ -434,35 +421,35 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   "git-reflow": {
     metrics: [
-      { label: "Project Type", value: "Web + Extension", note: "GitHub Home personalization project" },
-      { label: "Core Output", value: "Layout Templates", note: "Saved templates applied to GitHub DOM" },
-      { label: "Focus", value: "UI Priority", note: "Custom GitHub Home information layout" },
+      { label: "프로젝트 유형", value: "Web + Extension", note: "GitHub Home 개인화 프로젝트" },
+      { label: "핵심 결과물", value: "레이아웃 템플릿", note: "저장된 템플릿을 GitHub DOM에 적용" },
+      { label: "포커스", value: "UI 우선순위", note: "GitHub Home 정보 배치 커스터마이징" },
     ],
     outcome: [
-      "Built a web app for cloning, editing, saving, and browsing GitHub Home layout templates.",
-      "Connected the saved template flow to a Chrome Extension content script that applies layout changes on GitHub.",
-      "Separated shared template types and runtime validation so frontend, backend, and extension can rely on the same contract.",
+      "GitHub Home 레이아웃 템플릿을 복제, 편집, 저장, 탐색할 수 있는 웹 앱을 구축했습니다.",
+      "저장된 템플릿 흐름을 Chrome Extension 콘텐츠 스크립트와 연결해 GitHub에서 레이아웃 변경이 적용되도록 구현했습니다.",
+      "프론트엔드, 백엔드, 확장이 같은 계약을 기준으로 템플릿 데이터를 다룰 수 있도록 공유 타입과 런타임 검증을 분리했습니다.",
     ],
     approach: [
       {
-        title: "Template First",
-        body: "Git Reflow starts from a default GitHub Home template. Users clone it, adjust column widths, layout variants, and block visibility, then save the result as their own layout.",
-        points: ["Default template clone", "Column width editing", "Grid/List template browsing", "Card previews"],
+        title: "템플릿 중심 흐름",
+        body: "Git Reflow는 기본 GitHub Home 템플릿에서 시작합니다. 사용자는 템플릿을 복제한 뒤 컬럼 너비, 레이아웃 변형, 블록 표시 여부를 조정하고 자신만의 레이아웃으로 저장할 수 있습니다.",
+        points: ["기본 템플릿 복제", "컬럼 너비 편집", "Grid/List 템플릿 탐색", "카드 프리뷰"],
       },
       {
-        title: "Extension Apply Flow",
-        body: "The Chrome Extension reads the latest saved template and applies it to the actual GitHub Home page using a Manifest V3 content script and Chrome Storage.",
+        title: "확장 적용 흐름",
+        body: "Chrome Extension은 가장 최근에 저장된 템플릿을 읽고, Manifest V3 콘텐츠 스크립트와 Chrome Storage를 사용해 실제 GitHub Home 페이지에 적용합니다.",
       },
     ],
     learnings: [
-      "Personalization tools need safe layout constraints so users can change priority without breaking the page.",
-      "A shared contract between FE, BE, and extension reduces drift in template data.",
-      "Chrome Extension UX is strongest when the web app handles authoring and the extension focuses on applying state.",
+      "개인화 도구는 사용자가 정보 우선순위를 바꾸더라도 페이지가 깨지지 않도록 안전한 레이아웃 제약이 필요합니다.",
+      "FE, BE, Extension 사이에 공유 계약을 두면 템플릿 데이터의 불일치를 줄일 수 있습니다.",
+      "Chrome Extension UX는 웹 앱이 작성 경험을 맡고 확장은 상태 적용에 집중할 때 가장 명확해집니다.",
     ],
     nextSteps: [
-      "Expand targets beyond GitHub Home after the first layout flow is stable.",
-      "Add stronger template versioning and migration handling.",
-      "Document extension behavior with before/after GitHub Home examples.",
+      "첫 레이아웃 플로우가 안정화된 뒤 GitHub Home 외의 화면으로 적용 대상을 확장합니다.",
+      "템플릿 버전 관리와 마이그레이션 처리를 강화합니다.",
+      "GitHub Home의 전후 예시를 통해 확장 동작을 문서화합니다.",
     ],
   },
   cogic: {
