@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
 import { navigationItems, siteMeta, type LinkItem } from "../data/portfolio";
@@ -19,16 +19,18 @@ function HomeIcon() {
 }
 
 export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.visitHref, showMail = true }: FloatingMenuProps) {
-  const firstAnchorHref = items.find((item) => item.href.startsWith("#"))?.href ?? items[0]?.href ?? "";
+  const homeItem = useMemo(() => items.find((item) => item.label.toLowerCase() === "home"), [items]);
+  const menuItems = useMemo(() => items.filter((item) => item.label.toLowerCase() !== "home"), [items]);
+  const firstAnchorHref = menuItems.find((item) => item.href.startsWith("#"))?.href ?? menuItems[0]?.href ?? "";
   const [activeHref, setActiveHref] = useState(firstAnchorHref);
 
   useEffect(() => {
-    const anchorItems = items.filter((item) => item.href.startsWith("#"));
+    const anchorItems = menuItems.filter((item) => item.href.startsWith("#"));
     const sectionIds = anchorItems.map((item) => item.href.replace("#", ""));
 
     const updateActiveSection = () => {
       const viewportAnchor = window.scrollY + window.innerHeight * 0.42;
-      let currentHref = anchorItems[0]?.href ?? items[0]?.href ?? "";
+      let currentHref = anchorItems[0]?.href ?? menuItems[0]?.href ?? "";
 
       sectionIds.forEach((id) => {
         const section = document.getElementById(id);
@@ -49,13 +51,26 @@ export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.vi
       window.removeEventListener("scroll", updateActiveSection);
       window.removeEventListener("resize", updateActiveSection);
     };
-  }, [firstAnchorHref, items]);
+  }, [firstAnchorHref, menuItems]);
 
   return (
     <div className="menu-float menu-float--portfolio is-visible">
       <div className="inner">
         <div className="menu-float__inner">
           <div className="menu-float__wrapper">
+            {homeItem ? (
+              <a
+                className="button button--medium--rounded floating-action-button menu-float__home-button"
+                href={homeItem.href}
+                aria-label="Home"
+                onClick={(event) => scrollToAnchor(event, homeItem.href, homeItem.scrollOffset)}
+              >
+                <span className="floating-action-button__icon">
+                  <HomeIcon />
+                </span>
+                <span className="floating-action-button__text">Home</span>
+              </a>
+            ) : null}
             <div className="menu-float__bottom">
               <div className="menu-float__layout menu-float__layout--secondary">
                 <div className="menu-float__content">
@@ -63,31 +78,17 @@ export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.vi
                     <div className="menu-float__bar" />
                   </div>
                   <ul className="menu-float__nav">
-                    {items.map((item) => {
-                      const isHome = item.label.toLowerCase() === "home";
-
-                      return (
-                        <li key={item.label}>
-                          <a
-                            className={`menu-float__item${activeHref === item.href ? " is-active" : ""}${isHome ? " menu-float__item--home" : ""}`}
-                            href={item.href}
-                            aria-label={isHome ? "Home" : undefined}
-                            onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
-                          >
-                            {isHome ? (
-                              <>
-                                <span className="menu-float__item-label">{item.label}</span>
-                                <span className="menu-float__item-icon">
-                                  <HomeIcon />
-                                </span>
-                              </>
-                            ) : (
-                              item.label
-                            )}
-                          </a>
-                        </li>
-                      );
-                    })}
+                    {menuItems.map((item) => (
+                      <li key={item.label}>
+                        <a
+                          className={`menu-float__item${activeHref === item.href ? " is-active" : ""}`}
+                          href={item.href}
+                          onClick={(event) => scrollToAnchor(event, item.href, item.scrollOffset)}
+                        >
+                          {item.label}
+                        </a>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>

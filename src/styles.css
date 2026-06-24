@@ -1100,7 +1100,7 @@
   display: grid;
   place-items: center;
   color: currentColor;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: var(--font-bold);
   line-height: 1;
   opacity: 0;
@@ -2824,6 +2824,11 @@
   pointer-events: auto;
 }
 
+.menu-float--portfolio .menu-float__wrapper {
+  flex-direction: row;
+  align-items: center;
+}
+
 .menu-float__bottom {
   opacity: 0.72;
   transition: opacity 0.25s ease;
@@ -2847,46 +2852,6 @@
   color: #dedede;
 }
 
-.menu-float__item--home {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-float__item--home .menu-float__item-label,
-.menu-float__item--home .menu-float__item-icon {
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-}
-
-.menu-float__item--home .menu-float__item-icon {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  transform: translateY(4px) scale(0.86);
-}
-
-.menu-float__item--home .menu-float__home-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.menu-float__item--home:hover .menu-float__item-label,
-.menu-float__item--home:focus-visible .menu-float__item-label {
-  opacity: 0;
-  transform: translateY(-4px) scale(0.92);
-}
-
-.menu-float__item--home:hover .menu-float__item-icon,
-.menu-float__item--home:focus-visible .menu-float__item-icon {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
 .menu-float__layout--secondary .menu-float__item.is-active {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
@@ -2894,6 +2859,45 @@
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.42),
     0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+.menu-float__home-button {
+  --menu-color-1: #aaeec4;
+  --button-bg: var(--menu-color-1, #aaeec4);
+  --button-color: var(--color-primary);
+  position: relative;
+  width: 96px;
+  min-width: 96px;
+  height: 60px;
+  margin-right: 6px;
+  overflow: hidden;
+  background: var(--button-bg);
+  color: var(--button-color);
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  line-height: 100%;
+  text-shadow: none;
+  box-shadow: none;
+  opacity: 0.72;
+  transition: opacity 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.menu-float--portfolio .menu-float__wrapper:hover .menu-float__home-button,
+.menu-float--portfolio .menu-float__wrapper:focus-within .menu-float__home-button,
+.menu-float__home-button:hover,
+.menu-float__home-button:focus-visible {
+  opacity: 1;
+}
+
+.menu-float__home-button .menu-float__home-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.menu-float__home-button .floating-action-button__text {
+  font-size: 12px;
+  font-weight: var(--font-bold);
 }
 
 .menu-float__layout--tertiary .button[class*="--awwward"],
