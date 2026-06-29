@@ -121,7 +121,10 @@ export function SiteHeader() {
 
       targetScrollTopRef.current = targetScrollTop;
       isProgressNavigationRef.current = true;
-      window.scrollTo({ top: targetScrollTop, behavior: "smooth" });
+      window.scrollTo({
+        top: targetScrollTop,
+        behavior: isDraggingProgressRef.current ? "auto" : "smooth",
+      });
       scheduleProgressNavigationRelease();
     }
   };

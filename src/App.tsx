@@ -4,6 +4,7 @@ import { PortfolioPage } from "./components/PortfolioPage";
 import { ProjectCaseStudyPage } from "./components/ProjectCaseStudyPage";
 import { getProjectSlug, highlightCards } from "./data/portfolio";
 import { resetWindowScrollToTop } from "./utils/scrollReset";
+import { useSmoothPageScroll } from "./utils/useSmoothPageScroll";
 
 function getCurrentPath() {
   return window.location.pathname;
@@ -11,6 +12,8 @@ function getCurrentPath() {
 
 function App() {
   const [path, setPath] = useState(getCurrentPath);
+
+  useSmoothPageScroll();
 
   useEffect(() => {
     const previousScrollRestoration = window.history.scrollRestoration;
