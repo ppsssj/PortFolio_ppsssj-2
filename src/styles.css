@@ -3009,8 +3009,8 @@
   transform: translateY(0);
 }
 
-.footer__left .footer-contact-link {
-  --footer-contact-link-width: 182px;
+.footer__right {
+  margin-left: auto;
 }
 
 .footer__right .footer-contact-link {

@@ -54,18 +54,6 @@ export function FooterSection() {
           </div>
         </div>
         <div className="footer__bottom" id="contact">
-          <div className="footer__left">
-            <ul className="footer__nav">
-              <li>
-                <a className="footer-contact-link" href="mailto:ppssjj020222@gmail.com" aria-label="Gmail">
-                  <span className="footer-contact-link__text">ppssjj020222@gmail.com</span>
-                  <span className="footer-contact-link__icon">
-                    <GmailIcon />
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </div>
           <div className="footer__right">
             <ul className="footer__nav">
               <li>
