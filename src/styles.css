@@ -129,33 +129,6 @@
   transform: translateX(-50%);
 }
 
-.scroll-progress-back {
-  position: absolute;
-  top: 50%;
-  right: calc(100% + 14px);
-  color: var(--color-connect);
-  font-size: 12px;
-  font-weight: var(--font-medium);
-  line-height: 1;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-6px, -50%);
-  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-}
-
-.scroll-progress-shell.is-scrolled .scroll-progress-back {
-  opacity: 0.88;
-  pointer-events: auto;
-  transform: translate(0, -50%);
-}
-
-.scroll-progress-back:hover,
-.scroll-progress-back:focus-visible {
-  color: #ff6a2b;
-  opacity: 1;
-  transform: translate(-2px, -50%);
-}
-
 .header-action-button {
   position: relative;
   justify-content: center;
@@ -304,10 +277,6 @@
   .scroll-progress-shell {
     gap: 8px;
     max-width: calc(100vw - 20px);
-  }
-
-  .scroll-progress-back {
-    font-size: 11px;
   }
 
   .scroll-progress {

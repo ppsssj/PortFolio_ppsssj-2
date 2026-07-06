@@ -159,24 +159,6 @@ export function SiteHeader() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const navigateToProjects = () => {
-    window.history.pushState(null, "", "/#highlights");
-    window.dispatchEvent(new Event("pushstate"));
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        const target = document.getElementById("highlights");
-
-        if (!target) {
-          return;
-        }
-
-        const targetTop = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
-      });
-    });
-  };
-
   const handleProgressPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -291,18 +273,6 @@ export function SiteHeader() {
                 <div
                   className={`scroll-progress-shell${isProjectPage ? " is-project-page" : ""}${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
                 >
-                  {isProjectPage ? (
-                    <a
-                      className="scroll-progress-back"
-                      href="/#highlights"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        navigateToProjects();
-                      }}
-                    >
-                      Home
-                    </a>
-                  ) : null}
                   <div
                     className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
                     role="slider"
