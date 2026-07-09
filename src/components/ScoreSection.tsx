@@ -44,18 +44,21 @@ const marketplaceProjectOrder = [
     displayName: "Git Effects",
     descriptor: "Git workflow UX",
     logo: "/assets/GitEffects/logo.svg",
+    marketplaceUrl: "https://marketplace.visualstudio.com/items?itemName=ppsssj.git-effects",
   },
   {
     key: "cogic",
     displayName: "Cogic",
     descriptor: "AST code graph",
     logo: "/assets/Cogic/logo.svg",
+    marketplaceUrl: "https://marketplace.visualstudio.com/items?itemName=ppsssj.cogic",
   },
   {
     key: "readmeMaker",
     displayName: "Readme Maker",
     descriptor: "README automation",
     logo: "/assets/README%20MAKER/logo.png",
+    marketplaceUrl: "https://marketplace.visualstudio.com/items?itemName=ppsssj.readme-maker",
   },
 ];
 
@@ -94,6 +97,7 @@ function buildMarketplaceMetrics(data: MarketplaceStatsResponse | null) {
       label: stats?.displayName ?? project.displayName,
       descriptor: project.descriptor,
       logo: project.logo,
+      marketplaceUrl: project.marketplaceUrl,
       tag: "Acquisition",
       value: stats?.acquisition ?? 0,
       webDownloads: stats?.webDownloads ?? 0,
@@ -389,7 +393,13 @@ export function ScoreSection() {
             return (
               <div className="layout-overall__item" key={item.label}>
                 <div className="layout-overall__type">
-                  <span className="layout-overall__project">
+                  <a
+                    className="layout-overall__project"
+                    href={item.marketplaceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${item.label} on Visual Studio Marketplace`}
+                  >
                     <span className="layout-overall__logo" aria-hidden="true">
                       <img src={item.logo} alt="" />
                     </span>
@@ -397,7 +407,7 @@ export function ScoreSection() {
                       <strong>{item.label}</strong>
                       <span>{item.descriptor}</span>
                     </span>
-                  </span>
+                  </a>
                   <strong>{item.tag}</strong>
                 </div>
                 <div className="layout-overall__metric">

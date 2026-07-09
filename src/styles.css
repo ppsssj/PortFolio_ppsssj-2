@@ -2261,6 +2261,25 @@
   gap: 10px;
   min-width: 0;
   max-width: min(100%, 280px);
+  color: inherit;
+  border-radius: var(--rounded-small);
+  transition: opacity 0.2s ease;
+}
+
+.layout-overall__project:hover,
+.layout-overall__project:focus-visible {
+  opacity: 0.72;
+}
+
+.layout-overall__project:focus-visible {
+  outline: var(--border-thin) solid currentColor;
+  outline-offset: 4px;
+}
+
+.layout-overall__project:hover .layout-overall__project-copy strong,
+.layout-overall__project:focus-visible .layout-overall__project-copy strong {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .layout-overall__project-copy {
