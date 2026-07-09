@@ -39,9 +39,24 @@ type MarketplaceStatsState =
   | { status: "error"; data: null };
 
 const marketplaceProjectOrder = [
-  { key: "gitEffects", displayName: "Git Effects", logo: "/assets/GitEffects/logo.svg" },
-  { key: "cogic", displayName: "Cogic", logo: "/assets/Cogic/logo.svg" },
-  { key: "readmeMaker", displayName: "Readme Maker", logo: "/assets/README%20MAKER/logo.png" },
+  {
+    key: "gitEffects",
+    displayName: "Git Effects",
+    descriptor: "Git workflow UX",
+    logo: "/assets/GitEffects/logo.svg",
+  },
+  {
+    key: "cogic",
+    displayName: "Cogic",
+    descriptor: "AST code graph",
+    logo: "/assets/Cogic/logo.svg",
+  },
+  {
+    key: "readmeMaker",
+    displayName: "Readme Maker",
+    descriptor: "README automation",
+    logo: "/assets/README%20MAKER/logo.png",
+  },
 ];
 
 function formatMetric(value: number) {
@@ -59,9 +74,13 @@ function buildMarketplaceMetrics(data: MarketplaceStatsResponse | null) {
 
     return {
       label: stats?.displayName ?? project.displayName,
+      descriptor: project.descriptor,
       logo: project.logo,
-      tag: "ACQ",
+      tag: "Acquisition",
       value: stats?.acquisition ?? 0,
+      webDownloads: stats?.webDownloads ?? 0,
+      installsFromVSCode: stats?.installsFromVSCode ?? 0,
+      pageViews: stats?.pageViews ?? 0,
       max: maxAcquisition,
       suffix: "",
     };
@@ -326,9 +345,11 @@ export function ScoreSection() {
           <h2 className="heading-2">
             MARKET / STATS
             <span className="c-heading-score__note">
-              {" "}
-              -&gt; {marketplaceStats.status === "ready" ? formatMetric(totalAcquisition * scoreProgress) : "--"}
-              <sup>ACQ</sup>
+              <span className="c-heading-score__arrow">-&gt;</span>
+              <span className="c-heading-score__value">
+                {marketplaceStats.status === "ready" ? formatMetric(totalAcquisition * scoreProgress) : "--"}
+              </span>
+              <sup>ACQUISITION</sup>
             </span>
           </h2>
           <div className="c-heading-score__link">
@@ -350,7 +371,10 @@ export function ScoreSection() {
                     <span className="layout-overall__logo" aria-hidden="true">
                       <img src={item.logo} alt="" />
                     </span>
-                    <span>{item.label}</span>
+                    <span className="layout-overall__project-copy">
+                      <strong>{item.label}</strong>
+                      <span>{item.descriptor}</span>
+                    </span>
                   </span>
                   <strong>{item.tag}</strong>
                 </div>
@@ -364,6 +388,20 @@ export function ScoreSection() {
                     <strong>{metricValue}{item.suffix}</strong>
                   </div>
                 </div>
+                <ul className="layout-overall__details">
+                  <li>
+                    <span>Web downloads</span>
+                    <strong>{marketplaceStats.status === "ready" ? formatMetric(item.webDownloads * scoreProgress) : "--"}</strong>
+                  </li>
+                  <li>
+                    <span>VS Code installs</span>
+                    <strong>{marketplaceStats.status === "ready" ? formatMetric(item.installsFromVSCode * scoreProgress) : "--"}</strong>
+                  </li>
+                  <li>
+                    <span>Page views</span>
+                    <strong>{marketplaceStats.status === "ready" ? formatMetric(item.pageViews * scoreProgress) : "--"}</strong>
+                  </li>
+                </ul>
               </div>
             );
           })}
