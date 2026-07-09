@@ -1,8 +1,72 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { profileTableTabs, scoreBreakdown, siteMeta } from "../data/portfolio";
+import { profileTableTabs } from "../data/portfolio";
 
 const profileRowGridStyle = { "--score-cols": 4 } as CSSProperties;
 const dateColumnTabs = new Set(["Awards", "Activities", "Certification"]);
+const numberFormat = new Intl.NumberFormat("en-US");
+
+type MarketplaceExtensionStats = {
+  displayName: string;
+  extensionName: string;
+  uniqueIdentifier: string;
+  acquisition: number;
+  webDownloads: number;
+  installsFromVSCode: number;
+  pageViews: number;
+  uninstalls: number;
+};
+
+type MarketplaceStatsSummary = {
+  publishedExtensions: number;
+  totalAcquisition: number;
+  totalWebDownloads: number;
+  totalInstallsFromVSCode: number;
+  totalPageViews: number;
+  totalUninstalls: number;
+};
+
+type MarketplaceStatsResponse = {
+  updatedAt: string;
+  source: string;
+  publisher: string;
+  summary: MarketplaceStatsSummary;
+  extensions: Record<string, MarketplaceExtensionStats>;
+};
+
+type MarketplaceStatsState =
+  | { status: "loading"; data: null }
+  | { status: "ready"; data: MarketplaceStatsResponse }
+  | { status: "error"; data: null };
+
+const marketplaceProjectOrder = [
+  { key: "gitEffects", displayName: "Git Effects", logo: "/assets/GitEffects/logo.svg" },
+  { key: "cogic", displayName: "Cogic", logo: "/assets/Cogic/logo.svg" },
+  { key: "readmeMaker", displayName: "Readme Maker", logo: "/assets/README%20MAKER/logo.png" },
+];
+
+function formatMetric(value: number) {
+  return numberFormat.format(Math.round(value));
+}
+
+function buildMarketplaceMetrics(data: MarketplaceStatsResponse | null) {
+  const maxAcquisition = Math.max(
+    ...marketplaceProjectOrder.map((project) => data?.extensions[project.key]?.acquisition ?? 0),
+    1,
+  );
+
+  return marketplaceProjectOrder.map((project) => {
+    const stats = data?.extensions[project.key];
+
+    return {
+      label: stats?.displayName ?? project.displayName,
+      logo: project.logo,
+      tag: "ACQ",
+      value: stats?.acquisition ?? 0,
+      max: maxAcquisition,
+      suffix: "",
+    };
+  });
+}
 
 function ProfileMark({ name }: { name: string }) {
   const key = name.toLowerCase();
@@ -162,13 +226,16 @@ export function ScoreSection() {
   const [activeTab, setActiveTab] = useState(profileTableTabs[0].label);
   const [hasAnimatedScore, setHasAnimatedScore] = useState(false);
   const [scoreProgress, setScoreProgress] = useState(0);
+  const [marketplaceStats, setMarketplaceStats] = useState<MarketplaceStatsState>({ status: "loading", data: null });
   const scoreSectionRef = useRef<HTMLElement>(null);
   const currentTab = profileTableTabs.find((tab) => tab.label === activeTab) ?? profileTableTabs[0];
   const activeTabIndex = Math.max(
     0,
     profileTableTabs.findIndex((tab) => tab.label === currentTab.label),
   );
-  const buildScore = Number.parseInt(siteMeta.score, 10);
+  const marketplaceData = marketplaceStats.status === "ready" ? marketplaceStats.data : null;
+  const marketplaceMetrics = buildMarketplaceMetrics(marketplaceData);
+  const totalAcquisition = marketplaceData?.summary.totalAcquisition ?? 0;
 
   useEffect(() => {
     const section = scoreSectionRef.current;
@@ -190,6 +257,40 @@ export function ScoreSection() {
     observer.observe(section);
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadMarketplaceStats() {
+      try {
+        const response = await fetch("/api/marketplace-stats");
+
+        if (!response.ok) {
+          throw new Error("Marketplace stats API is unavailable.");
+        }
+
+        const data = (await response.json()) as MarketplaceStatsResponse;
+
+        if (!data.summary || !data.extensions) {
+          throw new Error("Marketplace stats response is missing required fields.");
+        }
+
+        if (isMounted) {
+          setMarketplaceStats({ status: "ready", data });
+        }
+      } catch {
+        if (isMounted) {
+          setMarketplaceStats({ status: "error", data: null });
+        }
+      }
+    }
+
+    loadMarketplaceStats();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -223,39 +324,49 @@ export function ScoreSection() {
       <div className="block">
         <div className="c-heading-score">
           <h2 className="heading-2">
-            {siteMeta.scoreLabel} / SCORE
+            MARKET / STATS
             <span className="c-heading-score__note">
               {" "}
-              -&gt; {Math.round(buildScore * scoreProgress)}%
-              <sup>INDEX</sup>
+              -&gt; {marketplaceStats.status === "ready" ? formatMetric(totalAcquisition * scoreProgress) : "--"}
+              <sup>ACQ</sup>
             </span>
           </h2>
           <div className="c-heading-score__link">
             <a className="link-underlined" href="#score">
-              Product craft balance
+              {marketplaceStats.status === "error" ? "Marketplace data unavailable" : "Extension acquisition by project"}
             </a>
           </div>
         </div>
 
-        <div className="layout-overall">
-          {scoreBreakdown.map((item) => (
-            <div className="layout-overall__item" key={item.label}>
-              <div className="layout-overall__type">
-                {item.label}
-                <strong>{item.weight}</strong>
-              </div>
-              <div className="layout-overall__metric">
-                <div className="layout-overall__chart">
-                  <div className="layout-overall__progress">
-                    <div className="layout-overall__progressbar" style={{ width: `${item.value * scoreProgress}%` }} />
+        <div className="layout-overall layout-overall--marketplace" style={{ "--overall-cols": marketplaceMetrics.length } as CSSProperties}>
+          {marketplaceMetrics.map((item) => {
+            const progressWidth = item.max > 0 ? Math.min((item.value / item.max) * 100 * scoreProgress, 100) : 0;
+            const metricValue = marketplaceStats.status === "ready" ? formatMetric(item.value * scoreProgress) : "--";
+
+            return (
+              <div className="layout-overall__item" key={item.label}>
+                <div className="layout-overall__type">
+                  <span className="layout-overall__project">
+                    <span className="layout-overall__logo" aria-hidden="true">
+                      <img src={item.logo} alt="" />
+                    </span>
+                    <span>{item.label}</span>
+                  </span>
+                  <strong>{item.tag}</strong>
+                </div>
+                <div className="layout-overall__metric">
+                  <div className="layout-overall__chart">
+                    <div className="layout-overall__progress">
+                      <div className="layout-overall__progressbar" style={{ width: `${progressWidth}%` }} />
+                    </div>
+                  </div>
+                  <div className="layout-overall__score">
+                    <strong>{metricValue}{item.suffix}</strong>
                   </div>
                 </div>
-                <div className="layout-overall__score">
-                  <strong>{Math.round(item.value * scoreProgress)}%</strong>
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div>
