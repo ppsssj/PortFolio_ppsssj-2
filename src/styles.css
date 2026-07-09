@@ -2372,6 +2372,22 @@
   margin-bottom: clamp(24px, 4vw, 56px);
 }
 
+.c-heading-score__link {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  line-height: 120%;
+  text-align: right;
+}
+
+.c-heading-score__updated {
+  max-width: 260px;
+  color: rgba(var(--color-primary-rgb), 0.52);
+  font-size: var(--text-size-small);
+  font-weight: var(--font-normal);
+  line-height: 130%;
+}
+
 .c-heading-score__note {
   display: inline-flex;
   align-items: baseline;

@@ -63,6 +63,24 @@ function formatMetric(value: number) {
   return numberFormat.format(Math.round(value));
 }
 
+function formatUpdatedAt(value?: string) {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}
+
 function buildMarketplaceMetrics(data: MarketplaceStatsResponse | null) {
   const maxAcquisition = Math.max(
     ...marketplaceProjectOrder.map((project) => data?.extensions[project.key]?.acquisition ?? 0),
@@ -255,6 +273,7 @@ export function ScoreSection() {
   const marketplaceData = marketplaceStats.status === "ready" ? marketplaceStats.data : null;
   const marketplaceMetrics = buildMarketplaceMetrics(marketplaceData);
   const totalAcquisition = marketplaceData?.summary.totalAcquisition ?? 0;
+  const updatedAtLabel = formatUpdatedAt(marketplaceData?.updatedAt);
 
   useEffect(() => {
     const section = scoreSectionRef.current;
@@ -354,8 +373,11 @@ export function ScoreSection() {
           </h2>
           <div className="c-heading-score__link">
             <a className="link-underlined" href="#score">
-              {marketplaceStats.status === "error" ? "Marketplace data unavailable" : "Extension acquisition by project"}
+              {marketplaceStats.status === "error" ? "Marketplace data unavailable" : "3 Published VS Code Extensions"}
             </a>
+            {updatedAtLabel ? (
+              <span className="c-heading-score__updated">Updated {updatedAtLabel} from Publisher Reports</span>
+            ) : null}
           </div>
         </div>
 
