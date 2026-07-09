@@ -2236,6 +2236,10 @@
   margin-bottom: clamp(24px, 4vw, 60px);
 }
 
+.layout-overall--marketplace {
+  margin-bottom: clamp(56px, 7vw, 112px);
+}
+
 .layout-overall__item {
   display: grid;
   grid-template-rows: auto 1fr auto;
