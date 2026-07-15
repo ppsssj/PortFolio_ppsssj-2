@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type DownloadHistoryPoint = {
   date: string;
@@ -49,9 +49,9 @@ function formatDate(value: string) {
   }).format(date);
 }
 
-function buildChartGeometry(points: DownloadHistoryPoint[]) {
+function buildChartPath(points: DownloadHistoryPoint[]) {
   if (!points.length) {
-    return { path: "", endPoint: null };
+    return "";
   }
 
   const timestamps = points.map((point) => new Date(`${point.date}T00:00:00Z`).getTime());
@@ -69,40 +69,11 @@ function buildChartGeometry(points: DownloadHistoryPoint[]) {
       return { x, y };
     });
 
-  return {
-    path: coordinates.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" "),
-    endPoint: coordinates.at(-1) ?? null,
-  };
+  return coordinates.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ");
 }
 
 export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: MarketplaceDownloadChartProps) {
   const [state, setState] = useState<ChartState>({ status: "loading", data: null });
-  const [hasEntered, setHasEntered] = useState(false);
-  const [prefersReducedMotion] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-
-    if (!section || !("IntersectionObserver" in window)) {
-      setHasEntered(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasEntered(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25 },
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -140,7 +111,7 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
   }, [extensionId]);
 
   const history = state.status === "ready" ? state.data.downloadHistory ?? [] : [];
-  const chartGeometry = useMemo(() => buildChartGeometry(history), [history]);
+  const chartPath = useMemo(() => buildChartPath(history), [history]);
   const firstPoint = history[0];
   const lastPoint = history.at(-1);
   const total = state.status === "ready" ? state.data.acquisition : null;
@@ -148,7 +119,7 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
   const installsFromVSCode = state.status === "ready" ? state.data.installsFromVSCode : null;
 
   return (
-    <section className="project-marketplace-downloads" id="downloads" ref={sectionRef}>
+    <section className="project-marketplace-downloads" id="downloads">
       <div className="inner">
         <div className="project-marketplace-downloads__header">
           <div>
@@ -160,7 +131,7 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
           </a>
         </div>
 
-        <div className={`project-download-chart project-download-chart--${state.status}${hasEntered ? " is-visible" : ""}`}>
+        <div className={`project-download-chart project-download-chart--${state.status}`}>
           <div className="project-download-chart__summary">
             <div className="project-download-chart__metric project-download-chart__metric--total">
               <span>Total downloads</span>
@@ -180,7 +151,7 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
           </div>
 
           <div className="project-download-chart__visual">
-            {state.status === "ready" && chartGeometry.path ? (
+            {state.status === "ready" && chartPath ? (
               <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} role="img" aria-label={`${state.data.displayName} cumulative downloads chart`}>
                 <line
                   className="project-download-chart__baseline"
@@ -189,47 +160,7 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
                   y1={chartHeight - chartPadding.bottom}
                   y2={chartHeight - chartPadding.bottom}
                 />
-                <path
-                  className="project-download-chart__line"
-                  d={chartGeometry.path}
-                  pathLength="1"
-                  strokeDasharray={prefersReducedMotion ? undefined : 1}
-                  strokeDashoffset={prefersReducedMotion ? undefined : 1}
-                >
-                  {!prefersReducedMotion && hasEntered ? (
-                    <animate
-                      id="downloadLineReveal"
-                      attributeName="stroke-dashoffset"
-                      from="1"
-                      to="0"
-                      dur="1.45s"
-                      fill="freeze"
-                      calcMode="spline"
-                      keyTimes="0;1"
-                      keySplines="0.22 1 0.36 1"
-                    />
-                  ) : null}
-                </path>
-                {chartGeometry.endPoint && (prefersReducedMotion || hasEntered) ? (
-                  <circle
-                    className="project-download-chart__point"
-                    cx={chartGeometry.endPoint.x}
-                    cy={chartGeometry.endPoint.y}
-                    r="5"
-                    opacity={prefersReducedMotion ? 1 : 0}
-                  >
-                    {!prefersReducedMotion ? (
-                      <animate
-                        attributeName="opacity"
-                        from="0"
-                        to="1"
-                        begin="downloadLineReveal.end"
-                        dur="0.16s"
-                        fill="freeze"
-                      />
-                    ) : null}
-                  </circle>
-                ) : null}
+                <path className="project-download-chart__line" d={chartPath} />
               </svg>
             ) : (
               <div className="project-download-chart__empty" aria-live="polite">

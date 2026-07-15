@@ -2354,13 +2354,6 @@
   vector-effect: non-scaling-stroke;
 }
 
-.project-download-chart__point {
-  fill: #ededed;
-  stroke: var(--color-primary);
-  stroke-width: 2;
-  vector-effect: non-scaling-stroke;
-}
-
 .project-download-chart__empty {
   display: grid;
   place-items: center;
@@ -2371,8 +2364,6 @@
 
 .project-download-chart--loading .project-download-chart__empty {
   background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.04), transparent);
-  background-size: 200% 100%;
-  animation: project-download-loading 1.8s linear infinite;
 }
 
 .project-download-chart__dates {
@@ -2388,11 +2379,6 @@
   text-transform: uppercase;
 }
 
-@keyframes project-download-loading {
-  to {
-    background-position: -200% 0;
-  }
-}
 
 
 @media (max-width: 1360px) {
@@ -3704,18 +3690,8 @@
     display: none;
   }
 
-  .project-download-chart__line,
-  .project-download-chart__point,
   .project-download-chart--loading .project-download-chart__empty {
     animation: none;
-  }
-
-  .project-download-chart__line {
-    stroke-dashoffset: 0;
-  }
-
-  .project-download-chart__point {
-    opacity: 1;
   }
 }
 
@@ -3960,7 +3936,7 @@
   }
 
   .project-marketplace-downloads__header h2 {
-    font-size: clamp(40px, 13vw, 68px);
+    font-size: clamp(32px, 10vw, 44px);
   }
 
   .project-case-finale__cta {
