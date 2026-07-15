@@ -44,12 +44,31 @@ export type CaseStudySection = {
   points?: string[];
 };
 
+export type CaseStudyFlowStep = {
+  label: string;
+  detail: string;
+};
+
+export type ProjectCaseStudyFinale = {
+  flow: {
+    eyebrow: string;
+    title: string;
+    steps: CaseStudyFlowStep[];
+  };
+  decisions: {
+    eyebrow: string;
+    title: string;
+    points: string[];
+  };
+};
+
 export type ProjectCaseStudy = {
   metrics: CaseStudyMetric[];
   outcome: string[];
   approach: CaseStudySection[];
   learnings: string[];
   nextSteps: string[];
+  finale: ProjectCaseStudyFinale;
 };
 
 export type PaletteItem = {
@@ -127,7 +146,7 @@ export const projectNavigationItems: LinkItem[] = [
   { label: "Result", href: "#result", scrollOffset: 96 },
   { label: "Approach", href: "#approach", scrollOffset: 96 },
   { label: "Screens", href: "#screens", scrollOffset: 96 },
-  { label: "Learning", href: "#learning", scrollOffset: 96 },
+  { label: "Works", href: "#structure", scrollOffset: 96 },
 ];
 
 export const socialItems: LinkItem[] = [
@@ -441,6 +460,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         body: "Chrome Extension은 가장 최근에 저장된 템플릿을 읽고, Manifest V3 콘텐츠 스크립트와 Chrome Storage를 사용해 실제 GitHub Home 페이지에 적용합니다.",
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "적용 흐름",
+        title: "웹에서 만든 레이아웃이 GitHub에 적용되기까지",
+        steps: [
+          { label: "기본 레이아웃 선택", detail: "제공되는 GitHub Home 레이아웃을 선택해 편집을 시작합니다." },
+          { label: "원하는 방식으로 편집", detail: "컬럼 너비와 배치 방식을 바꾸고, 필요한 블록만 화면에 남깁니다." },
+          { label: "설정 저장", detail: "완성한 레이아웃을 언제든 다시 사용할 수 있도록 저장합니다." },
+          { label: "확장 프로그램에서 불러오기", detail: "Chrome Extension이 가장 최근에 저장한 레이아웃을 불러옵니다." },
+          { label: "GitHub에 적용", detail: "불러온 설정에 맞춰 실제 GitHub Home 화면의 배치를 변경합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "구조 설계",
+        title: "웹 앱과 확장 프로그램의 역할을 나눴습니다",
+        points: [
+          "웹 앱에서는 레이아웃을 만들고 편집하는 작업에만 집중할 수 있게 했습니다.",
+          "확장 프로그램은 저장한 레이아웃을 불러와 GitHub에 적용하는 역할만 담당합니다.",
+          "웹 앱과 확장 프로그램이 같은 형식의 설정 데이터를 사용해 서로 다른 값이 전달되는 문제를 줄였습니다.",
+          "화면이 깨질 수 있는 설정은 미리 제한하고, 저장된 값도 적용 전에 한 번 더 확인합니다.",
+        ],
+      },
+    },
     learnings: [
       "개인화 도구는 사용자가 정보 우선순위를 바꾸더라도 페이지가 깨지지 않도록 안전한 레이아웃 제약이 필요합니다.",
       "FE, BE, Extension 사이에 공유 계약을 두면 템플릿 데이터의 불일치를 줄일 수 있습니다.",
@@ -475,6 +517,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         points: ["Node inspector", "Trace mode", "Runtime debug mode", "Scaffold Lab"],
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "분석 과정",
+        title: "소스 코드가 탐색 가능한 그래프가 되기까지",
+        steps: [
+          { label: "코드 읽기", detail: "현재 열려 있는 파일과 주변 TypeScript·JavaScript 파일을 불러옵니다." },
+          { label: "코드 구조 분석", detail: "AST를 이용해 코드가 어떤 요소로 구성되어 있는지 파악합니다." },
+          { label: "요소 분류", detail: "파일, 함수, 클래스, 타입을 각각 하나의 그래프 노드로 정리합니다." },
+          { label: "관계 연결", detail: "어떤 함수가 호출되고 참조되는지 선으로 연결합니다." },
+          { label: "원본 코드로 이동", detail: "그래프에서 노드를 선택하면 해당 소스 코드 위치로 바로 이동합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "탐색 설계",
+        title: "목적에 맞는 방식으로 코드를 살펴볼 수 있게 했습니다",
+        points: [
+          "Inspector에서는 선택한 함수나 클래스의 정보와 주변 연결 관계를 확인할 수 있습니다.",
+          "Trace Mode에서는 특정 코드가 어디에서 시작해 어디로 이어지는지 따라갈 수 있습니다.",
+          "Runtime Debug에서는 코드 구조뿐 아니라 실행 중에 값이 어떻게 변하는지도 확인할 수 있습니다.",
+          "기능을 목적별 모드로 나눠 한 화면에 너무 많은 정보가 나타나지 않도록 했습니다.",
+        ],
+      },
+    },
     learnings: [
       "Code visualization needs a strong bridge back to the source file.",
       "A VS Code Webview behaves like a small product inside another product, so layout and state must stay compact.",
@@ -508,6 +573,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         points: ["Character selection", "Accurate mode", "Debounced auto detect"],
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "동작 과정",
+        title: "Git 명령 결과가 캐릭터 피드백으로 표시되기까지",
+        steps: [
+          { label: "Git 명령 실행", detail: "사용자가 push, pull, commit 같은 Git 작업을 실행합니다." },
+          { label: "작업 감지", detail: "확장 프로그램이 명령 실행이나 저장소의 상태 변화를 확인합니다." },
+          { label: "성공 여부 확인", detail: "Git 실행 결과를 읽고 작업이 성공했는지 실패했는지 구분합니다." },
+          { label: "반복 알림 제거", detail: "짧은 시간에 같은 이벤트가 여러 번 감지되면 하나의 알림만 남깁니다." },
+          { label: "결과 표시", detail: "작업 결과에 맞는 메시지와 캐릭터 효과를 화면에 보여줍니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "피드백 설계",
+        title: "재미는 더하고 작업 방해는 줄였습니다",
+        points: [
+          "push, pull, commit처럼 결과 확인이 필요한 작업에만 피드백을 표시합니다.",
+          "애니메이션을 보여주기 전에 Git 명령의 성공과 실패를 정확히 구분하도록 했습니다.",
+          "피드백 화면은 에디터를 오래 가리지 않고 잠시 나타났다가 자동으로 사라집니다.",
+          "사용자가 원하는 캐릭터와 Git 작업 감지 방식을 선택할 수 있게 했습니다.",
+        ],
+      },
+    },
     learnings: [
       "Small DX tools still need precise state handling to avoid becoming distracting.",
       "Visual delight works best when the underlying command result is reliable.",
@@ -541,6 +629,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         body: "Vault turns generated graphs into reusable resources, which makes the product closer to a workspace than a one-off graph renderer.",
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "Workflow",
+        title: "수식으로 만든 그래프를 저장하고 다시 편집합니다",
+        steps: [
+          { label: "수식 또는 데이터 입력", detail: "시각화하려는 함수, 매개변수 또는 배열 데이터를 입력합니다." },
+          { label: "그래프 생성", detail: "입력 내용에 맞는 2D 그래프나 3D 곡선·곡면을 화면에 그립니다." },
+          { label: "그래프 조절", detail: "Studio에서 범위와 시점, 표현 방식을 바꾸며 결과를 살펴봅니다." },
+          { label: "Vault에 저장", detail: "만든 그래프를 나중에도 사용할 수 있도록 작업 목록에 저장합니다." },
+          { label: "다시 열어 편집", detail: "저장한 그래프를 다시 수정하거나 AI Panel에 그래프에 관한 설명을 요청합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "Product Design",
+        title: "그래프 작업을 언제든 이어갈 수 있게 했습니다",
+        points: [
+          "2D와 3D처럼 그래프 종류가 달라도 같은 작업 순서로 만들고 편집할 수 있게 했습니다.",
+          "3D 그래프를 처음 열었을 때 형태를 파악하기 쉽도록 기본 시점과 조작 방식을 정했습니다.",
+          "AI Panel은 일반적인 대화보다 현재 선택한 그래프를 설명하고 수정하는 데 집중합니다.",
+          "그래프를 저장하고 다시 편집할 수 있게 해 반복해서 사용하는 작업 공간으로 만들었습니다.",
+        ],
+      },
+    },
     learnings: [
       "3D interfaces need strong defaults because users can get lost quickly.",
       "Saving and reopening work changes a visualization demo into a usable product.",
@@ -574,6 +685,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         body: "Canvas output gives immediate feedback, while MediaPipe input makes body interaction part of the graph rather than a separate feature.",
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "실행 구조",
+        title: "노드를 연결해 실시간 결과를 확인하기까지",
+        steps: [
+          { label: "입력 추가", detail: "이미지, 시간, 웹캠, 손 움직임처럼 사용할 데이터를 노드로 추가합니다." },
+          { label: "노드 연결", detail: "각 노드를 선으로 연결해 데이터가 이동할 순서를 정합니다." },
+          { label: "연결 순서대로 계산", detail: "실행 엔진이 앞 노드의 결과를 다음 노드에 전달하며 값을 계산합니다." },
+          { label: "화면에 그리기", detail: "계산된 결과를 Canvas 2D를 이용해 시각 이미지로 변환합니다." },
+          { label: "결과 바로 확인", detail: "노드 안의 작은 화면과 최종 화면에서 변화를 실시간으로 확인합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "인터랙션 설계",
+        title: "연결한 결과를 바로 이해할 수 있게 했습니다",
+        points: [
+          "각 노드에 작은 미리보기 화면을 넣어 어느 단계에서 결과가 달라졌는지 바로 확인할 수 있습니다.",
+          "노드를 연결하거나 값을 바꾸면 최종 결과도 즉시 바뀌도록 만들었습니다.",
+          "손 움직임도 다른 이미지나 숫자 데이터처럼 자유롭게 연결할 수 있는 입력으로 만들었습니다.",
+          "노드 종류를 무작정 늘리기보다 연결 방향과 실행 순서를 쉽게 이해할 수 있도록 구성했습니다.",
+        ],
+      },
+    },
     learnings: [
       "Visual programming tools need predictable data flow more than many node types.",
       "Tiny previews inside nodes help users understand changes without losing the full canvas.",
@@ -607,6 +741,29 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         body: "The dashboard emphasizes why the result changed, not only what the predicted value is.",
       },
     ],
+    finale: {
+      flow: {
+        eyebrow: "예측 과정",
+        title: "입력한 위치가 시간대별 소음 예측으로 바뀌기까지",
+        steps: [
+          { label: "위치와 환경 입력", detail: "지도에서 예측할 위치를 선택하고 도로와 주변 환경 정보를 입력합니다." },
+          { label: "예측 요청", detail: "입력한 정보를 Flask API를 통해 소음 예측 모델에 전달합니다." },
+          { label: "교통수단별 계산", detail: "자동차, 이륜자동차, 열차 모델이 각각의 예상 소음 수준을 계산합니다." },
+          { label: "24시간 변화 표시", detail: "계산된 값을 0시부터 23시까지의 시간대별 그래프로 보여줍니다." },
+          { label: "주요 원인 표시", detail: "도로와 환경 조건 중 어떤 항목이 결과에 큰 영향을 주었는지 함께 보여줍니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "정보 설계",
+        title: "예측값만 보여주지 않고 의미까지 설명했습니다",
+        points: [
+          "지도에서는 어느 위치의 소음을 예측하고 있는지 확인할 수 있습니다.",
+          "24시간 그래프에서는 소음이 어느 시간대에 높아지는지 비교할 수 있습니다.",
+          "주요 영향 요인에서는 예측 결과가 달라진 이유를 확인할 수 있습니다.",
+          "자동차, 이륜자동차, 열차의 결과를 나눠 교통수단별 차이를 쉽게 비교할 수 있게 했습니다.",
+        ],
+      },
+    },
     learnings: [
       "Data products need explanation layers to be useful to non-model users.",
       "Maps and charts should answer different questions instead of duplicating the same value.",

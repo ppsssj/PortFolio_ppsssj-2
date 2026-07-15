@@ -91,11 +91,37 @@ function calculateExtensionStats(extension, responseJson) {
     },
   );
 
+  const downloadsByDate = responseJson.dailyStats.reduce((result, dailyStat) => {
+    const statisticDate = new Date(dailyStat?.statisticDate);
+
+    if (Number.isNaN(statisticDate.getTime())) {
+      return result;
+    }
+
+    const date = statisticDate.toISOString().slice(0, 10);
+    const counts = dailyStat?.counts ?? {};
+    const downloads = toNumber(counts.webDownloadCount) + toNumber(counts.installCount);
+
+    result.set(date, (result.get(date) ?? 0) + downloads);
+
+    return result;
+  }, new Map());
+
+  let cumulativeDownloads = 0;
+  const downloadHistory = Array.from(downloadsByDate.entries())
+    .sort(([firstDate], [secondDate]) => firstDate.localeCompare(secondDate))
+    .map(([date, downloads]) => {
+      cumulativeDownloads += downloads;
+
+      return { date, value: cumulativeDownloads };
+    });
+
   return {
     displayName: extension.displayName,
     extensionName: extension.extensionName,
     uniqueIdentifier: extension.uniqueIdentifier,
     acquisition: totals.webDownloads + totals.installsFromVSCode,
+    downloadHistory,
     ...totals,
   };
 }

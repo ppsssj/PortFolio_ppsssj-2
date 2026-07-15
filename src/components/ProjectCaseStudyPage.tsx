@@ -5,6 +5,7 @@ import { AnimatedFavicon } from "./AnimatedFavicon";
 import { FloatingMenu } from "./FloatingMenu";
 import { FooterSection } from "./FooterSection";
 import { MarqueeBar } from "./MarqueeBar";
+import { MarketplaceDownloadChart } from "./MarketplaceDownloadChart";
 import { ProjectHeroImageStack } from "./ProjectHeroImageStack";
 import { ProjectScreenFlowCamera } from "./ProjectScreenFlowCamera";
 import { SiteHeader } from "./SiteHeader";
@@ -40,6 +41,20 @@ function DownIcon() {
   );
 }
 
+function getProjectLinkLabel(label: string) {
+  const normalizedLabel = label.toLowerCase();
+
+  if (normalizedLabel === "github") {
+    return "GitHub에서 코드 보기";
+  }
+
+  if (normalizedLabel === "marketplace") {
+    return "Marketplace에서 확인하기";
+  }
+
+  return label;
+}
+
 export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const slug = getProjectSlug(card);
   const caseStudy = projectCaseStudies[slug];
@@ -47,6 +62,12 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const heroStackCount = Math.min(galleryImages.length, 5);
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
+  const marketplaceExtensionId = marketplaceLink
+    ? new URL(marketplaceLink.href).searchParams.get("itemName")
+    : null;
+  const caseNavigationItems = marketplaceLink
+    ? [...projectNavigationItems, { label: "Downloads", href: "#downloads", scrollOffset: 96 }]
+    : projectNavigationItems;
   const heroRef = useRef<HTMLElement | null>(null);
   const heroMediaWrapRef = useRef<HTMLDivElement | null>(null);
   const heroStackTargetRef = useRef(0);
@@ -415,32 +436,53 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
 
         <ProjectScreenFlowCamera card={card} images={galleryImages} />
 
-        <section className="project-case-section project-case-section--split project-case-section--learning" id="learning">
+        <section className="project-case-section project-case-finale" id="structure">
           <div className="inner">
-            <div className="project-case-split">
-              <article>
-                <p>Learning</p>
-                <h2>What I learned.</h2>
-                <ul>
-                  {caseStudy.learnings.map((item) => (
-                    <li key={item}>{item}</li>
+            <div className="project-case-finale__grid">
+              <article className="project-case-finale__flow">
+                <p>{caseStudy.finale.flow.eyebrow}</p>
+                <h2>{caseStudy.finale.flow.title}</h2>
+                <ol className="project-case-flow" aria-label={`${card.title} 핵심 작동 흐름`}>
+                  {caseStudy.finale.flow.steps.map((step, index) => (
+                    <li key={step.label}>
+                      <span className="project-case-flow__index" aria-hidden="true">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <strong>{step.label}</strong>
+                        <p>{step.detail}</p>
+                      </div>
+                    </li>
                   ))}
-                </ul>
+                </ol>
               </article>
-              <article>
-                <p>Next</p>
-                <h2>What should be measured next.</h2>
+              <article className="project-case-finale__decisions">
+                <p>{caseStudy.finale.decisions.eyebrow}</p>
+                <h2>{caseStudy.finale.decisions.title}</h2>
                 <ul>
-                  {caseStudy.nextSteps.map((item) => (
+                  {caseStudy.finale.decisions.points.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
               </article>
             </div>
+            {card.detail.links?.length ? (
+              <nav className="project-case-finale__cta" aria-label={`${card.title} 프로젝트 링크`}>
+                {card.detail.links.map((link) => (
+                  <a href={link.href} target="_blank" rel="noreferrer" key={`${link.label}-${link.href}`}>
+                    {getProjectLinkLabel(link.label)}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </nav>
+            ) : null}
           </div>
         </section>
+        {marketplaceLink && marketplaceExtensionId ? (
+          <MarketplaceDownloadChart extensionId={marketplaceExtensionId} marketplaceHref={marketplaceLink.href} />
+        ) : null}
       </main>
-      <FloatingMenu items={projectNavigationItems} githubHref={githubLink?.href ?? siteMeta.visitHref} showMail={false} />
+      <FloatingMenu items={caseNavigationItems} githubHref={githubLink?.href ?? siteMeta.visitHref} showMail={false} />
       <FooterSection />
     </div>
   );
