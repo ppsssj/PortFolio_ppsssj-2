@@ -331,7 +331,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
     <div className="page-shell project-case-page">
       <AnimatedFavicon />
       <MarqueeBar />
-      <SiteHeader />
+      <SiteHeader items={caseNavigationItems} />
       <main className="wrapper project-case" id="content">
         <section className="project-case-hero" id="overview" ref={heroRef}>
           <div className="inner">

@@ -462,7 +462,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     finale: {
       flow: {
-        eyebrow: "적용 흐름",
+        eyebrow: "Application flow",
         title: "웹에서 만든 레이아웃이 GitHub에 적용되기까지",
         steps: [
           { label: "기본 레이아웃 선택", detail: "제공되는 GitHub Home 레이아웃을 선택해 편집을 시작합니다." },
@@ -473,7 +473,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         ],
       },
       decisions: {
-        eyebrow: "구조 설계",
+        eyebrow: "Structural design",
         title: "웹 앱과 확장 프로그램의 역할을 나눴습니다",
         points: [
           "웹 앱에서는 레이아웃을 만들고 편집하는 작업에만 집중할 수 있게 했습니다.",
@@ -519,7 +519,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     finale: {
       flow: {
-        eyebrow: "분석 과정",
+        eyebrow: "Analysis process",
         title: "소스 코드가 탐색 가능한 그래프가 되기까지",
         steps: [
           { label: "코드 읽기", detail: "현재 열려 있는 파일과 주변 TypeScript·JavaScript 파일을 불러옵니다." },
@@ -530,7 +530,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         ],
       },
       decisions: {
-        eyebrow: "탐색 설계",
+        eyebrow: "Exploration Design",
         title: "목적에 맞는 방식으로 코드를 살펴볼 수 있게 했습니다",
         points: [
           "Inspector에서는 선택한 함수나 클래스의 정보와 주변 연결 관계를 확인할 수 있습니다.",
@@ -575,7 +575,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     finale: {
       flow: {
-        eyebrow: "동작 과정",
+        eyebrow: "How it works",
         title: "Git 명령 결과가 캐릭터 피드백으로 표시되기까지",
         steps: [
           { label: "Git 명령 실행", detail: "사용자가 push, pull, commit 같은 Git 작업을 실행합니다." },
@@ -586,7 +586,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         ],
       },
       decisions: {
-        eyebrow: "피드백 설계",
+        eyebrow: "Feedback design",
         title: "재미는 더하고 작업 방해는 줄였습니다",
         points: [
           "push, pull, commit처럼 결과 확인이 필요한 작업에만 피드백을 표시합니다.",
@@ -687,7 +687,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     finale: {
       flow: {
-        eyebrow: "실행 구조",
+        eyebrow: "Execution structure",
         title: "노드를 연결해 실시간 결과를 확인하기까지",
         steps: [
           { label: "입력 추가", detail: "이미지, 시간, 웹캠, 손 움직임처럼 사용할 데이터를 노드로 추가합니다." },
@@ -698,7 +698,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         ],
       },
       decisions: {
-        eyebrow: "인터랙션 설계",
+        eyebrow: "Interaction Design",
         title: "연결한 결과를 바로 이해할 수 있게 했습니다",
         points: [
           "각 노드에 작은 미리보기 화면을 넣어 어느 단계에서 결과가 달라졌는지 바로 확인할 수 있습니다.",
@@ -743,7 +743,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     finale: {
       flow: {
-        eyebrow: "예측 과정",
+        eyebrow: "Prediction process",
         title: "입력한 위치가 시간대별 소음 예측으로 바뀌기까지",
         steps: [
           { label: "위치와 환경 입력", detail: "지도에서 예측할 위치를 선택하고 도로와 주변 환경 정보를 입력합니다." },
@@ -754,7 +754,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         ],
       },
       decisions: {
-        eyebrow: "정보 설계",
+        eyebrow: "Information Design",
         title: "예측값만 보여주지 않고 의미까지 설명했습니다",
         points: [
           "지도에서는 어느 위치의 소음을 예측하고 있는지 확인할 수 있습니다.",

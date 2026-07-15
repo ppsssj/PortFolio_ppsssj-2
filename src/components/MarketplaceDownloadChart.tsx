@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type DownloadHistoryPoint = {
   date: string;
@@ -9,6 +9,8 @@ type MarketplaceExtensionStats = {
   displayName: string;
   uniqueIdentifier: string;
   acquisition: number;
+  webDownloads: number;
+  installsFromVSCode: number;
   downloadHistory?: DownloadHistoryPoint[];
 };
 
@@ -47,9 +49,9 @@ function formatDate(value: string) {
   }).format(date);
 }
 
-function buildChartPath(points: DownloadHistoryPoint[]) {
+function buildChartGeometry(points: DownloadHistoryPoint[]) {
   if (!points.length) {
-    return "";
+    return { path: "", endPoint: null };
   }
 
   const timestamps = points.map((point) => new Date(`${point.date}T00:00:00Z`).getTime());
@@ -59,19 +61,47 @@ function buildChartPath(points: DownloadHistoryPoint[]) {
   const plotWidth = chartWidth - chartPadding.left - chartPadding.right;
   const plotHeight = chartHeight - chartPadding.top - chartPadding.bottom;
 
-  return points
-    .map((point, index) => {
+  const coordinates = points.map((point, index) => {
       const timeProgress = maxTime === minTime ? index / Math.max(points.length - 1, 1) : (timestamps[index] - minTime) / (maxTime - minTime);
       const x = chartPadding.left + timeProgress * plotWidth;
       const y = chartPadding.top + (1 - point.value / maxValue) * plotHeight;
 
-      return `${index === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`;
-    })
-    .join(" ");
+      return { x, y };
+    });
+
+  return {
+    path: coordinates.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" "),
+    endPoint: coordinates.at(-1) ?? null,
+  };
 }
 
 export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: MarketplaceDownloadChartProps) {
   const [state, setState] = useState<ChartState>({ status: "loading", data: null });
+  const [hasEntered, setHasEntered] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section || !("IntersectionObserver" in window)) {
+      setHasEntered(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasEntered(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -109,13 +139,15 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
   }, [extensionId]);
 
   const history = state.status === "ready" ? state.data.downloadHistory ?? [] : [];
-  const chartPath = useMemo(() => buildChartPath(history), [history]);
+  const chartGeometry = useMemo(() => buildChartGeometry(history), [history]);
   const firstPoint = history[0];
   const lastPoint = history.at(-1);
   const total = state.status === "ready" ? state.data.acquisition : null;
+  const webDownloads = state.status === "ready" ? state.data.webDownloads : null;
+  const installsFromVSCode = state.status === "ready" ? state.data.installsFromVSCode : null;
 
   return (
-    <section className="project-marketplace-downloads" id="downloads">
+    <section className="project-marketplace-downloads" id="downloads" ref={sectionRef}>
       <div className="inner">
         <div className="project-marketplace-downloads__header">
           <div>
@@ -127,15 +159,27 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
           </a>
         </div>
 
-        <div className={`project-download-chart project-download-chart--${state.status}`}>
+        <div className={`project-download-chart project-download-chart--${state.status}${hasEntered ? " is-visible" : ""}`}>
           <div className="project-download-chart__summary">
-            <span>Total downloads</span>
-            <strong>{total === null ? "--" : numberFormat.format(total)}</strong>
-            <p>Web downloads + VS Code installs</p>
+            <div className="project-download-chart__metric project-download-chart__metric--total">
+              <span>Total downloads</span>
+              <strong>{total === null ? "--" : numberFormat.format(total)}</strong>
+              <p>Web downloads + VS Code installs</p>
+            </div>
+            <div className="project-download-chart__metric">
+              <span>Web downloads</span>
+              <strong>{webDownloads === null ? "--" : numberFormat.format(webDownloads)}</strong>
+              <p>Downloads from the Marketplace page</p>
+            </div>
+            <div className="project-download-chart__metric">
+              <span>VS Code installs</span>
+              <strong>{installsFromVSCode === null ? "--" : numberFormat.format(installsFromVSCode)}</strong>
+              <p>Installs started inside VS Code</p>
+            </div>
           </div>
 
           <div className="project-download-chart__visual">
-            {state.status === "ready" && chartPath ? (
+            {state.status === "ready" && chartGeometry.path ? (
               <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} role="img" aria-label={`${state.data.displayName} cumulative downloads chart`}>
                 <line
                   className="project-download-chart__baseline"
@@ -144,12 +188,12 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
                   y1={chartHeight - chartPadding.bottom}
                   y2={chartHeight - chartPadding.bottom}
                 />
-                <path className="project-download-chart__line" d={chartPath} pathLength="1" />
-                {lastPoint ? (
+                <path className="project-download-chart__line" d={chartGeometry.path} pathLength="1" />
+                {chartGeometry.endPoint ? (
                   <circle
                     className="project-download-chart__point"
-                    cx={chartWidth - chartPadding.right}
-                    cy={chartPadding.top}
+                    cx={chartGeometry.endPoint.x}
+                    cy={chartGeometry.endPoint.y}
                     r="5"
                   />
                 ) : null}

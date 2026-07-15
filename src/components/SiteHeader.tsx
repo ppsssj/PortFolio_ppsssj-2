@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
-import { navigationItems, projectNavigationItems } from "../data/portfolio";
+import { navigationItems, projectNavigationItems, type LinkItem } from "../data/portfolio";
 import { scrollToAnchor } from "../utils/anchorScroll";
+
+type SiteHeaderProps = {
+  items?: LinkItem[];
+};
 
 function getElementBackground(element: Element | null) {
   let currentElement = element;
@@ -33,7 +37,7 @@ function isDarkColor(color: string) {
   return luminance < 0.5;
 }
 
-export function SiteHeader() {
+export function SiteHeader({ items }: SiteHeaderProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isThumbOnDark, setIsThumbOnDark] = useState(false);
   const [isDraggingProgress, setIsDraggingProgress] = useState(false);
@@ -48,7 +52,7 @@ export function SiteHeader() {
   const targetScrollTopRef = useRef(0);
   const isScrolled = scrollProgress > 0.5;
   const isProjectPage = window.location.pathname.startsWith("/projects/");
-  const headerNavigationItems = isProjectPage ? projectNavigationItems : navigationItems;
+  const headerNavigationItems = items ?? (isProjectPage ? projectNavigationItems : navigationItems);
 
   const getScrollableHeight = () =>
     Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight;
