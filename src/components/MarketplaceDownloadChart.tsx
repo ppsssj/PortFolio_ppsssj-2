@@ -78,6 +78,7 @@ function buildChartGeometry(points: DownloadHistoryPoint[]) {
 export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: MarketplaceDownloadChartProps) {
   const [state, setState] = useState<ChartState>({ status: "loading", data: null });
   const [hasEntered, setHasEntered] = useState(false);
+  const [prefersReducedMotion] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -188,14 +189,46 @@ export function MarketplaceDownloadChart({ extensionId, marketplaceHref }: Marke
                   y1={chartHeight - chartPadding.bottom}
                   y2={chartHeight - chartPadding.bottom}
                 />
-                <path className="project-download-chart__line" d={chartGeometry.path} pathLength="1" />
-                {chartGeometry.endPoint ? (
+                <path
+                  className="project-download-chart__line"
+                  d={chartGeometry.path}
+                  pathLength="1"
+                  strokeDasharray={prefersReducedMotion ? undefined : 1}
+                  strokeDashoffset={prefersReducedMotion ? undefined : 1}
+                >
+                  {!prefersReducedMotion && hasEntered ? (
+                    <animate
+                      id="downloadLineReveal"
+                      attributeName="stroke-dashoffset"
+                      from="1"
+                      to="0"
+                      dur="1.45s"
+                      fill="freeze"
+                      calcMode="spline"
+                      keyTimes="0;1"
+                      keySplines="0.22 1 0.36 1"
+                    />
+                  ) : null}
+                </path>
+                {chartGeometry.endPoint && (prefersReducedMotion || hasEntered) ? (
                   <circle
                     className="project-download-chart__point"
                     cx={chartGeometry.endPoint.x}
                     cy={chartGeometry.endPoint.y}
                     r="5"
-                  />
+                    opacity={prefersReducedMotion ? 1 : 0}
+                  >
+                    {!prefersReducedMotion ? (
+                      <animate
+                        attributeName="opacity"
+                        from="0"
+                        to="1"
+                        begin="downloadLineReveal.end"
+                        dur="0.16s"
+                        fill="freeze"
+                      />
+                    ) : null}
+                  </circle>
                 ) : null}
               </svg>
             ) : (
