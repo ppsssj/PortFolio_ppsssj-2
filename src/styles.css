@@ -2305,7 +2305,7 @@
   display: block;
   margin-top: clamp(24px, 3vw, 42px);
   color: var(--color-primary);
-  font-size: clamp(42px, 4.5vw, 76px);
+  font-size: clamp(32px, 3.4vw, 56px);
   font-weight: var(--font-black);
   letter-spacing: -0.04em;
   line-height: 0.86;
@@ -3920,7 +3920,11 @@
     border-left: 0;
   }
 
-  .project-download-chart__metric strong,
+  .project-download-chart__metric strong {
+    margin-top: 18px;
+    font-size: clamp(42px, 15vw, 60px);
+  }
+
   .project-download-chart__metric--total strong {
     margin-top: 18px;
     font-size: clamp(54px, 20vw, 82px);
@@ -4155,4 +4159,10 @@
     height: 16px;
   }
 
+}
+
+@media (max-width: 768px) {
+  .project-case-hero__stack-jump {
+    display: none;
+  }
 }
