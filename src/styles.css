@@ -2328,6 +2328,19 @@
   margin-top: 0;
 }
 
+.project-download-chart__canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 280;
+  cursor: crosshair;
+  outline: none;
+}
+
+.project-download-chart__canvas:focus-visible {
+  outline: 1px solid rgba(var(--color-primary-rgb), 0.28);
+  outline-offset: 8px;
+}
+
 .project-download-chart__visual svg,
 .project-download-chart__empty {
   display: block;
@@ -2352,6 +2365,74 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+}
+
+.project-download-chart__active-point line {
+  stroke: rgba(var(--color-primary-rgb), 0.2);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.project-download-chart__active-point circle {
+  fill: #ededed;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.project-download-chart__tooltip {
+  position: absolute;
+  z-index: 1;
+  left: var(--tooltip-x);
+  top: var(--tooltip-y);
+  display: grid;
+  gap: 6px;
+  min-width: max-content;
+  padding: 10px 12px;
+  border: 1px solid rgba(var(--color-primary-rgb), 0.14);
+  border-radius: 3px;
+  background: rgba(237, 237, 237, 0.96);
+  box-shadow: 0 8px 24px rgba(var(--color-primary-rgb), 0.08);
+  color: var(--color-primary);
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 14px));
+  backdrop-filter: blur(8px);
+}
+
+.project-download-chart__tooltip[data-side="bottom"] {
+  transform: translate(-50%, 14px);
+}
+
+.project-download-chart__tooltip[data-edge="left"] {
+  transform: translate(0, calc(-100% - 14px));
+}
+
+.project-download-chart__tooltip[data-edge="left"][data-side="bottom"] {
+  transform: translate(0, 14px);
+}
+
+.project-download-chart__tooltip[data-edge="right"] {
+  transform: translate(-100%, calc(-100% - 14px));
+}
+
+.project-download-chart__tooltip[data-edge="right"][data-side="bottom"] {
+  transform: translate(-100%, 14px);
+}
+
+.project-download-chart__tooltip span {
+  color: rgba(var(--color-primary-rgb), 0.48);
+  font-size: 9px;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.project-download-chart__tooltip strong {
+  font-size: 12px;
+  font-weight: var(--font-black);
+  line-height: 1;
 }
 
 .project-download-chart__empty {
