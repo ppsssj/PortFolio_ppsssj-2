@@ -8,44 +8,16 @@ type SiteHeaderProps = {
   items?: LinkItem[];
 };
 
-function getElementBackground(element: Element | null) {
-  let currentElement = element;
-
-  while (currentElement && currentElement !== document.documentElement) {
-    const background = window.getComputedStyle(currentElement).backgroundColor;
-
-    if (background && background !== "rgba(0, 0, 0, 0)" && background !== "transparent") {
-      return background;
-    }
-
-    currentElement = currentElement.parentElement;
-  }
-
-  return window.getComputedStyle(document.body).backgroundColor;
-}
-
-function isDarkColor(color: string) {
-  const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-
-  if (!match) {
-    return false;
-  }
-
-  const [, red, green, blue] = match.map(Number);
-  const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
-
-  return luminance < 0.5;
-}
-
 export function SiteHeader({ items }: SiteHeaderProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isThumbOnDark, setIsThumbOnDark] = useState(false);
   const [isDraggingProgress, setIsDraggingProgress] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const progressShellRef = useRef<HTMLDivElement>(null);
+  const progressControlRef = useRef<HTMLDivElement>(null);
   const isDraggingProgressRef = useRef(false);
   const isProgressNavigationRef = useRef(false);
   const moveFrameRef = useRef<number | null>(null);
-  const contrastFrameRef = useRef<number | null>(null);
   const settleFrameRef = useRef<number | null>(null);
   const settleTimeoutRef = useRef<number | null>(null);
   const pendingClientXRef = useRef(0);
@@ -90,34 +62,18 @@ export function SiteHeader({ items }: SiteHeaderProps) {
     settleTimeoutRef.current = window.setTimeout(finishProgressNavigation, 1400);
   };
 
-  const updateThumbContrast = (progress: number) => {
-    if (contrastFrameRef.current !== null) {
-      window.cancelAnimationFrame(contrastFrameRef.current);
-    }
-
-    contrastFrameRef.current = window.requestAnimationFrame(() => {
-      const track = trackRef.current;
-
-      if (!track) {
-        return;
-      }
-
-      const rect = track.getBoundingClientRect();
-      const x = rect.left + rect.width * (progress / 100);
-      const y = rect.top + rect.height / 2;
-      const elementBehindThumb = document.elementFromPoint(x, y);
-      const background = getElementBackground(elementBehindThumb);
-
-      setIsThumbOnDark(isDarkColor(background));
-      contrastFrameRef.current = null;
-    });
-  };
-
   const setProgress = (nextProgress: number, shouldScroll: boolean) => {
     const clampedProgress = Math.min(100, Math.max(0, nextProgress));
 
+    if (thumbRef.current) {
+      thumbRef.current.style.left = `${clampedProgress}%`;
+    }
+
+    const hasScrolled = clampedProgress > 0.5;
+    progressShellRef.current?.classList.toggle("is-scrolled", hasScrolled);
+    progressControlRef.current?.classList.toggle("is-scrolled", hasScrolled);
+    progressControlRef.current?.setAttribute("aria-valuenow", String(Math.round(clampedProgress)));
     setScrollProgress(clampedProgress);
-    updateThumbContrast(clampedProgress);
 
     if (shouldScroll) {
       const scrollableHeight = getScrollableHeight();
@@ -224,10 +180,6 @@ export function SiteHeader({ items }: SiteHeaderProps) {
         window.cancelAnimationFrame(moveFrameRef.current);
       }
 
-      if (contrastFrameRef.current !== null) {
-        window.cancelAnimationFrame(contrastFrameRef.current);
-      }
-
       clearSettleChecks();
     };
   }, []);
@@ -275,9 +227,11 @@ export function SiteHeader({ items }: SiteHeaderProps) {
 
               <div className="header-main__search">
                 <div
+                  ref={progressShellRef}
                   className={`scroll-progress-shell${isProjectPage ? " is-project-page" : ""}${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
                 >
                   <div
+                    ref={progressControlRef}
                     className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
                     role="slider"
                     aria-label="Page scroll position"
@@ -292,7 +246,8 @@ export function SiteHeader({ items }: SiteHeaderProps) {
                   >
                     <div className="scroll-progress__track" ref={trackRef}>
                       <div
-                        className={`scroll-progress__thumb${isThumbOnDark ? " is-on-dark" : ""}`}
+                        ref={thumbRef}
+                        className="scroll-progress__thumb"
                         style={{ left: `${scrollProgress}%` }}
                       />
                     </div>

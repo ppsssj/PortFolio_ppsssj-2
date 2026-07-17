@@ -16,6 +16,14 @@
   min-height: 100%;
 }
 
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 .wrapper {
   width: 100%;
 }
@@ -103,7 +111,8 @@
   max-width: min(calc(100vw - 32px), 560px);
   transform: translateX(-50%);
   opacity: 0.72;
-  transition: top 0.28s ease, opacity 0.25s ease;
+  transition: opacity 0.2s ease;
+  mix-blend-mode: difference;
   pointer-events: auto;
 }
 
@@ -224,7 +233,7 @@
   position: relative;
   height: 3px;
   border-radius: 999px;
-  background: rgba(var(--color-primary-rgb), 0.12);
+  background: rgba(255, 255, 255, 0.2);
   overflow: visible;
   transition: height 0.2s ease, background 0.2s ease;
 }
@@ -232,7 +241,7 @@
 .scroll-progress:hover .scroll-progress__track,
 .scroll-progress.is-dragging .scroll-progress__track {
   height: 4px;
-  background: rgba(var(--color-primary-rgb), 0.2);
+  background: rgba(255, 255, 255, 0.32);
 }
 
 .scroll-progress__thumb {
@@ -240,12 +249,12 @@
   top: 50%;
   width: 11px;
   height: 11px;
-  background: #1a1a1a;
-  border: 2px solid #1a1a1a;
+  background: #fff;
+  border: 2px solid #fff;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
   transform: translate(-50%, -50%);
-  transition: left 0.12s linear, background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .scroll-progress:hover .scroll-progress__thumb,
@@ -254,13 +263,7 @@
 }
 
 .scroll-progress.is-dragging .scroll-progress__thumb {
-  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
-}
-
-.scroll-progress__thumb.is-on-dark {
-  background: #fff;
-  border-color: #fff;
-  box-shadow: 0 0 0 1px rgba(var(--color-primary-rgb), 0.18);
+  transition: transform 0.2s ease;
 }
 
 @media (max-width: 1270px) {
