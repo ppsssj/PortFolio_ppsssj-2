@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { createPortal } from "react-dom";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
 import { navigationItems, projectNavigationItems, type LinkItem } from "../data/portfolio";
@@ -185,7 +186,8 @@ export function SiteHeader({ items }: SiteHeaderProps) {
   }, []);
 
   return (
-    <header id="header">
+    <>
+      <header id="header">
       <div className="inner">
         <div className="c-header-main">
           <div className="header-main">
@@ -225,35 +227,7 @@ export function SiteHeader({ items }: SiteHeaderProps) {
                 </ul>
               </nav>
 
-              <div className="header-main__search">
-                <div
-                  ref={progressShellRef}
-                  className={`scroll-progress-shell${isProjectPage ? " is-project-page" : ""}${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
-                >
-                  <div
-                    ref={progressControlRef}
-                    className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
-                    role="slider"
-                    aria-label="Page scroll position"
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuenow={Math.round(scrollProgress)}
-                    tabIndex={0}
-                    onPointerDown={handleProgressPointerDown}
-                    onPointerMove={handleProgressPointerMove}
-                    onPointerUp={handleProgressPointerUp}
-                    onPointerCancel={handleProgressPointerUp}
-                  >
-                    <div className="scroll-progress__track" ref={trackRef}>
-                      <div
-                        ref={thumbRef}
-                        className="scroll-progress__thumb"
-                        style={{ left: `${scrollProgress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div className="header-main__search" aria-hidden="true" />
 
               <div className="header-main__right">
                 <div className="header-main__bts">
@@ -280,5 +254,37 @@ export function SiteHeader({ items }: SiteHeaderProps) {
         </div>
       </div>
     </header>
+
+      {createPortal(
+        <div
+          ref={progressShellRef}
+          className={`scroll-progress-shell${isProjectPage ? " is-project-page" : ""}${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
+        >
+          <div
+            ref={progressControlRef}
+            className={`scroll-progress${isScrolled ? " is-scrolled" : ""}${isDraggingProgress ? " is-dragging" : ""}`}
+            role="slider"
+            aria-label="Page scroll position"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(scrollProgress)}
+            tabIndex={0}
+            onPointerDown={handleProgressPointerDown}
+            onPointerMove={handleProgressPointerMove}
+            onPointerUp={handleProgressPointerUp}
+            onPointerCancel={handleProgressPointerUp}
+          >
+            <div className="scroll-progress__track" ref={trackRef}>
+              <div
+                ref={thumbRef}
+                className="scroll-progress__thumb"
+                style={{ left: `${scrollProgress}%` }}
+              />
+            </div>
+          </div>
+        </div>,
+        document.body,
+      )}
+    </>
   );
 }
