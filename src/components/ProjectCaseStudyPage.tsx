@@ -2,6 +2,11 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 
 import { getProjectSlug, projectCaseStudies, projectNavigationItems, siteMeta, type HighlightCard } from "../data/portfolio";
 import { AnimatedFavicon } from "./AnimatedFavicon";
+import { ArchitectureDiagram } from "./ArchitectureDiagram";
+import { ClientBackendDiagram } from "./ClientBackendDiagram";
+import { GridArchitectureDiagram } from "./GridArchitectureDiagram";
+import { PipelineArchitectureDiagram } from "./PipelineArchitectureDiagram";
+import { SystemFlowDiagram } from "./SystemFlowDiagram";
 import { FloatingMenu } from "./FloatingMenu";
 import { FooterSection } from "./FooterSection";
 import { MarqueeBar } from "./MarqueeBar";
@@ -68,6 +73,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const caseNavigationItems = [
     ...projectNavigationItems,
     ...(caseStudy?.architecture ? [{ label: "System", href: "#architecture", scrollOffset: 96 }] : []),
+    ...(caseStudy?.process ? [{ label: "Process", href: "#process", scrollOffset: 96 }] : []),
     ...(marketplaceLink ? [{ label: "Downloads", href: "#downloads", scrollOffset: 96 }] : []),
   ];
   const heroRef = useRef<HTMLElement | null>(null);
@@ -443,6 +449,15 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                 <p>{caseStudy.architecture.eyebrow}</p>
                 <h2>{caseStudy.architecture.title}</h2>
               </div>
+              {caseStudy.architecture.diagram ? <ArchitectureDiagram diagram={caseStudy.architecture.diagram} /> : null}
+              {caseStudy.architecture.flowDiagram ? <SystemFlowDiagram diagram={caseStudy.architecture.flowDiagram} /> : null}
+              {caseStudy.architecture.clientBackendDiagram ? (
+                <ClientBackendDiagram diagram={caseStudy.architecture.clientBackendDiagram} />
+              ) : null}
+              {caseStudy.architecture.pipelineDiagram ? (
+                <PipelineArchitectureDiagram diagram={caseStudy.architecture.pipelineDiagram} />
+              ) : null}
+              {caseStudy.architecture.gridDiagram ? <GridArchitectureDiagram diagram={caseStudy.architecture.gridDiagram} /> : null}
               <div className="project-case-approach">
                 {caseStudy.architecture.items.map((item, index, items) => (
                   <article
@@ -453,7 +468,24 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                   >
                     <h3>{item.title}</h3>
                     <p>{item.body}</p>
-                    {item.points?.length ? (
+                    {item.table ? (
+                      <table className="project-case-table">
+                        <thead>
+                          <tr>
+                            <th>{item.table.columns[0]}</th>
+                            <th>{item.table.columns[1]}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {item.table.rows.map((row) => (
+                            <tr key={row.join("-")}>
+                              <td>{row[0]}</td>
+                              <td>{row[1]}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : item.points?.length ? (
                       <ul>
                         {item.points.map((point) => (
                           <li key={point}>{point}</li>
@@ -474,20 +506,116 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                 <p>{caseStudy.performance.eyebrow}</p>
                 <h2>{caseStudy.performance.title}</h2>
               </div>
-              <div className="project-case-metrics">
+              <div className="project-case-stats">
                 {caseStudy.performance.stats.map((stat) => (
-                  <article className="project-case-metric" key={stat.label}>
-                    <span>{stat.label}</span>
+                  <article className="project-case-stats__item" key={stat.label}>
                     <strong>{stat.value}</strong>
-                    <p>{stat.note}</p>
+                    <span>{stat.label}</span>
                   </article>
                 ))}
               </div>
+              {caseStudy.performance.layers?.length ? (
+                <div className="project-case-pipeline-wrap">
+                  <p className="project-case-pipeline-wrap__caption">
+                    각 계층은 서로 다른 비용을 줄이며, 상위 캐시가 실패하면 하위 계층의 재사용 여부를 판단합니다.
+                  </p>
+                  <div className="project-case-pipeline">
+                    {caseStudy.performance.flowInput ? (
+                      <div className="project-case-pipeline__io">
+                        <span>{caseStudy.performance.flowInput.label}</span>
+                        <p>{caseStudy.performance.flowInput.note}</p>
+                      </div>
+                    ) : null}
+                    <span className="project-case-pipeline__arrow" aria-hidden="true" />
+                    <ol className="project-case-pipeline__layers" aria-label="캐시 계층 구조">
+                      {caseStudy.performance.layers.map((layer) => (
+                        <li key={layer.badge}>
+                          <div className="project-case-pipeline__layer-main">
+                            <span className="project-case-pipeline__badge">{layer.badge}</span>
+                            <strong>{layer.title}</strong>
+                            <p>{layer.detail}</p>
+                          </div>
+                          {layer.tags?.length ? (
+                            <div className="project-case-pipeline__layer-keys">
+                              <span>Cache Key</span>
+                              <div className="project-case-chips">
+                                {layer.tags.map((tag) => (
+                                  <span className="project-case-chip" key={tag}>
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ol>
+                    <span className="project-case-pipeline__arrow" aria-hidden="true" />
+                    {caseStudy.performance.flowOutput ? (
+                      <div className="project-case-pipeline__io">
+                        <span>{caseStudy.performance.flowOutput.label}</span>
+                        <p>{caseStudy.performance.flowOutput.note}</p>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
               <ul className="project-case-outcomes">
                 {caseStudy.performance.notes.map((note) => (
                   <li key={note}>{note}</li>
                 ))}
               </ul>
+            </div>
+          </section>
+        ) : null}
+
+        {caseStudy.process ? (
+          <section className="project-case-section project-case-section--dark" id="process">
+            <div className="inner">
+              <div className="project-case-section__heading">
+                <p>{caseStudy.process.eyebrow}</p>
+                <h2>{caseStudy.process.title}</h2>
+              </div>
+              <div className="project-case-process-body">
+                <div className="project-case-process-flows">
+                  {caseStudy.process.flows.map((flow) => (
+                    <div className="project-case-hpipeline" key={flow.title}>
+                      <p className="project-case-hpipeline__title">{flow.title}</p>
+                      <ol className="project-case-hpipeline__steps" aria-label={flow.title}>
+                        {flow.steps.map((step) => (
+                          <li key={step}>{step}</li>
+                        ))}
+                      </ol>
+                      <p className="project-case-hpipeline__caption">{flow.caption}</p>
+                    </div>
+                  ))}
+                </div>
+                {caseStudy.process.tables?.length ? (
+                  <div className="project-case-process-table">
+                    {caseStudy.process.tables.map((table) => (
+                      <div className="project-case-process-table__item" key={table.title}>
+                        <p className="project-case-hpipeline__title">{table.title}</p>
+                        <table className="project-case-table project-case-table--dark">
+                          <thead>
+                            <tr>
+                              <th>{table.columns[0]}</th>
+                              <th>{table.columns[1]}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {table.rows.map((row) => (
+                              <tr key={row.join("-")}>
+                                <td>{row[0]}</td>
+                                <td>{row[1]}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </section>
         ) : null}

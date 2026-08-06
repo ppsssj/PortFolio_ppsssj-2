@@ -42,6 +42,10 @@ export type CaseStudySection = {
   title: string;
   body: string;
   points?: string[];
+  table?: {
+    columns: [string, string];
+    rows: [string, string][];
+  };
 };
 
 export type CaseStudyFlowStep = {
@@ -69,6 +73,97 @@ export type CaseStudyUxFlowItem = {
   points?: string[];
 };
 
+export type ArchDiagramNode = {
+  label: string;
+  note?: string;
+};
+
+export type ArchitectureSystemDiagram = {
+  extension: {
+    title: string;
+    subtitle: string;
+    entry: ArchDiagramNode;
+    hub: ArchDiagramNode;
+    services: ArchDiagramNode[];
+    editorApi: ArchDiagramNode;
+  };
+  webview: {
+    title: string;
+    subtitle: string;
+    panels: ArchDiagramNode[];
+  };
+  protocol: {
+    label: string;
+    forward: string;
+    backward: string;
+  };
+};
+
+export type SystemFlowDiagram = {
+  user: ArchDiagramNode;
+  client: {
+    title: string;
+    panels: ArchDiagramNode[];
+  };
+  spine: ArchDiagramNode[];
+  aiBranch: {
+    context: string;
+    nodes: ArchDiagramNode[];
+  };
+};
+
+export type ProcessFlow = {
+  title: string;
+  caption: string;
+  steps: string[];
+};
+
+export type ProcessTable = {
+  title: string;
+  columns: [string, string];
+  rows: [string, string][];
+};
+
+export type ClientBackendDiagram = {
+  client: {
+    title: string;
+    groups: { label: string; chips: string[] }[];
+    note?: string;
+  };
+  backend: {
+    title: string;
+    chips: string[];
+  };
+  storage: {
+    title: string;
+    note: string;
+    chips?: string[];
+  };
+  protocol: {
+    forward: string;
+    backward: string;
+  };
+};
+
+export type PipelineArchitectureDiagram = {
+  input: { title: string; note: string; meta?: string };
+  model: { title: string; subtitle: string; chips: string[] };
+  backend: { title: string; subtitle: string; note?: string };
+  frontend: { title: string; chips: string[] };
+  protocol: { forward: string; backward: string };
+};
+
+export type GridArchitectureNode = {
+  title: string;
+  subtitle: string;
+  note?: string;
+};
+
+export type GridArchitectureDiagram = {
+  topRow: GridArchitectureNode[];
+  bottomRow: GridArchitectureNode[];
+};
+
 export type ProjectCaseStudy = {
   metrics: CaseStudyMetric[];
   outcome: string[];
@@ -79,13 +174,27 @@ export type ProjectCaseStudy = {
   architecture?: {
     eyebrow: string;
     title: string;
+    diagram?: ArchitectureSystemDiagram;
+    flowDiagram?: SystemFlowDiagram;
+    clientBackendDiagram?: ClientBackendDiagram;
+    pipelineDiagram?: PipelineArchitectureDiagram;
+    gridDiagram?: GridArchitectureDiagram;
     items: CaseStudySection[];
   };
   performance?: {
     eyebrow: string;
     title: string;
     stats: CaseStudyMetric[];
+    flowInput?: { label: string; note: string };
+    flowOutput?: { label: string; note: string };
+    layers?: { badge: string; title: string; detail: string; tags?: string[] }[];
     notes: string[];
+  };
+  process?: {
+    eyebrow: string;
+    title: string;
+    flows: ProcessFlow[];
+    tables?: ProcessTable[];
   };
   uxFlow?: {
     eyebrow: string;
@@ -516,6 +625,98 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "템플릿 버전 관리와 마이그레이션 처리를 강화합니다.",
       "GitHub Home의 전후 예시를 통해 확장 동작을 문서화합니다.",
     ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "웹에서 편집한 Template JSON을 저장하고, Extension이 실제 GitHub 화면에 적용합니다",
+      gridDiagram: {
+        topRow: [
+          { title: "React Web Editor", subtitle: "Template Library · Editor · Network" },
+          { title: "Node.js API", subtitle: "Google ID Token 검증 · Template CRUD · Publish · Like · View · Import", note: "Bearer Session · Rate Limit" },
+          { title: "SQLite", subtitle: "Templates · Versions", note: "Sessions · Usage" },
+        ],
+        bottomRow: [
+          { title: "Chrome Extension", subtitle: "Manifest V3 · Content Script", note: "DOM Mapping · CSS Override" },
+          { title: "Shared Contract", subtitle: "Types · Validator · Normalize", note: "FE · BE · Extension 공통" },
+          { title: "GitHub DOM", subtitle: "Home · Repository · Profile", note: "Screen별 Selector Registry" },
+        ],
+      },
+      items: [
+        {
+          title: "Node.js API",
+          body: "React Web Editor와 Chrome Extension 사이에서 인증과 템플릿 데이터를 중계합니다. 저장 시점마다 Shared Schema로 검증·정규화합니다.",
+          table: {
+            columns: ["Module", "Role"],
+            rows: [
+              ["Auth", "Google ID Token 검증 · Bearer Session"],
+              ["Template API", "CRUD · Publish · Like · View · Import"],
+              ["Rate Limit", "Read/Mutation 요청 제한"],
+            ],
+          },
+        },
+        {
+          title: "SQLite",
+          body: "템플릿과 버전, 세션·사용 기록을 저장합니다. Legacy JSON을 마이그레이션해 하나의 스키마로 관리합니다.",
+          points: ["Templates · Versions", "Sessions · Usage", "Legacy JSON Migration"],
+        },
+        {
+          title: "Chrome Extension",
+          body: "가장 최근 템플릿을 조회해 GitHub DOM에 적용합니다. 단일 selector 대신 Screen별 Selector Registry를 사용해 DOM 변경에 대응합니다.",
+          points: ["Manifest V3 Content Script 주입", "Selector Registry 기반 DOM Mapping", "MutationObserver로 동적 화면 재적용"],
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Pipelines",
+      title: "템플릿 편집이 저장을 거쳐 실제 GitHub 화면 적용으로 이어지기까지",
+      flows: [
+        {
+          title: "1. Template Library와 편집 흐름",
+          steps: ["Google 로그인", "Library 진입", "기본 템플릿 복제", "Editor 수정", "Save Draft"],
+          caption: "기본 템플릿은 직접 수정하지 않고 복제본으로 시작해 원본 상태를 보호했습니다.",
+        },
+        {
+          title: "2. 저장부터 실제 적용까지",
+          steps: ["Google 로그인", "템플릿 편집", "저장 요청", "검증 · 정규화", "SQLite 저장", "Extension 조회", "GitHub 적용"],
+          caption: "저장 성공만 확인하지 않고, 동일 계약으로 Extension 적용 가능 여부까지 보장합니다.",
+        },
+        {
+          title: "3. Chrome Extension 실행 흐름",
+          steps: ["document_idle", "페이지 감지", "템플릿 조회", "Payload 검증", "DOM 매핑", "스타일 적용"],
+          caption: "Manifest V3 Content Script가 GitHub 페이지에 직접 주입되어 실행됩니다.",
+        },
+      ],
+      tables: [
+        {
+          title: "Template Contract 구조",
+          columns: ["Layer", "필드"],
+          rows: [
+            ["Screen", "github-home · repository-readme · profile-overview"],
+            ["Region", "topbar · left/right sidebar · main-feed"],
+            ["Block", "type · visible · props · screenId"],
+            ["Layout", "left · main · right · resizeEnabled"],
+          ],
+        },
+        {
+          title: "보안 · 운영 처리",
+          columns: ["항목", "설명"],
+          rows: [
+            ["ID Token 검증", "Google Identity 기반 사용자 식별"],
+            ["Session 저장", "SHA-256으로 저장"],
+            ["CORS", "Allowlist 기반 제한"],
+            ["Rate Limit", "Read/Mutation 분리 적용"],
+          ],
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Result",
+      title: "원본을 직접 건드리지 않고 복제본으로 안전하게 다뤘습니다",
+      items: [
+        { tag: "Template", title: "기본 템플릿 복제", body: "기본 템플릿은 직접 수정하지 않고 복제본으로 시작해 원본 상태를 보호합니다." },
+        { tag: "Import", title: "Import 복제 저장", body: "Import는 원본을 덮어쓰지 않고 사용자 Library에 복제본으로 저장합니다." },
+        { tag: "Registry", title: "Selector Registry 격리", body: "외부 서비스 DOM에 직접 의존하는 위험을 Selector Registry로 격리했습니다." },
+      ],
+    },
   },
   cogic: {
     metrics: [
@@ -576,24 +777,71 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     architecture: {
       eyebrow: "System Design",
       title: "분석 엔진과 UI를 메시지 계약으로 분리했습니다",
+      diagram: {
+        extension: {
+          title: "VS Code Extension Host",
+          subtitle: "메시지 라우팅 · 정적 분석 · VS Code API",
+          entry: { label: "Extension Entry", note: "activate()" },
+          hub: { label: "CodeGraphPanel", note: "Orchestrator" },
+          services: [
+            { label: "Workspace Service", note: "파일 탐색 · tsconfig" },
+            { label: "Analysis Core", note: "AST · Symbol · Type" },
+            { label: "RuntimeDebug Bridge", note: "Stack Frame · Variables" },
+          ],
+          editorApi: { label: "VS Code Editor API", note: "openLocation · Source Range 이동" },
+        },
+        webview: {
+          title: "React Webview",
+          subtitle: "Visualization & Interaction",
+          panels: [
+            { label: "Topbar · FiltersBar", note: "Depth · Trace · 필터" },
+            { label: "CanvasPane", note: "ReactFlow 그래프" },
+            { label: "Inspector", note: "상세 정보 탐색" },
+            { label: "Scaffold Lab", note: "구조 생성" },
+          ],
+        },
+        protocol: {
+          label: "Typed Message Protocol",
+          forward: "selectWorkspaceFile · openLocation · analyzeActiveFile",
+          backward: "workspaceFiles · analysisResult · runtimeDebug",
+        },
+      },
       items: [
         {
           title: "Extension Host",
           body: "VS Code API와 정적 분석을 전담하는 영역입니다. CodeGraphPanel이 Orchestrator로서 메시지 라우팅, 상태 관리, 요청 제어를 맡고, Analysis Core가 TypeScript Program·TypeChecker로 AST를 분석합니다.",
-          points: ["Workspace Service — 파일 탐색, tsconfig, 목록 캐시", "Analysis Core — AST·Symbol·Type·Framework Adapter", "RuntimeDebug Bridge — Stack Frame·Variables 연결"],
+          table: {
+            columns: ["Component", "Role"],
+            rows: [
+              ["Workspace Service", "파일 탐색 · tsconfig · 목록 캐시"],
+              ["Analysis Core", "AST · Symbol · Type · Framework Adapter"],
+              ["RuntimeDebug Bridge", "Stack Frame · Variables 연결"],
+            ],
+          },
         },
         {
           title: "React Webview",
           body: "시각화와 사용자 상호작용만 담당하는 독립된 프론트엔드입니다. App이 메시지·상태·레이아웃을 통합 관리하고, 그래프 렌더링과 상세 탐색을 컴포넌트 단위로 분리했습니다.",
-          points: ["Topbar·FiltersBar — Depth·Trace·필터 제어", "CanvasPane — ReactFlow 그래프, 선택·탐색·Export", "Inspector·Scaffold Lab — 상세 정보와 구조 생성"],
+          table: {
+            columns: ["Component", "Role"],
+            rows: [
+              ["Topbar · FiltersBar", "Depth · Trace · 필터 제어"],
+              ["CanvasPane", "ReactFlow 그래프, 선택 · 탐색 · Export"],
+              ["Inspector · Scaffold Lab", "상세 정보와 구조 생성"],
+            ],
+          },
         },
         {
           title: "Typed Message Protocol",
           body: "두 영역은 직접 결합되지 않고, 타입이 정의된 요청/응답 메시지로만 통신합니다. Webview가 selectWorkspaceFile·openLocation 같은 요청을 보내면, Extension이 analysisResult·workspaceFiles로 응답하는 구조입니다.",
-          points: [
-            "Webview → Extension: selectWorkspaceFile · openLocation · analyzeActiveFile",
-            "Extension → Webview: workspaceFiles · analysisResult · runtimeDebug",
-          ],
+          table: {
+            columns: ["Webview → Extension", "Extension → Webview"],
+            rows: [
+              ["selectWorkspaceFile", "workspaceFiles"],
+              ["openLocation", "analysisResult"],
+              ["analyzeActiveFile", "runtimeDebug"],
+            ],
+          },
         },
       ],
     },
@@ -601,9 +849,32 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       eyebrow: "Performance",
       title: "3단계 캐시로 반복 분석 비용을 줄였습니다",
       stats: [
-        { label: "Workspace TTL", value: "10초", note: "ts·tsx·js·jsx 파일 목록을 10초간 재사용하고, node_modules·dist·build는 최대 4,000개 검색에서 제외합니다." },
-        { label: "Analysis Cache", value: "40개", note: "동일한 코드와 분석 옵션의 graph·diagnostics·trace 결과를 최근 접근 시각 기준으로 최대 40개까지 재사용합니다." },
-        { label: "SourceFile Cache", value: "800개", note: "변경되지 않은 디스크 파일의 파싱 결과를 CompilerHost에서 최대 800개까지 재사용해 반복 파싱 비용을 줄입니다." },
+        { label: "Workspace TTL", value: "10초", note: "파일 목록 재사용 주기" },
+        { label: "Max Scan", value: "4,000", note: "최대 검색 파일 수" },
+        { label: "Analysis Cache", value: "40개", note: "분석 결과 캐시 수" },
+        { label: "SourceFile Cache", value: "800개", note: "SourceFile 캐시 수" },
+      ],
+      flowInput: { label: "분석 요청", note: "Active Editor + Graph Options" },
+      flowOutput: { label: "분석 결과", note: "graph · diagnostics · trace · meta" },
+      layers: [
+        {
+          badge: "Layer 1",
+          title: "Workspace File List Cache",
+          detail: "ts·tsx·js·jsx 파일 목록을 10초 동안 재사용하고, node_modules·dist·build·out·.next은 제외한 채 최대 4,000개까지 검색합니다.",
+          tags: ["workspace state"],
+        },
+        {
+          badge: "Layer 2",
+          title: "Analysis Result Cache",
+          detail: "동일한 코드와 분석 옵션의 graph·diagnostics·trace 결과를 최근 접근 시각 기준으로 최대 40개까지 재사용합니다.",
+          tags: ["codeHash", "graphDepth", "traceMode", "workspaceFilesHash"],
+        },
+        {
+          badge: "Layer 3",
+          title: "TypeScript SourceFile Cache",
+          detail: "변경되지 않은 디스크 파일의 파싱 결과를 CompilerHost에서 최대 800개까지 재사용해 반복 파싱 비용을 줄입니다.",
+          tags: ["mtimeMs", "size", "ScriptKind", "languageVersionKey"],
+        },
       ],
       notes: [
         "저장되지 않은 활성 편집기 내용은 항상 메모리의 최신 텍스트로 분석해 캐시가 오래된 코드를 보여주지 않도록 했습니다.",
@@ -753,6 +1024,108 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Add demo scenarios with saved Vault examples.",
       "Document AI Panel command coverage.",
     ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "React Client와 Spring Boot API를 하나의 그래프 워크스페이스로 연결했습니다",
+      flowDiagram: {
+        user: { label: "User" },
+        client: {
+          title: "React Client",
+          panels: [
+            { label: "Studio", note: "그래프 생성 · 편집 · 2D·3D 시각화" },
+            { label: "Vault", note: "나의 그래프 관리 · 공개·비공개 설정" },
+            { label: "AI Panel", note: "자연어 요청 · AI 분석 결과 확인" },
+          ],
+        },
+        spine: [
+          { label: "Studio State", note: "앱 상태 · 그래프 데이터 · Undo/Redo · Marker 분석 결과" },
+          { label: "Math & Render Engine", note: "수식 파싱(Math.js) · 좌표 샘플링 · 2D·3D 렌더링" },
+          { label: "Spring Boot API", note: "Auth · Vault CRUD · History 관리" },
+          { label: "MVP Storage", note: "저장된 그래프 · 변경 히스토리 · AI 요청 기록" },
+        ],
+        aiBranch: {
+          context: "Context",
+          nodes: [
+            { label: "AI Proxy / LLM", note: "그래프 문맥 전달 · LLM 응답 처리 · 구조화 명령 변환" },
+            { label: "Structured Command", note: "허용 명령 필터링 · Allowlist 검증 · 파라미터 검증" },
+          ],
+        },
+      },
+      items: [
+        {
+          title: "React Client",
+          body: "Studio·Vault·AI Panel 세 화면이 하나의 클라이언트에서 상태를 공유합니다. Studio에서 만든 그래프를 Vault에서 관리하고, AI Panel에서 같은 그래프에 대해 질문하고 명령할 수 있습니다.",
+          table: {
+            columns: ["Panel", "Role"],
+            rows: [
+              ["Studio", "그래프 생성 · 편집 · 2D·3D 시각화"],
+              ["Vault", "나의 그래프 관리 · 공개·비공개 설정"],
+              ["AI Panel", "자연어 요청 · AI 분석 결과 확인"],
+            ],
+          },
+        },
+        {
+          title: "Math & Render Engine",
+          body: "수식을 파싱해 좌표를 샘플링하고, Three.js로 2D·3D 그래프를 렌더링하며 사용자의 직접 조작까지 처리하는 핵심 엔진입니다.",
+          points: ["수식 파싱 (Math.js)", "좌표 샘플링", "2D·3D 렌더링", "그래프 직접 조작"],
+        },
+        {
+          title: "Spring Boot API",
+          body: "React Client가 만든 그래프와 작업 이력을 영속화하는 백엔드입니다. 사용자별 리소스를 인증 기반으로 저장하고 조회합니다.",
+          table: {
+            columns: ["Endpoint", "Role"],
+            rows: [
+              ["Auth", "로그인 · 사용자 관리"],
+              ["Vault CRUD", "그래프 리소스 관리"],
+              ["History", "작업 이력 관리"],
+            ],
+          },
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Pipelines",
+      title: "수식이 그래프가 되고, AI 명령이 상태에 반영되기까지",
+      flows: [
+        {
+          title: "1. 수식 기반 2D·3D 그래프 렌더링",
+          steps: ["수식 입력", "Math.js 파싱", "좌표 샘플링", "Float32Array", "BufferGeometry", "Three.js 렌더링"],
+          caption:
+            "수식을 파싱하고 정의역을 일정 간격으로 샘플링해 좌표 데이터를 생성한 뒤, BufferGeometry로 변환해 2D·3D 그래프로 렌더링했습니다.",
+        },
+        {
+          title: "2. 그래프 직접 조작 및 Undo/Redo",
+          steps: ["포인트 선택", "Drag 시작", "Snapshot 저장", "좌표 변경", "그래프 재계산", "History 갱신"],
+          caption: "한 번의 Drag 동작을 하나의 Undo 단위로 관리했습니다. Drag 시작 시 상태를 저장하고, 종료 시 변경 결과를 History에 기록합니다.",
+        },
+        {
+          title: "3. AI 명령 처리 흐름",
+          steps: ["자연어 요청", "그래프 문맥", "LLM 요청", "JSON 파싱", "Allowlist", "결과 반영"],
+          caption: "그래프 문맥을 LLM에 전달하고, 응답을 JSON 명령으로 변환한 뒤 검증된 결과만 그래프 상태에 반영했습니다.",
+        },
+      ],
+      tables: [
+        {
+          title: "지원 명령 · Allowlist",
+          columns: ["명령", "기능"],
+          rows: [
+            ["mark_max", "극대점 표시"],
+            ["mark_roots", "근 표시"],
+            ["slice_x", "X축 단면"],
+            ["contour_z", "Z값 등고선"],
+          ],
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Result",
+      title: "검증된 명령만 그래프 상태에 반영합니다",
+      items: [
+        { tag: "Context", title: "Context 구성", body: "현재 그래프 정보를 포함해 LLM에 전달할 문맥을 구성합니다." },
+        { tag: "Validate", title: "명령 검증", body: "JSON 명령을 Allowlist 기준으로 파라미터까지 검증합니다." },
+        { tag: "Apply", title: "상태 반영", body: "검증된 결과만 그래프 상태(Marker · 단면 · 등고선)에 적용합니다." },
+      ],
+    },
   },
   prismdesign: {
     metrics: [
@@ -809,6 +1182,118 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Record performance data for large node graphs.",
       "Document the runtime data model.",
     ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "편집 상태와 실행 런타임을 분리하고, 연결 정보를 실제 데이터 흐름으로 변환했습니다",
+      clientBackendDiagram: {
+        client: {
+          title: "React Client",
+          groups: [
+            { label: "Studio State", chips: ["Nodes / Edges", "Operator Params", "Selection", "Viewer State"] },
+            { label: "Runtime / Evaluator", chips: ["Input Map", "Registry 조회", "TOP 평가", "CHOP 평가", "SOP 평가", "Frame Cache"] },
+          ],
+          note: "Canvas 2D Preview / Final Viewer",
+        },
+        backend: {
+          title: "Backend (Express)",
+          chips: ["JWT 인증", "Graph CRUD API", "User Graph Directory"],
+        },
+        storage: {
+          title: "JSON Graph Storage",
+          note: "/graphs/{userId}/graph_001.json",
+          chips: ["Nodes / Edges", "사용자별 폴더 구조"],
+        },
+        protocol: {
+          forward: "POST · PUT · DELETE /api/graphs",
+          backward: "그래프 목록 · 상세 응답",
+        },
+      },
+      items: [
+        {
+          title: "React Client",
+          body: "Studio State가 편집 중인 노드·연결·선택 상태를 들고 있고, Runtime/Evaluator가 이를 매 프레임 평가해 Canvas 2D Preview와 최종 Viewer로 내보냅니다.",
+          table: {
+            columns: ["State", "Role"],
+            rows: [
+              ["Studio State", "Nodes/Edges · Operator Params · Selection · Viewer State"],
+              ["Runtime / Evaluator", "Input Map → Registry → TOP·CHOP·SOP 평가 → Frame Cache"],
+              ["Canvas 2D", "노드별 Preview · Final Viewer"],
+            ],
+          },
+        },
+        {
+          title: "Backend (Express)",
+          body: "React Client와는 Graph CRUD API로만 통신합니다. JWT로 사용자를 식별하고, 사용자별 디렉터리에 그래프를 JSON으로 저장·조회합니다.",
+          table: {
+            columns: ["Module", "Role"],
+            rows: [
+              ["JWT 인증", "Bearer Token 검증 · 사용자 식별"],
+              ["Graph CRUD API", "생성 · 조회 · 저장 · 이름 변경 · 삭제"],
+              ["User Graph Directory", "사용자별 폴더 구조"],
+            ],
+          },
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Pipelines",
+      title: "노드 연결이 실제 데이터 흐름과 실행 결과로 이어지기까지",
+      flows: [
+        {
+          title: "1. ReactFlow 기반 노드 편집기",
+          steps: ["Operator 선택", "노드 생성", "위치 배치", "Handle 연결", "Parameter 수정", "편집 상태 갱신"],
+          caption: "노드 생성·연결·선택·삭제와 Inspector 연동이 가능한 편집기를 구현했습니다.",
+        },
+        {
+          title: "2. 실시간 Runtime 평가",
+          steps: ["requestAnimationFrame", "Input Map 생성", "Operator 종류 확인", "Registry 탐색", "연결 노드 평가", "Frame Cache", "Preview 출력"],
+          caption: "프레임마다 연결 관계를 평가하고, 노드별 미리보기와 최종 Viewer를 갱신했습니다.",
+        },
+        {
+          title: "3. 손동작 데이터 처리 흐름",
+          steps: ["웹캠 입력", "HandLandmarker", "제스처 계산", "CHOP 채널 변환", "Operator 연결", "실시간 비주얼 변화"],
+          caption:
+            "웹캠에서 추출한 손 랜드마크를 거리·높이·각도 값으로 계산한 뒤, 0~1 범위의 CHOP 채널로 변환해 여러 Operator 파라미터에 연결했습니다.",
+        },
+        {
+          title: "4. 사용자별 프로젝트 저장 흐름",
+          steps: ["Studio State", "Thumbnail", "Authorization", "Express API", "JSON 저장"],
+          caption:
+            "Nodes·Edges·Params를 직렬화하고 Viewer 결과로 썸네일을 생성한 뒤, Bearer Token을 포함해 /api/graphs로 저장을 요청하고 사용자별 폴더에 JSON으로 저장합니다.",
+        },
+      ],
+      tables: [
+        {
+          title: "API 주요 엔드포인트",
+          columns: ["Endpoint", "설명"],
+          rows: [
+            ["GET /api/graphs", "그래프 목록 조회"],
+            ["GET /api/graphs/:id", "특정 그래프 조회"],
+            ["POST /api/graphs", "새 그래프 저장"],
+            ["PUT /api/graphs/:id", "그래프 수정"],
+            ["DELETE /api/graphs/:id", "그래프 삭제"],
+          ],
+        },
+        {
+          title: "제스처 채널 매핑",
+          columns: ["손동작", "제어 대상"],
+          rows: [
+            ["엄지 · 검지 Pinch (ch0)", "Noise Amplitude"],
+            ["검지 높이 (ch1)", "Noise Frequency"],
+            ["손목 기울기 (ch2)", "Animation Speed"],
+          ],
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Result",
+      title: "손동작을 UI 이벤트가 아닌 데이터로 다뤘습니다",
+      items: [
+        { tag: "Input", title: "입력 추상화", body: "웹캠 로직을 Hands CHOP으로 분리했습니다." },
+        { tag: "Channel", title: "데이터 채널화", body: "손동작을 0~1 범위의 채널 값으로 변환했습니다." },
+        { tag: "Reuse", title: "재사용 가능한 연결", body: "TOP·SOP 파라미터에 반복해서 연결할 수 있습니다." },
+      ],
+    },
   },
   "traffic-noise-prediction-system": {
     metrics: [
@@ -865,6 +1350,106 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Show example input/output scenarios.",
       "Document the data source and preprocessing pipeline.",
     ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "Frontend와 모델 서버를 분리하고, JSON 기반 계약으로 연결했습니다",
+      pipelineDiagram: {
+        input: {
+          title: "도시 환경 데이터",
+          note: "위치 · 시간 · 거리 · 날씨 · 교통수단",
+          meta: "JSON Metadata",
+        },
+        model: {
+          title: "AI Model Layer",
+          subtitle: "전처리 · 입력 스키마 고정 · CatBoost 추론",
+          chips: ["자동차", "이륜자동차", "열차"],
+        },
+        backend: {
+          title: "Flask Backend API",
+          subtitle: "입력 검증 → 모델 선택 → 추론 → JSON 응답",
+          note: "서울 지역 좌표 범위 Validation",
+        },
+        frontend: {
+          title: "React Frontend",
+          chips: ["지도 기반 위치 입력", "24시간 예측 그래프", "영향 요인 시각화"],
+        },
+        protocol: {
+          forward: "예측 요청",
+          backward: "REST API 응답",
+        },
+      },
+      items: [
+        {
+          title: "AI Model Layer",
+          body: "원본 메타데이터를 전처리하고 입력 스키마를 고정한 뒤, 교통수단별로 독립된 CatBoost 모델이 추론합니다.",
+          points: ["전처리 · 입력 스키마 고정", "CatBoost 추론 (교통수단별 모델)", "자동차 · 이륜자동차 · 열차 모델 분리"],
+        },
+        {
+          title: "Flask Backend API",
+          body: "React Frontend와는 REST API로만 통신합니다. 서울 지역 좌표 범위를 검증한 뒤 모델을 선택해 추론하고 JSON으로 응답합니다.",
+          points: ["입력 검증 → 모델 선택 → 추론 → JSON 응답", "서울 지역 좌표 범위 Validation"],
+        },
+        {
+          title: "React Frontend",
+          body: "예측 요청을 보내고 응답을 지도, 24시간 그래프, 영향 요인 화면으로 나눠 보여줍니다.",
+          points: ["지도 기반 위치 입력", "24시간 예측 그래프", "영향 요인 시각화"],
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Pipelines",
+      title: "위치 데이터가 예측값과 해석 가능한 결과로 이어지기까지",
+      flows: [
+        {
+          title: "1. 모델 입력과 예측 파이프라인",
+          steps: ["원본 JSON", "전처리", "스키마 고정", "범주형 정의", "CatBoost 추론", "예측 결과"],
+          caption:
+            "원본 메타데이터를 전처리하고 feature_list.json · cat_cols.json으로 입력 스키마를 고정한 뒤, 교통수단별 CatBoost 모델로 추론해 dB와 Feature Importance를 얻습니다.",
+        },
+        {
+          title: "2. 프론트엔드 상태 관리",
+          steps: ["Idle", "Loading", "Success", "Invalid", "Error"],
+          caption:
+            "초기 위치 선택 대기 상태에서 예측 요청을 보내고, 서울 범위 검증과 API 응답 결과에 따라 Success · Invalid · Error 중 하나로 전환됩니다.",
+        },
+        {
+          title: "3. 예측 결과 해석 구조",
+          steps: ["모델 예측값", "Feature Importance", "영향 요인 재분류", "사용자 화면 반영"],
+          caption: "시간대별 dB 예측값과 변수 중요도를 거리 · 시간 · 도시 환경 · 날씨로 재분류해 주요 원인을 화면에 표시합니다.",
+        },
+      ],
+      tables: [
+        {
+          title: "API 응답 구조",
+          columns: ["필드", "설명"],
+          rows: [
+            ["predictions", "시간대별 예측 dB 배열"],
+            ["vehicleType", "자동차 · 이륜자동차 · 열차"],
+            ["featureImportance", "주요 영향 요인 목록"],
+            ["location", "latitude · longitude"],
+          ],
+        },
+        {
+          title: "24시간 소음 프로파일 요약",
+          columns: ["지표", "값"],
+          rows: [
+            ["최대 예측값", "72.4 dB · 18시"],
+            ["최저 예측값", "49.8 dB · 03시"],
+            ["예측 포인트", "교통수단별 24개"],
+          ],
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Result",
+      title: "영향 요인을 네 가지 기준으로 재분류했습니다",
+      items: [
+        { tag: "Distance", title: "거리", body: "소음원과 측정 지점 간 거리입니다." },
+        { tag: "Time", title: "시간", body: "시간대별 교통 패턴을 반영합니다." },
+        { tag: "Urban", title: "도시 환경", body: "도로 · 건물 · 공간 특성입니다." },
+        { tag: "Weather", title: "날씨", body: "기상 조건과 환경 변수입니다." },
+      ],
+    },
   },
 };
 
