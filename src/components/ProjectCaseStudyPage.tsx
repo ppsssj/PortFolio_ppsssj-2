@@ -65,9 +65,11 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const marketplaceExtensionId = marketplaceLink
     ? new URL(marketplaceLink.href).searchParams.get("itemName")
     : null;
-  const caseNavigationItems = marketplaceLink
-    ? [...projectNavigationItems, { label: "Downloads", href: "#downloads", scrollOffset: 96 }]
-    : projectNavigationItems;
+  const caseNavigationItems = [
+    ...projectNavigationItems,
+    ...(caseStudy?.architecture ? [{ label: "System", href: "#architecture", scrollOffset: 96 }] : []),
+    ...(marketplaceLink ? [{ label: "Downloads", href: "#downloads", scrollOffset: 96 }] : []),
+  ];
   const heroRef = useRef<HTMLElement | null>(null);
   const heroMediaWrapRef = useRef<HTMLDivElement | null>(null);
   const heroStackTargetRef = useRef(0);
@@ -433,6 +435,91 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
             </div>
           </div>
         </section>
+
+        {caseStudy.architecture ? (
+          <section className="project-case-section" id="architecture">
+            <div className="inner">
+              <div className="project-case-section__heading">
+                <p>{caseStudy.architecture.eyebrow}</p>
+                <h2>{caseStudy.architecture.title}</h2>
+              </div>
+              <div className="project-case-approach">
+                {caseStudy.architecture.items.map((item, index, items) => (
+                  <article
+                    className={`project-case-approach__item${
+                      index === items.length - 1 && items.length % 2 !== 0 ? " project-case-approach__item--wide" : ""
+                    }`}
+                    key={item.title}
+                  >
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                    {item.points?.length ? (
+                      <ul>
+                        {item.points.map((point) => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {caseStudy.performance ? (
+          <section className="project-case-section project-case-section--dark" id="performance">
+            <div className="inner">
+              <div className="project-case-section__heading">
+                <p>{caseStudy.performance.eyebrow}</p>
+                <h2>{caseStudy.performance.title}</h2>
+              </div>
+              <div className="project-case-metrics">
+                {caseStudy.performance.stats.map((stat) => (
+                  <article className="project-case-metric" key={stat.label}>
+                    <span>{stat.label}</span>
+                    <strong>{stat.value}</strong>
+                    <p>{stat.note}</p>
+                  </article>
+                ))}
+              </div>
+              <ul className="project-case-outcomes">
+                {caseStudy.performance.notes.map((note) => (
+                  <li key={note}>{note}</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ) : null}
+
+        {caseStudy.uxFlow ? (
+          <section className="project-case-section" id="uxflow">
+            <div className="inner">
+              <div className="project-case-section__heading">
+                <p>{caseStudy.uxFlow.eyebrow}</p>
+                <h2>{caseStudy.uxFlow.title}</h2>
+              </div>
+              <div className="project-case-approach">
+                {caseStudy.uxFlow.items.map((item) => (
+                  <article className="project-case-approach__item" key={item.tag}>
+                    <h3>
+                      <span className="project-case-approach__tag">{item.tag}</span>
+                      {item.title}
+                    </h3>
+                    <p>{item.body}</p>
+                    {item.points?.length ? (
+                      <ul>
+                        {item.points.map((point) => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <ProjectScreenFlowCamera card={card} images={galleryImages} />
 

@@ -62,6 +62,13 @@ export type ProjectCaseStudyFinale = {
   };
 };
 
+export type CaseStudyUxFlowItem = {
+  tag: string;
+  title: string;
+  body: string;
+  points?: string[];
+};
+
 export type ProjectCaseStudy = {
   metrics: CaseStudyMetric[];
   outcome: string[];
@@ -69,6 +76,22 @@ export type ProjectCaseStudy = {
   learnings: string[];
   nextSteps: string[];
   finale: ProjectCaseStudyFinale;
+  architecture?: {
+    eyebrow: string;
+    title: string;
+    items: CaseStudySection[];
+  };
+  performance?: {
+    eyebrow: string;
+    title: string;
+    stats: CaseStudyMetric[];
+    notes: string[];
+  };
+  uxFlow?: {
+    eyebrow: string;
+    title: string;
+    items: CaseStudyUxFlowItem[];
+  };
 };
 
 export type PaletteItem = {
@@ -550,6 +573,74 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Add sample repositories and benchmark screenshots.",
       "Collect user feedback from Marketplace or GitHub issues.",
     ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "분석 엔진과 UI를 메시지 계약으로 분리했습니다",
+      items: [
+        {
+          title: "Extension Host",
+          body: "VS Code API와 정적 분석을 전담하는 영역입니다. CodeGraphPanel이 Orchestrator로서 메시지 라우팅, 상태 관리, 요청 제어를 맡고, Analysis Core가 TypeScript Program·TypeChecker로 AST를 분석합니다.",
+          points: ["Workspace Service — 파일 탐색, tsconfig, 목록 캐시", "Analysis Core — AST·Symbol·Type·Framework Adapter", "RuntimeDebug Bridge — Stack Frame·Variables 연결"],
+        },
+        {
+          title: "React Webview",
+          body: "시각화와 사용자 상호작용만 담당하는 독립된 프론트엔드입니다. App이 메시지·상태·레이아웃을 통합 관리하고, 그래프 렌더링과 상세 탐색을 컴포넌트 단위로 분리했습니다.",
+          points: ["Topbar·FiltersBar — Depth·Trace·필터 제어", "CanvasPane — ReactFlow 그래프, 선택·탐색·Export", "Inspector·Scaffold Lab — 상세 정보와 구조 생성"],
+        },
+        {
+          title: "Typed Message Protocol",
+          body: "두 영역은 직접 결합되지 않고, 타입이 정의된 요청/응답 메시지로만 통신합니다. Webview가 selectWorkspaceFile·openLocation 같은 요청을 보내면, Extension이 analysisResult·workspaceFiles로 응답하는 구조입니다.",
+          points: [
+            "Webview → Extension: selectWorkspaceFile · openLocation · analyzeActiveFile",
+            "Extension → Webview: workspaceFiles · analysisResult · runtimeDebug",
+          ],
+        },
+      ],
+    },
+    performance: {
+      eyebrow: "Performance",
+      title: "3단계 캐시로 반복 분석 비용을 줄였습니다",
+      stats: [
+        { label: "Workspace TTL", value: "10초", note: "ts·tsx·js·jsx 파일 목록을 10초간 재사용하고, node_modules·dist·build는 최대 4,000개 검색에서 제외합니다." },
+        { label: "Analysis Cache", value: "40개", note: "동일한 코드와 분석 옵션의 graph·diagnostics·trace 결과를 최근 접근 시각 기준으로 최대 40개까지 재사용합니다." },
+        { label: "SourceFile Cache", value: "800개", note: "변경되지 않은 디스크 파일의 파싱 결과를 CompilerHost에서 최대 800개까지 재사용해 반복 파싱 비용을 줄입니다." },
+      ],
+      notes: [
+        "저장되지 않은 활성 편집기 내용은 항상 메모리의 최신 텍스트로 분석해 캐시가 오래된 코드를 보여주지 않도록 했습니다.",
+        "문서 변경·저장을 감지하면 분석 결과 캐시를 비우고, 파일 생성·삭제·이름 변경은 SourceFile 캐시를 무효화합니다.",
+        "tsconfig나 캐시 설정이 바뀌면 두 캐시를 함께 초기화해 캐시 적중률과 정확성을 동시에 지킵니다.",
+      ],
+    },
+    uxFlow: {
+      eyebrow: "User Experience",
+      title: "탐색·이동·이해·재사용으로 이어지는 흐름",
+      items: [
+        {
+          tag: "EXPLORE",
+          title: "그래프 생성 및 범위 탐색",
+          body: "파일과 연결된 호출·참조·데이터 흐름을 시각화하고, Depth와 Root Scope를 조절해 필요한 범위만 확장합니다.",
+          points: ["노드 선택·다중 선택", "검색·관계 필터", "외부 파일 확장"],
+        },
+        {
+          tag: "NAVIGATE",
+          title: "그래프와 원본 코드 양방향 연결",
+          body: "노드를 선택하면 Inspector가 갱신되고, 더블클릭하면 Extension이 파일을 열어 해당 Source Range로 이동합니다.",
+          points: ["Graph → Inspector → Editor가 하나의 탐색 흐름으로 동작"],
+        },
+        {
+          tag: "UNDERSTAND",
+          title: "Trace와 Runtime Debug로 실행 문맥 확인",
+          body: "Trace Mode는 그래프 생성 순서를 단계별로 재생하고, Runtime Debug는 중단된 Stack Frame을 노드와 연결합니다.",
+          points: ["정적 구조와 실제 실행 위치를 같은 그래프 문맥에서 확인"],
+        },
+        {
+          tag: "REUSE",
+          title: "분석 결과 내보내기와 구조 생성",
+          body: "그래프와 상태를 JSON으로 저장하고, 시각 결과를 JPG·SVG로 내보내며 Scaffold Lab에서 코드 구조를 생성합니다.",
+          points: ["JSON — graph + state snapshot", "JPG·SVG — 시각 결과", "Scaffold Lab — patch preview"],
+        },
+      ],
+    },
   },
   "git-effects": {
     metrics: [

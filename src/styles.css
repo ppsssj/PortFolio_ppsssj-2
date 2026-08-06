@@ -1859,6 +1859,16 @@ html::-webkit-scrollbar {
   text-wrap: balance;
 }
 
+.project-case-approach__tag {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(var(--color-primary-rgb), 0.55);
+  font-size: var(--text-size-small);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .project-case-approach__item p,
 .project-case-approach__item li,
 .project-case-split li {
