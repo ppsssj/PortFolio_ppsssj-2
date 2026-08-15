@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { featuredProjectCard, getProjectSlug, highlightCards } from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
@@ -354,15 +354,13 @@ function ProjectDetailPanel({
 
 function FeaturedProject({
   card,
-  isActive,
   onOpen,
 }: {
   card: HighlightCard;
-  isActive: boolean;
-  onOpen: () => void;
+  onOpen: (event: MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
-    <article className={`card-slide card-slide--featured${isActive ? " is-active" : ""}`}>
+    <article className="card-slide card-slide--featured">
       <div className="box-figure">
         <figure className="figure-rollover js-collectable is-large">
           <button
@@ -370,7 +368,6 @@ function FeaturedProject({
             type="button"
             onClick={onOpen}
             aria-label={`Open ${card.title} project detail`}
-            aria-expanded={isActive}
           >
             <ProjectPreviewImage card={card} />
           </button>
@@ -398,20 +395,13 @@ function FeaturedProject({
 }
 
 export function ElementsSection() {
-  const [selectedCard, setSelectedCard] = useState<HighlightCard | null>(null);
+  const openProjectPage = (card: HighlightCard) => {
+    const caseStudyHref = `/projects/${getProjectSlug(card)}`;
 
-  useEffect(() => {
-    if (!selectedCard) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [selectedCard]);
+    resetWindowScrollToTop();
+    window.history.pushState(null, "", caseStudyHref);
+    window.dispatchEvent(new Event("pushstate"));
+  };
 
   return (
     <section className="anchor-section" id="highlights">
@@ -432,25 +422,21 @@ export function ElementsSection() {
 
           <FeaturedProject
             card={featuredProjectCard}
-            isActive={selectedCard?.title === featuredProjectCard.title}
-            onOpen={() => setSelectedCard(featuredProjectCard)}
+            onOpen={() => openProjectPage(featuredProjectCard)}
           />
 
           <ul className="gallery-site gallery-site--two-cols">
               {highlightCards.map((card) => {
-                const isActive = selectedCard?.title === card.title;
-
                 return (
                   <li key={card.title}>
-                    <article className={`card-slide${isActive ? " is-active" : ""}`}>
+                    <article className="card-slide">
                       <div className="box-figure">
                         <figure className="figure-rollover js-collectable is-large">
                           <button
                             className="figure-rollover__link figure-rollover__button"
                             type="button"
-                            onClick={() => setSelectedCard(card)}
+                            onClick={() => openProjectPage(card)}
                             aria-label={`Open ${card.title} project detail`}
-                            aria-expanded={selectedCard?.title === card.title}
                           >
                             <ProjectPreviewImage card={card} />
                           </button>
@@ -470,13 +456,13 @@ export function ElementsSection() {
                       <div className="card-slide__info">
                         <div className="card-slide__row">
                           <h3 className="card-slide__title">
-                            <button type="button" onClick={() => setSelectedCard(card)}>
+                            <button type="button" onClick={() => openProjectPage(card)}>
                               {card.title}
                             </button>
                           </h3>
                           <div className="card-slide__data">
                             <small>from</small>
-                            <button type="button" className="link-underlined" onClick={() => setSelectedCard(card)}>
+                            <button type="button" className="link-underlined" onClick={() => openProjectPage(card)}>
                               {card.category}
                             </button>
                           </div>
@@ -488,9 +474,6 @@ export function ElementsSection() {
                 );
               })}
           </ul>
-          <AnimatePresence>
-            {selectedCard ? <ProjectDetailPanel card={selectedCard} onClose={() => setSelectedCard(null)} /> : null}
-          </AnimatePresence>
         </div>
       </div>
     </section>
