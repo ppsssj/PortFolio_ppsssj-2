@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { getProjectSlug, highlightCards } from "../data/portfolio";
+import { featuredProjectCard, getProjectSlug, highlightCards } from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
 import { resetWindowScrollToTop } from "../utils/scrollReset";
@@ -352,6 +352,51 @@ function ProjectDetailPanel({
   );
 }
 
+function FeaturedProject({
+  card,
+  isActive,
+  onOpen,
+}: {
+  card: HighlightCard;
+  isActive: boolean;
+  onOpen: () => void;
+}) {
+  return (
+    <article className={`card-slide card-slide--featured${isActive ? " is-active" : ""}`}>
+      <div className="box-figure">
+        <figure className="figure-rollover js-collectable is-large">
+          <button
+            className="figure-rollover__link figure-rollover__button"
+            type="button"
+            onClick={onOpen}
+            aria-label={`Open ${card.title} project detail`}
+            aria-expanded={isActive}
+          >
+            <ProjectPreviewImage card={card} />
+          </button>
+          <ProjectOpenMark />
+        </figure>
+      </div>
+      <div className="card-slide__info">
+        <div className="card-slide__row">
+          <h3 className="card-slide__title">
+            <button type="button" onClick={onOpen}>
+              {card.title}
+            </button>
+          </h3>
+          <div className="card-slide__data">
+            <small>from</small>
+            <button type="button" className="link-underlined" onClick={onOpen}>
+              {card.category}
+            </button>
+          </div>
+        </div>
+        <p className="card-slide__description">{card.description}</p>
+      </div>
+    </article>
+  );
+}
+
 export function ElementsSection() {
   const [selectedCard, setSelectedCard] = useState<HighlightCard | null>(null);
 
@@ -384,6 +429,12 @@ export function ElementsSection() {
               </h3>
             </div>
           </div>
+
+          <FeaturedProject
+            card={featuredProjectCard}
+            isActive={selectedCard?.title === featuredProjectCard.title}
+            onOpen={() => setSelectedCard(featuredProjectCard)}
+          />
 
           <ul className="gallery-site gallery-site--two-cols">
               {highlightCards.map((card) => {

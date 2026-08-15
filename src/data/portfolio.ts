@@ -296,6 +296,48 @@ export const creatorCredits: CreditItem[] = [
 
 export const heroGallery = ["/assets/Hero/img.png"];
 
+export const featuredProjectCard: HighlightCard = {
+  title: "InfiniteDesk",
+  category: "FEATURED / Windows Desktop",
+  typeLabel: "Desktop App",
+  description:
+    "실행 중인 Windows 앱 창을 하나의 작업 공간에서 미리보고, 캔버스에서 배치한 뒤 실제 데스크톱 레이아웃으로 다시 적용하는 데스크톱 컨트롤러입니다.",
+  image: "/assets/InfiniteDesk/infinitedesk_demo.gif",
+  detailImages: [
+    "/assets/InfiniteDesk/infinitedesk_demo.gif",
+    "/assets/InfiniteDesk/workspace-screenshot1.png",
+    "/assets/InfiniteDesk/workspace-screenshot2.png",
+    "/assets/InfiniteDesk/workspace-screenshot-dark.png",
+    "/assets/InfiniteDesk/logo-concept.png",
+  ],
+  href: "#highlights",
+  detail: {
+    role: "제품 기획, Electron 데스크톱 구조 설계, Windows 창 제어 연동, 프론트엔드 구현",
+    stack: ["Electron", "React", "TypeScript", "Vite", "Win32 API", "DWM Preview", "PowerShell Host", "Vitest"],
+    period: "2026.06 - 2026.08",
+    overview:
+      "InfiniteDesk는 실제 실행 중인 Windows 앱 창을 시각적인 작업 공간에서 정리하는 데스크톱 앱입니다. Electron 인터페이스와 로컬 Win32, DWM Preview 호스트를 연결해 창 스캔, 미리보기, 그룹 이동, 저장, 복원 흐름을 하나의 제품 경험으로 묶었습니다.",
+    problem:
+      "여러 앱을 동시에 쓰는 작업 환경에서는 같은 창 배치를 매번 다시 맞추는 일이 반복됩니다. 기존 창 관리 도구는 스냅이나 타일링에 집중하는 경우가 많아, 현재 열린 창을 한눈에 확인하고 개인 배치를 저장한 뒤 실제 데스크톱에 다시 적용하는 시각적 작업 흐름이 부족했습니다.",
+    solution:
+      "시각적인 컨트롤러와 네이티브 창 제어 계층을 분리했습니다. Renderer는 캔버스 편집, 선택, Workspace 상태, Dock 검색을 담당하고, Main Process는 PowerShell Host를 통해 창 목록 조회, 입력 전달, 창 이동, DWM 미리보기를 처리합니다. 그래서 정적인 목업이 아니라 실제 데스크톱을 조작하는 제품형 도구로 동작합니다.",
+    highlights: [
+      "0.1.0 Windows 설치 파일을 GitHub Release로 배포",
+      "실행 중인 Windows 앱 창을 DWM 기반 실시간 미리보기로 표시",
+      "반복되는 데스크톱 배치를 위한 Workspace 저장 및 복원 흐름",
+      "실제 창 조작을 위한 Mirror Control과 Native Overlay 모드",
+      "핵심 캔버스와 저장 로직에 대한 CI, TypeScript typecheck, Vitest 검증",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/ppsssj/InfiniteDesk" },
+      {
+        label: "Download",
+        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.1.0/InfiniteDesk.Setup.0.1.0.exe",
+      },
+    ],
+  },
+};
+
 const highlightCardsSource: HighlightCard[] = [
   {
     title: "Git Reflow",
@@ -561,6 +603,8 @@ export const highlightCards: HighlightCard[] = highlightCardOrder
   .map((title) => highlightCardsSource.find((card) => card.title === title))
   .filter((card): card is HighlightCard => Boolean(card));
 
+export const allProjectCards: HighlightCard[] = [featuredProjectCard, ...highlightCards];
+
 export function getProjectSlug(card: Pick<HighlightCard, "title">) {
   return card.title
     .toLowerCase()
@@ -570,6 +614,138 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 }
 
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
+  infinitedesk: {
+    metrics: [
+      { label: "Release", value: "0.1.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
+      { label: "Tests", value: "74", note: "캔버스, 레이아웃 헬퍼, 저장 로직 중심 Vitest 검증" },
+      { label: "Platform", value: "Windows", note: "Electron 컨트롤러와 로컬 Win32, DWM Preview 호스트" },
+    ],
+    outcome: [
+      "브라우저 프로토타입이 아니라 설치 가능한 Windows 데스크톱 앱 형태로 배포했습니다.",
+      "시각적인 캔버스 조작 흐름을 실제 운영체제 창 제어와 연결했습니다.",
+      "개인정보, 보안, 릴리즈 노트, CI, 테스트 스크립트를 갖춰 제품형 프로젝트로 보이도록 정리했습니다.",
+    ],
+    approach: [
+      {
+        title: "Desktop Controller",
+        body: "UI를 실제 창을 조작하기 위한 컨트롤 표면으로 설계했습니다. 사용자는 현재 데스크톱을 스캔하고, 미리보기를 배치하고, Workspace로 저장한 뒤 Windows 창에 다시 적용할 수 있습니다.",
+        points: ["Windows 창 스캔", "캔버스 배치", "Workspace 저장/복원", "레이아웃 적용"],
+      },
+      {
+        title: "Native Boundary",
+        body: "Electron은 제품 셸과 typed IPC 계층을 담당하고, 로컬 PowerShell Host는 창 목록 조회, 이동, 임베딩, DWM 미리보기 동기화를 맡습니다.",
+        points: ["신뢰 가능한 IPC sender 검증", "PowerShell host 프로세스 경계", "Win32 창 명령", "DWM 썸네일 미리보기"],
+      },
+    ],
+    learnings: [
+      "설치가 필요한 데스크톱 제품은 웹 데모보다 더 빠르게 신뢰 장치를 보여줘야 합니다.",
+      "네이티브 제어 코드는 엄격한 IPC 경계와 사용자에게 이해되는 개인정보 설명이 필요합니다.",
+      "Windows 전용 설치 파일을 직접 실행하지 않는 평가자도 많기 때문에 강한 데모 GIF가 중요합니다.",
+    ],
+    nextSteps: [
+      "Electron 업데이트로 현재 high severity audit 항목을 정리합니다.",
+      "코드서명 빌드 또는 unsigned build 검증 안내를 더 명확히 추가합니다.",
+      "실제 사용 피드백을 모아 반복 작업 흐름을 preset 문서로 정리합니다.",
+    ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "Electron은 작업 공간 UI를 조율하고, 로컬 native host는 실제 Windows 창을 제어합니다.",
+      gridDiagram: {
+        topRow: [
+          { title: "React Renderer", subtitle: "Canvas, Workspace List, Dock, Overlay UI" },
+          { title: "Electron Main", subtitle: "Trusted IPC, Storage, App Lifecycle" },
+          { title: "Preload API", subtitle: "contextBridge 기반 typed bridge" },
+        ],
+        bottomRow: [
+          { title: "Window Host", subtitle: "PowerShell + Win32 commands", note: "Scan, focus, move, restore, embed" },
+          { title: "DWM Preview Host", subtitle: "Native preview sync", note: "실시간 창 썸네일과 입력 전달" },
+          { title: "Local Storage", subtitle: "Recoverable JSON", note: "Templates, Saved Workspaces" },
+        ],
+      },
+      items: [
+        {
+          title: "Renderer Layer",
+          body: "Renderer는 직접 조작 경험에 집중합니다. 캔버스 이동/확대, 창 카드 geometry, 그룹 선택, Dock 검색, 상태 피드백을 담당합니다.",
+          points: ["Canvas transform hooks", "Window geometry helpers", "Dock app search", "Overlay state"],
+        },
+        {
+          title: "Main Process Boundary",
+          body: "Main Process는 native host를 호출하기 전에 IPC sender를 검증합니다. 권한이 큰 데스크톱 조작을 Renderer에서 직접 실행하지 않도록 경계를 분리했습니다.",
+          points: ["contextIsolation", "sandbox", "nodeIntegration disabled", "trusted sender validation"],
+        },
+        {
+          title: "Native Hosts",
+          body: "PowerShell host script는 Win32와 DWM 작업을 제품 UI와 분리하고, 좁은 command protocol을 통해 필요한 명령만 처리합니다.",
+          points: ["Window enumeration", "MoveWindow and SetWindowPos", "DWM thumbnails", "Pointer relay"],
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Flow",
+      title: "시각적인 작업 공간이 실제 데스크톱 레이아웃으로 바뀌는 흐름입니다.",
+      flows: [
+        {
+          title: "1. Scan and preview",
+          steps: ["Windows 창 스캔", "컨트롤러 창 제외", "창 카드 생성", "DWM Preview 동기화"],
+          caption: "현재 열린 창을 읽어 시각적인 작업 공간으로 바꾸고, 화면 캡처를 외부에 저장하지 않습니다.",
+        },
+        {
+          title: "2. Arrange and save",
+          steps: ["카드 드래그", "그룹 선택", "영역 생성", "Workspace 저장"],
+          caption: "캔버스 상태를 재사용 가능한 Workspace 데이터로 저장해 반복되는 작업 배치를 다시 불러올 수 있게 했습니다.",
+        },
+        {
+          title: "3. Apply to desktop",
+          steps: ["복원 가능한 창 검증", "Restore command 전달", "실제 창 이동", "결과 표시"],
+          caption: "저장된 레이아웃을 native control host를 통해 실제 Windows 창의 위치와 크기로 다시 변환합니다.",
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Product Detail",
+      title: "중요한 조작은 먼저 시각적으로 확인하고, 그 다음 실제 창에 반영합니다.",
+      items: [
+        {
+          tag: "Preview",
+          title: "실행 중인 창 확인",
+          body: "레이아웃을 적용하기 전에 현재 데스크톱 상황을 작업 공간에서 먼저 확인할 수 있습니다.",
+        },
+        {
+          tag: "Control",
+          title: "캔버스에서 먼저 편집",
+          body: "실제 창을 바로 움직이지 않고, 캔버스에서 배치를 만든 뒤 준비됐을 때 적용합니다.",
+        },
+        {
+          tag: "Repeat",
+          title: "반복 배치 저장",
+          body: "여러 앱을 함께 쓰는 반복 작업 환경을 하나의 복원 가능한 Workspace로 저장합니다.",
+        },
+      ],
+    },
+    finale: {
+      flow: {
+        eyebrow: "Application Flow",
+        title: "현재 데스크톱 상태를 저장하고 복원 가능한 Workspace로 만드는 과정입니다.",
+        steps: [
+          { label: "Scan", detail: "보이고 복원 가능한 Windows 앱 창을 수집합니다." },
+          { label: "Preview", detail: "InfiniteDesk 작업 공간 안에 DWM 실시간 미리보기를 렌더링합니다." },
+          { label: "Arrange", detail: "캔버스에서 창 카드를 이동, 그룹화, 크기 조정합니다." },
+          { label: "Save", detail: "완성된 배치를 이름 있는 Workspace로 저장합니다." },
+          { label: "Apply", detail: "Workspace 배치에 맞춰 실제 Windows 창을 이동합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "Build Decisions",
+        title: "단순한 UI 목업이 아니라 데스크톱 제품처럼 보이도록 구성했습니다.",
+        points: [
+          "Windows 전용 흐름을 설치 없이 이해할 수 있도록 메인 자산을 GIF로 배치했습니다.",
+          "로컬 데스크톱 정보를 다루기 때문에 개인정보와 보안 문서를 함께 정리했습니다.",
+          "Renderer가 데스크톱 제어를 직접 실행하지 않도록 native layer를 Electron IPC 뒤로 분리했습니다.",
+          "기존 6개 카드와 무게감이 달라 홈에서는 별도 featured GIF로 강조했습니다.",
+        ],
+      },
+    },
+  },
   "git-reflow": {
     metrics: [
       { label: "프로젝트 유형", value: "Web + Extension", note: "GitHub Home 개인화 프로젝트" },

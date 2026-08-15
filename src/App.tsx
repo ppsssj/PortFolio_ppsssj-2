@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { PortfolioPage } from "./components/PortfolioPage";
 import { ProjectCaseStudyPage } from "./components/ProjectCaseStudyPage";
-import { getProjectSlug, highlightCards } from "./data/portfolio";
+import { allProjectCards, getProjectSlug } from "./data/portfolio";
 import { resetWindowScrollToTop } from "./utils/scrollReset";
 import { useSmoothPageScroll } from "./utils/useSmoothPageScroll";
 
@@ -46,7 +46,7 @@ function App() {
       return null;
     }
 
-    return highlightCards.find((card) => getProjectSlug(card) === match[1]) ?? null;
+    return allProjectCards.find((card) => getProjectSlug(card) === match[1]) ?? null;
   }, [path]);
 
   if (selectedProject) {

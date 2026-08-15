@@ -8,4 +8,5 @@ dist
 curl.txt
 curl-*.txt
 marketplace-curl.txt
+vite.*.log
 
