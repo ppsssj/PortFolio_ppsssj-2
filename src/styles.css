@@ -383,6 +383,10 @@ html::-webkit-scrollbar {
   margin-bottom: clamp(52px, 7vw, 108px);
 }
 
+.card-slide--featured .figure-rollover__file {
+  aspect-ratio: 16 / 9;
+}
+
 .head-site .gallery-site {
   justify-items: center;
   padding-top: 1.4rem;
