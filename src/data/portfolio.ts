@@ -322,17 +322,18 @@ export const featuredProjectCard: HighlightCard = {
     solution:
       "시각적인 컨트롤러와 네이티브 창 제어 계층을 분리했습니다. Renderer는 캔버스 편집, 선택, Workspace 상태, Dock 검색을 담당하고, Main Process는 PowerShell Host를 통해 창 목록 조회, 입력 전달, 창 이동, DWM 미리보기를 처리합니다. 그래서 정적인 목업이 아니라 실제 데스크톱을 조작하는 제품형 도구로 동작합니다.",
     highlights: [
-      "0.1.0 Windows 설치 파일을 GitHub Release로 배포",
+      "0.2.0 Windows 설치 파일을 GitHub Release로 배포",
       "실행 중인 Windows 앱 창을 DWM 기반 실시간 미리보기로 표시",
       "반복되는 데스크톱 배치를 위한 Workspace 저장 및 복원 흐름",
       "실제 창 조작을 위한 Mirror Control과 Native Overlay 모드",
+      "캔버스 우클릭 실행과 드래그·리사이즈·스냅이 가능한 Quick Launch 미리보기 패널",
       "핵심 캔버스와 저장 로직에 대한 CI, TypeScript typecheck, Vitest 검증",
     ],
     links: [
       { label: "GitHub", href: "https://github.com/ppsssj/InfiniteDesk" },
       {
         label: "Download",
-        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.1.0/InfiniteDesk.Setup.0.1.0.exe",
+        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.2.0/InfiniteDesk.Setup.0.2.0.exe",
       },
     ],
   },
@@ -616,8 +617,8 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   infinitedesk: {
     metrics: [
-      { label: "Release", value: "0.1.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
-      { label: "Tests", value: "74", note: "캔버스, 레이아웃 헬퍼, 저장 로직 중심 Vitest 검증" },
+      { label: "Release", value: "0.2.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
+      { label: "Tests", value: "81", note: "캔버스, 레이아웃 헬퍼, 저장 로직 중심 Vitest 검증" },
       { label: "Platform", value: "Windows", note: "Electron 컨트롤러와 로컬 Win32, DWM Preview 호스트" },
     ],
     outcome: [
@@ -636,6 +637,16 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
         body: "Electron은 제품 셸과 typed IPC 계층을 담당하고, 로컬 PowerShell Host는 창 목록 조회, 이동, 임베딩, DWM 미리보기 동기화를 맡습니다.",
         points: ["신뢰 가능한 IPC sender 검증", "PowerShell host 프로세스 경계", "Win32 창 명령", "DWM 썸네일 미리보기"],
       },
+      {
+        title: "Dock & Quick Launch",
+        body: "DWM 미리보기 기반 Workspace 흐름 위에, 로컬 앱을 바로 검색·고정·실행할 수 있는 Dock과 자주 쓰는 실행 창을 화면 옆에 임시 고정하는 Quick Launch preview 패널을 추가했습니다.",
+        points: ["Dock 앱 검색/고정/실행", "캔버스 우클릭 위치 실행", "Quick Launch 드래그·리사이즈·사이드 스냅", "최소화된 창까지 포함한 창 탐지"],
+      },
+      {
+        title: "Virtual Display R&D",
+        body: "DWM 미리보기의 한계(실제 창을 옮기지 않고는 원본 화면 크기·포커스를 그대로 제어할 수 없음)를 넘어서기 위해 IddCx 기반 가상 디스플레이 드라이버를 실험 중입니다. Windows 11 환경에서 실제 앱 창을 가상 모니터에 렌더링한 뒤, InfiniteDesk의 축소 미리보기로 클릭·드래그·스크롤과 키보드 입력을 원본 창에 그대로 전달하는 경로까지 직접 검증했습니다. 아직 프로덕션 서명 드라이버가 아니라 패키징된 앱과는 분리된 프로토타입 단계이며, Windows 10 환경 호환은 계속 진행 중입니다.",
+        points: ["Windows 11에서 클릭/드래그/스크롤 입력 전달 검증", "키보드 입력 전달 검증", "테스트 서명 기반 UMDF/IddCx 드라이버 프로토타입", "패키징된 앱과 분리된 실험 단계"],
+      },
     ],
     learnings: [
       "설치가 필요한 데스크톱 제품은 웹 데모보다 더 빠르게 신뢰 장치를 보여줘야 합니다.",
@@ -643,9 +654,9 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Windows 전용 설치 파일을 직접 실행하지 않는 평가자도 많기 때문에 강한 데모 GIF가 중요합니다.",
     ],
     nextSteps: [
+      "Virtual Display 프로토타입의 모니터 생성·제거·복구를 여러 Windows 버전에서 안정적으로 재현합니다.",
+      "검증된 입력 전달 경로를 Electron 앱과 통합하고, 배포 가능한 드라이버 서명 전략을 정리합니다.",
       "Electron 업데이트로 현재 high severity audit 항목을 정리합니다.",
-      "코드서명 빌드 또는 unsigned build 검증 안내를 더 명확히 추가합니다.",
-      "실제 사용 피드백을 모아 반복 작업 흐름을 preset 문서로 정리합니다.",
     ],
     architecture: {
       eyebrow: "System Design",
