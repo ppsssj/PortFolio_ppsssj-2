@@ -32,7 +32,7 @@ export function FooterSection() {
         <div className="footer__top">
           <div className="footer__identity">
             <p className="footer__logo footer__logo--small">{siteMeta.brand}</p>
-            <p className="footer__signature">박성진 · Frontend Developer</p>
+            <p className="footer__signature">{siteMeta.title}</p>
           </div>
           <div className="footer__wrapper">
             <div className="footer__grid">

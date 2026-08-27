@@ -4,7 +4,7 @@
 
 # PPsssJ Developer Portfolio
 
-Frontend developer portfolio built with React, TypeScript, and Vite.
+Frontend engineering portfolio focused on web applications, interactive tools, and desktop software, built with React, TypeScript, and Vite.
 
 ## Live Site
 
@@ -16,7 +16,7 @@ https://ppsssj.vercel.app/
 
 ## About
 
-PPsssJ is a personal developer portfolio focused on frontend craft, interaction design, AI-driven product thinking, and polished project presentation. It includes selected projects, stack details, activity history, awards, and contact links.
+PPsssJ is a personal portfolio for a frontend engineer building interactive applications and tools across the browser, editor, and desktop. It presents product thinking, frontend architecture, visualization, system integration, published extensions, activity history, and awards.
 
 ## Tech Stack
 
@@ -25,15 +25,22 @@ PPsssJ is a personal developer portfolio focused on frontend craft, interaction 
 - Vite
 - Framer Motion
 - CSS
+- Electron
+- VS Code Extension API
+- Chrome Extension MV3
+- Three.js / React Three Fiber
+- ReactFlow / Canvas 2D
+- Node.js / Express
 
 ## Featured Projects
 
-- CodeGraph
+- InfiniteDesk
 - Cogic
-- Git Effects
 - GraphMind
 - PrismDesign
 - Traffic Noise Prediction System
+- Git Reflow
+- Git Effects
 
 ## Run Locally
 

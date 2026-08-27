@@ -97,7 +97,7 @@ function ProjectDetailPanel({
   const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
-  const categoryLabel = card.category.startsWith("ELEMENT /") ? card.category : `ELEMENT / ${card.category}`;
+  const categoryLabel = card.category;
   const previewImage = card.previewImage ?? detailImages[0] ?? card.image;
   const modalImageSeedRef = useRef(Date.now());
   const initialModalImage = detailImages[0] ?? previewImage;

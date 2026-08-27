@@ -242,13 +242,13 @@ export type ProfileTableTab = {
 
 export const siteMeta = {
   brand: "PPsssJ",
-  title: "박성진 · Frontend Developer",
+  title: "박성진 · Frontend Engineer",
   eyebrow: "Site of the Day",
   date: "Date",
   score: "88%",
   scoreLabel: "BUILD",
   description:
-    "완성도 있는 인터페이스와 인터랙션을 구현하며, 아이디어를 실제 제품 경험으로 연결하는 프론트엔드 개발자입니다.",
+    "React와 TypeScript를 중심으로 완성도 있는 인터페이스와 인터랙션을 구현하고, Web Application·Developer Tool·Desktop Application으로 확장합니다.",
   visitHref: "https://github.com/ppsssj",
   visitLabel: "GitHub",
   secondaryCtaHref: "mailto:ppssjj020222@gmail.com",
@@ -258,10 +258,10 @@ export const siteMeta = {
 export const marqueeItems = [
   "PPsssJ Portfolio Welcome",
   "Developer Portfolio",
-  "Frontend Craft",
-  "Interaction Systems",
+  "Frontend Engineering",
+  "Web Applications",
   "Selected Projects",
-  "Product Thinking",
+  "Interactive Tools",
 ];
 
 export const navigationItems: LinkItem[] = [
@@ -289,17 +289,17 @@ export const socialItems: LinkItem[] = [
 ];
 
 export const creatorCredits: CreditItem[] = [
-  { name: "Frontend", role: "Interface Craft & Implementation", badge: "FE" },
-  { name: "AI", role: "AI Integration & Product Thinking", badge: "AI" },
-  { name: "Product", role: "Usable Flow & Rapid Iteration", badge: "PX" },
+  { name: "Frontend", role: "React, TypeScript & Interaction", badge: "FE" },
+  { name: "Applications", role: "Web, Desktop & Extensions", badge: "AP" },
+  { name: "Product", role: "Visualization & Usable Flow", badge: "PX" },
 ];
 
 export const heroGallery = ["/assets/Hero/img.png"];
 
 export const featuredProjectCard: HighlightCard = {
   title: "InfiniteDesk",
-  category: "FEATURED / Windows Desktop",
-  typeLabel: "Desktop App",
+  category: "FEATURED / Desktop Application",
+  typeLabel: "Desktop / Windows",
   description:
     "실행 중인 Windows 앱 창을 하나의 작업 공간에서 미리보고, 캔버스에서 배치한 뒤 실제 데스크톱 레이아웃으로 다시 적용하는 데스크톱 컨트롤러입니다.",
   image: "/assets/InfiniteDesk/infinitedesk_demo.gif",
@@ -312,7 +312,7 @@ export const featuredProjectCard: HighlightCard = {
   ],
   href: "#highlights",
   detail: {
-    role: "제품 기획, Electron 데스크톱 구조 설계, Windows 창 제어 연동, 프론트엔드 구현",
+    role: "Electron 애플리케이션 구조, React/TypeScript UI, IPC 보안 경계, Win32/DWM 연동, 테스트·배포",
     stack: ["Electron", "React", "TypeScript", "Vite", "Win32 API", "DWM Preview", "PowerShell Host", "Vitest"],
     period: "2026.06 - 2026.08",
     overview:
@@ -322,7 +322,7 @@ export const featuredProjectCard: HighlightCard = {
     solution:
       "시각적인 컨트롤러와 네이티브 창 제어 계층을 분리했습니다. Renderer는 캔버스 편집, 선택, Workspace 상태, Dock 검색을 담당하고, Main Process는 PowerShell Host를 통해 창 목록 조회, 입력 전달, 창 이동, DWM 미리보기를 처리합니다. 그래서 정적인 목업이 아니라 실제 데스크톱을 조작하는 제품형 도구로 동작합니다.",
     highlights: [
-      "0.2.0 Windows 설치 파일을 GitHub Release로 배포",
+      "0.3.0 Windows 설치 파일을 GitHub Release로 배포",
       "실행 중인 Windows 앱 창을 DWM 기반 실시간 미리보기로 표시",
       "반복되는 데스크톱 배치를 위한 Workspace 저장 및 복원 흐름",
       "실제 창 조작을 위한 Mirror Control과 Native Overlay 모드",
@@ -333,7 +333,7 @@ export const featuredProjectCard: HighlightCard = {
       { label: "GitHub", href: "https://github.com/ppsssj/InfiniteDesk" },
       {
         label: "Download",
-        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.2.0/InfiniteDesk.Setup.0.2.0.exe",
+        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.3.0/InfiniteDesk.Setup.0.3.0.exe",
       },
     ],
   },
@@ -342,8 +342,8 @@ export const featuredProjectCard: HighlightCard = {
 const highlightCardsSource: HighlightCard[] = [
   {
     title: "Git Reflow",
-    category: "ELEMENT / Developer Workflow",
-    typeLabel: "Web / Extension",
+    category: "WEB APPLICATION / Browser Extension",
+    typeLabel: "Web App / Chrome",
     description:
       "웹 앱에서 GitHub Home 레이아웃 템플릿을 만들고, Chrome Extension 개인화 플로우를 통해 실제 GitHub 페이지에 적용하는 프로젝트입니다.",
     image: "/assets/git-reflow/gitreflow_home.png",
@@ -360,7 +360,7 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#contact",
     detail: {
-      role: "GitHub UI 개인화, Chrome Extension 콘텐츠 스크립트, 템플릿 에디터 UX, 풀스택 구현",
+      role: "템플릿 에디터, 공유 TypeScript 계약, Node.js API, Chrome Extension 통합",
       stack: ["React 18", "TypeScript", "Vite", "Node.js", "Google Identity Services", "Chrome Extension MV3"],
       period: "2026.06",
       overview:
@@ -379,8 +379,8 @@ const highlightCardsSource: HighlightCard[] = [
   },
   {
     title: "Cogic",
-    category: "ELEMENT / Code Visualization",
-    typeLabel: "VS Extension",
+    category: "DEVELOPER TOOL / Code Visualization",
+    typeLabel: "Developer Tool / VS Code",
     description:
       "TypeScript/JavaScript 코드베이스의 구조, 호출 관계, 데이터 흐름, 프레임워크 의미 정보를 VS Code 안에서 인터랙티브 그래프로 탐색할 수 있도록 만든 코드 시각화 확장입니다.",
     image: "/assets/Cogic/Cogic-NodeClick.gif",
@@ -394,7 +394,7 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#creator",
     detail: {
-      role: "Code analysis UX, graph interaction design, VS Code extension development, frontend implementation",
+      role: "TypeScript static analysis, typed message architecture, graph visualization, VS Code extension development",
       stack: [
         "TypeScript",
         "VS Code Extension API",
@@ -423,8 +423,8 @@ const highlightCardsSource: HighlightCard[] = [
   },
   {
     title: "Git Effects",
-    category: "ELEMENT / Developer Tooling",
-    typeLabel: "VS Extension",
+    category: "DEVELOPER TOOL / VS Code Extension",
+    typeLabel: "Developer Tool / VS Code",
     description:
       "VS Code에서 Git push, pull, commit 결과를 텍스트 로그 대신 slide-in Webview 이펙트와 캐릭터 피드백으로 보여주는 개발자 경험 확장입니다.",
     image: "/assets/GitEffects/git_effect.gif",
@@ -465,8 +465,8 @@ const highlightCardsSource: HighlightCard[] = [
   },
   {
     title: "GraphMind",
-    category: "ELEMENT / Math Visualization",
-    typeLabel: "Web",
+    category: "WEB APPLICATION / Interactive Visualization",
+    typeLabel: "Web App / 2D·3D",
     description:
       "수식과 구조화된 데이터를 2D/3D 그래프로 시각화하고, Studio에서 편집한 결과를 Vault에 저장해 다시 이어서 작업할 수 있도록 만든 인터랙티브 수학 워크스페이스입니다.",
     image: "/assets/GraphMind/GraphMind.png",
@@ -478,7 +478,7 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#typography",
     detail: {
-      role: "Product concept design, interactive visualization, frontend architecture, full-stack MVP implementation",
+      role: "Interactive visualization, frontend architecture, graph state management, Spring Boot integration",
       stack: [
         "React",
         "Three.js",
@@ -505,8 +505,8 @@ const highlightCardsSource: HighlightCard[] = [
   },
   {
     title: "PrismDesign",
-    category: "ELEMENT / Visual Programming",
-    typeLabel: "Web",
+    category: "WEB APPLICATION / Visual Programming",
+    typeLabel: "Web App / Creative Tool",
     description:
       "TOP, CHOP, SOP 오퍼레이터 노드를 연결해 실시간 미디어 파이프라인과 비주얼 결과를 구성할 수 있는 브라우저 기반 노드 비주얼 프로그래밍 스튜디오입니다.",
     image: "/assets/PrismDesign/PrismDesign.gif",
@@ -522,7 +522,7 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#details",
     detail: {
-      role: "PM, product structure design, UI/UX design, frontend implementation, interaction prototyping",
+      role: "Node editor architecture, runtime/evaluator design, ReactFlow·Canvas interaction, Express integration",
       stack: ["React", "Vite", "ReactFlow", "Canvas 2D", "Express", "MediaPipe"],
       period: "2026.02",
       overview:
@@ -541,8 +541,8 @@ const highlightCardsSource: HighlightCard[] = [
   },
   {
     title: "Traffic Noise Prediction System",
-    category: "ELEMENT / Data Prediction",
-    typeLabel: "Web",
+    category: "WEB APPLICATION / Data Visualization",
+    typeLabel: "Web App / Data",
     description:
       "도시 교통 소음 메타데이터를 기반으로 자동차, 이륜자동차, 열차별 소음 수준을 예측하고, 지도 UI에서 24시간 소음 프로파일과 주요 영향 요인을 시각화하는 예측 시스템입니다.",
     image:
@@ -556,7 +556,7 @@ const highlightCardsSource: HighlightCard[] = [
     ],
     href: "#score",
     detail: {
-      role: "Dashboard UI, data visualization, prediction result presentation, product planning",
+      role: "React dashboard, map/chart visualization, Flask API integration, prediction result interpretation",
       stack: [
         "React",
         "Flask",
@@ -617,7 +617,7 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   infinitedesk: {
     metrics: [
-      { label: "Release", value: "0.2.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
+      { label: "Release", value: "0.3.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
       { label: "Tests", value: "81", note: "캔버스, 레이아웃 헬퍼, 저장 로직 중심 Vitest 검증" },
       { label: "Platform", value: "Windows", note: "Electron 컨트롤러와 로컬 Win32, DWM Preview 호스트" },
     ],
@@ -1648,28 +1648,28 @@ export const palette: PaletteItem[] = [
 export const stack = [
   "React",
   "TypeScript",
-  "Vite",
-  "GSAP",
-  "Framer Motion",
   "CSS Architecture",
-  "Design Systems",
-  "Accessibility",
-  "Figma",
-  "Web Performance",
-  "Responsive Layouts",
-  "Content Modeling",
+  "Electron / Desktop",
+  "VS Code Extension API",
+  "Chrome Extension MV3",
+  "Three.js / React Three Fiber",
+  "ReactFlow / Canvas 2D",
+  "Node.js / Express",
+  "REST / IPC Integration",
+  "Vitest",
+  "Web Performance & Accessibility",
 ];
 
 export const detailDescription =
-  "이 포트폴리오는 아이디어를 실제로 사용할 수 있는 제품 경험으로 바꾸는 과정과, 프론트엔드 구현, AI 활용, 빠른 프로토타이핑, 인터랙션 설계를 함께 보여줍니다.";
+  "이 포트폴리오는 React와 TypeScript를 중심으로 인터랙티브한 Web Application과 Developer Tool을 만들고, 브라우저·에디터·데스크톱 환경까지 연결하는 과정을 보여줍니다.";
 
 export const githubUsername = "ppsssj";
 
 export const scoreBreakdown: ScoreItem[] = [
   { label: "Frontend Craft", weight: "35%", value: 92, score: "92%" },
-  { label: "Product Thinking", weight: "25%", value: 86, score: "86%" },
+  { label: "Application Engineering", weight: "25%", value: 86, score: "86%" },
   { label: "Interaction Design", weight: "20%", value: 88, score: "88%" },
-  { label: "AI Integration", weight: "20%", value: 84, score: "84%" },
+  { label: "Product Thinking", weight: "20%", value: 84, score: "84%" },
 ];
 
 export const juryVotes: VoteRow[] = [
@@ -1757,67 +1757,67 @@ export const profileTableTabs: ProfileTableTab[] = [
         source: "Language",
         focus: "Typing",
         stack: "TypeScript",
-        level: "Applied",
+        level: "Core",
         note: "Type-safe components, data models, and maintainable React code",
       },
     ],
   },
   {
-    label: "Developer Tools",
+    label: "Application Engineering",
     rows: [
       {
-        name: "Git",
-        role: "Version control for development workflow",
-        source: "Workflow",
-        focus: "Versioning",
-        stack: "Git",
-        level: "Daily",
-        note: "Commit history, branching, and project change tracking",
-      },
-      {
-        name: "GitHub",
-        role: "Repository hosting and project publishing",
-        source: "Workflow",
-        focus: "Repository",
-        stack: "GitHub",
-        level: "Core",
-        note: "Project sharing, source management, and portfolio links",
-      },
-      {
-        name: "VS Code",
-        role: "Primary code editing environment",
-        source: "Editor",
-        focus: "Development",
-        stack: "VS Code",
-        level: "Daily",
-        note: "TypeScript, React, and frontend project editing workflow",
-      },
-      {
-        name: "Figma",
-        role: "Interface design and visual planning",
-        source: "Design",
-        focus: "Prototyping",
-        stack: "Figma",
+        name: "Electron / Win32",
+        role: "Desktop application architecture and native Windows integration",
+        source: "Desktop",
+        focus: "Application",
+        stack: "Electron, Win32, DWM",
         level: "Applied",
-        note: "Layout planning, visual references, and component design",
+        note: "Renderer, preload, IPC boundary, native host, and Windows packaging",
       },
       {
-        name: "Postman",
-        role: "API testing and request validation",
-        source: "API",
-        focus: "Testing",
-        stack: "Postman",
+        name: "VS Code Extension API",
+        role: "Editor-integrated developer tools with React Webviews",
+        source: "Developer Tool",
+        focus: "Extension",
+        stack: "VS Code API, Webview",
+        level: "Published",
+        note: "Static analysis, typed messaging, Git feedback, and Marketplace distribution",
+      },
+      {
+        name: "Chrome Extension MV3",
+        role: "Browser-page integration through validated content scripts",
+        source: "Browser",
+        focus: "Extension",
+        stack: "Manifest V3, DOM",
         level: "Applied",
-        note: "Request testing, response checks, and backend integration support",
+        note: "Shared TypeScript contracts, storage, selector registry, and DOM personalization",
       },
       {
-        name: "Notion",
-        role: "Project notes and knowledge organization",
-        source: "Planning",
-        focus: "Documentation",
-        stack: "Notion",
-        level: "Daily",
-        note: "Task tracking, research notes, and project documentation",
+        name: "Three.js / R3F",
+        role: "Interactive 2D and 3D visualization for mathematical objects",
+        source: "Visualization",
+        focus: "Rendering",
+        stack: "Three.js, R3F",
+        level: "Applied",
+        note: "Math parsing, coordinate sampling, BufferGeometry, and direct manipulation",
+      },
+      {
+        name: "ReactFlow / Canvas",
+        role: "Node-based editors and real-time visual execution surfaces",
+        source: "Interactive UI",
+        focus: "Runtime",
+        stack: "ReactFlow, Canvas 2D",
+        level: "Applied",
+        note: "Graph editing, evaluator pipelines, live previews, and gesture-driven inputs",
+      },
+      {
+        name: "REST / IPC Contracts",
+        role: "Typed boundaries across clients, servers, extensions, and native hosts",
+        source: "Integration",
+        focus: "Architecture",
+        stack: "Node.js, Express, REST, IPC",
+        level: "Applied",
+        note: "Validated payloads, shared schemas, authentication, and process boundaries",
       },
     ],
   },

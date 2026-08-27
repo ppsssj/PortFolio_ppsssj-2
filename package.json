@@ -1,8 +1,8 @@
 {
-  "name": "aics-web",
+  "name": "ppsssj-portfolio",
   "private": true,
   "version": "1.0.0",
-  "description": "React wrapper for the MERSI HTML page",
+  "description": "Frontend engineering portfolio for web applications and interactive tools",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

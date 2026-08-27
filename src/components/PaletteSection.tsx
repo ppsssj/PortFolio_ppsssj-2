@@ -26,9 +26,9 @@ export function PaletteSection() {
 
         <div className="palette belief">
           <p className="palette__desc belief__intro">
-            A frontend builder
+            A frontend engineer
             <br />
-            creating <strong>usable products.</strong>
+            building <strong>interactive applications.</strong>
           </p>
           <div className="palette__list">
             <ul
@@ -53,12 +53,12 @@ export function PaletteSection() {
                     </div>
                     <div className="belief-card__body">
                       <p>
-                        빠른 프로토타이핑, 인터랙티브한 프론트엔드 구현, 실제
-                        사용 흐름을 기준으로 제품을 만듭니다.
+                        React와 TypeScript를 중심으로 복잡한 인터랙션을 설계하고,
+                        실제 사용 흐름을 기준으로 제품을 만듭니다.
                       </p>
                       <p>
-                        아이디어가 멈춰 있지 않도록 작은 실험을 빠르게 만들고,
-                        사용자가 이해할 수 있는 화면과 흐름으로 정리합니다.
+                        브라우저·에디터·데스크톱 환경의 시스템 연동을 사용자가
+                        이해할 수 있는 화면과 흐름으로 연결합니다.
                       </p>
                       <ul className="belief-tags">
                         {beliefTags.map((tag) => (
@@ -74,15 +74,15 @@ export function PaletteSection() {
                   <div className="list-palette__box belief-card__box">
                     <div className="list-palette__header">
                       <div className="list-palette__name">
-                        <strong>Frontend</strong> Product Craft
+                        <strong>Frontend-led</strong> Application Craft
                       </div>
                     </div>
                     <div className="belief-card__statement">
                       <span>A</span>
                       <span>product-minded</span>
-                      <span>frontend builder</span>
-                      <span>building interactive,</span>
-                      <span>usable products.</span>
+                      <span>frontend engineer</span>
+                      <span>building interactive</span>
+                      <span>applications &amp; tools.</span>
                     </div>
                     <p className="belief-card__copy"></p>
                   </div>
