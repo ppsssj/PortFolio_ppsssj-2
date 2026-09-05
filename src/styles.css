@@ -4072,9 +4072,11 @@ html::-webkit-scrollbar {
 .menu-float--portfolio .menu-float__wrapper {
   flex-direction: row;
   align-items: center;
+  max-width: calc(100vw - (var(--pad-inner) * 2));
 }
 
 .menu-float__bottom {
+  min-width: 0;
   opacity: 0.72;
   transition: opacity 0.25s ease;
 }
@@ -4095,6 +4097,21 @@ html::-webkit-scrollbar {
 
 .menu-float__layout--secondary .menu-float__item {
   color: #dedede;
+}
+
+.menu-float--portfolio .menu-float__layout--secondary {
+  min-width: 0;
+}
+
+.menu-float--portfolio .menu-float__layout--secondary .menu-float__content {
+  max-width: min(100%, calc(100vw - (var(--pad-inner) * 2) - 220px));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.menu-float--portfolio .menu-float__layout--secondary .menu-float__content::-webkit-scrollbar {
+  display: none;
 }
 
 .menu-float__layout--secondary .menu-float__item.is-active {

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 
-import { getProjectSlug, projectCaseStudies, projectNavigationItems, siteMeta, type HighlightCard } from "../data/portfolio";
+import { getProjectSlug, projectCaseStudies, siteMeta, type HighlightCard } from "../data/portfolio";
 import { AnimatedFavicon } from "./AnimatedFavicon";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import { ClientBackendDiagram } from "./ClientBackendDiagram";
@@ -71,10 +71,16 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
     ? new URL(marketplaceLink.href).searchParams.get("itemName")
     : null;
   const caseNavigationItems = [
-    ...projectNavigationItems,
+    { label: "Home", href: "/" },
+    { label: "Overview", href: "#overview", scrollOffset: 96 },
+    { label: "Result", href: "#result", scrollOffset: 96 },
+    { label: "Approach", href: "#approach", scrollOffset: 96 },
     ...(caseStudy?.architecture ? [{ label: "System", href: "#architecture", scrollOffset: 96 }] : []),
     ...(caseStudy?.performance ? [{ label: "Performance", href: "#performance", scrollOffset: 96 }] : []),
     ...(caseStudy?.process ? [{ label: "Process", href: "#process", scrollOffset: 96 }] : []),
+    ...(caseStudy?.uxFlow ? [{ label: "UX", href: "#uxflow", scrollOffset: 96 }] : []),
+    { label: "Screens", href: "#screens", scrollOffset: 96 },
+    { label: "Works", href: "#structure", scrollOffset: 96 },
     ...(marketplaceLink ? [{ label: "Downloads", href: "#downloads", scrollOffset: 96 }] : []),
   ];
   const heroRef = useRef<HTMLElement | null>(null);
