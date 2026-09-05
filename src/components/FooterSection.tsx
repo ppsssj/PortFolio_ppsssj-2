@@ -1,6 +1,9 @@
+import type { MouseEvent } from "react";
+
 import { GitHubIcon, GmailIcon, NaverMailIcon } from "./ContactIcons";
-import { connectLinks, footerGroups, navigationItems, siteMeta } from "../data/portfolio";
+import { allProjectCards, connectLinks, footerGroups, getProjectSlug, navigationItems, siteMeta } from "../data/portfolio";
 import { scrollToAnchor } from "../utils/anchorScroll";
+import { resetWindowScrollToTop } from "../utils/scrollReset";
 
 const footerLinkMap: Record<string, string> = {
   ...Object.fromEntries(navigationItems.map((item) => [item.label, item.href])),
@@ -23,8 +26,29 @@ function getContactIcon(label: string) {
   return <GmailIcon />;
 }
 
+function getFooterProjectImage(project: (typeof allProjectCards)[number]) {
+  return project.previewImage ?? project.detailImages?.find((image) => !image.toLowerCase().endsWith(".gif")) ?? project.image;
+}
+
 export function FooterSection() {
   const isProjectPage = window.location.pathname.startsWith("/projects/");
+  const currentProjectSlug = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/)?.[1] ?? "";
+  const currentProjectIndex = allProjectCards.findIndex((card) => getProjectSlug(card) === currentProjectSlug);
+  const relatedProjects =
+    currentProjectIndex >= 0
+      ? Array.from({ length: Math.min(3, allProjectCards.length - 1) }, (_, index) => {
+          const nextIndex = (currentProjectIndex + index + 1) % allProjectCards.length;
+
+          return allProjectCards[nextIndex];
+        })
+      : [];
+
+  const openProjectPage = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    event.preventDefault();
+    resetWindowScrollToTop();
+    window.history.pushState(null, "", href);
+    window.dispatchEvent(new Event("pushstate"));
+  };
 
   return (
     <footer id="footer">
@@ -51,6 +75,28 @@ export function FooterSection() {
                 </ul>
               ))}
             </div>
+            {isProjectPage && relatedProjects.length ? (
+              <aside className="footer-projects" aria-label="More project case studies">
+                <ul className="footer-projects__list">
+                  {relatedProjects.map((project) => {
+                    const projectSlug = getProjectSlug(project);
+                    const href = `/projects/${projectSlug}`;
+
+                    return (
+                      <li key={project.title}>
+                        <a className="footer-projects__link" href={href} onClick={(event) => openProjectPage(event, href)}>
+                          <img src={getFooterProjectImage(project)} alt="" loading="lazy" />
+                          <span>
+                            <strong>{project.title}</strong>
+                            <small>{project.typeLabel}</small>
+                          </span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </aside>
+            ) : null}
           </div>
         </div>
         <div className="footer__bottom" id="contact">

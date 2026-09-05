@@ -4282,6 +4282,10 @@ html::-webkit-scrollbar {
   --footer-contact-link-width: 96px;
 }
 
+.project-case-page #footer .footer__top {
+  position: relative;
+}
+
 .footer__identity {
   display: inline-flex;
   flex-direction: column;
@@ -4299,6 +4303,70 @@ html::-webkit-scrollbar {
   font-size: clamp(13px, 1vw, 16px);
   font-weight: var(--font-medium);
   line-height: 130%;
+}
+
+.footer-projects {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 0;
+  width: min(100%, 680px);
+}
+
+.footer-projects__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin: 0;
+  padding: 0;
+}
+
+.footer-projects__link {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  color: var(--color-primary);
+}
+
+.footer-projects__link img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--rounded-small);
+  background: var(--bg-3rd);
+  object-fit: cover;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.footer-projects__link span {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  line-height: 120%;
+}
+
+.footer-projects__link strong,
+.footer-projects__link small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer-projects__link strong {
+  font-size: clamp(14px, 1vw, 17px);
+  font-weight: var(--font-bold);
+}
+
+.footer-projects__link small {
+  color: rgba(var(--color-primary-rgb), 0.58);
+  font-size: var(--text-size-small);
+}
+
+.footer-projects__link:hover img,
+.footer-projects__link:focus-visible img {
+  opacity: 0.82;
+  transform: translateY(-2px);
 }
 
 @keyframes marquee-slide {
@@ -4365,6 +4433,23 @@ html::-webkit-scrollbar {
 
   .project-case-stats__item--primary {
     grid-column: auto;
+  }
+
+  .project-case-page #footer .footer__top {
+    display: block;
+  }
+
+  .project-case-page #footer .footer__wrapper {
+    display: flex;
+  }
+
+  .project-case-page #footer .footer__grid {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .footer-projects {
+    display: none;
   }
 
   .project-case-finale__grid {
