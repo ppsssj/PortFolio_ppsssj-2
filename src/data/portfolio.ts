@@ -36,6 +36,8 @@ export type CaseStudyMetric = {
   label: string;
   value: string;
   note: string;
+  detail?: string;
+  tone?: "primary" | "best-case" | "verified";
 };
 
 export type CaseStudySection = {
@@ -1034,39 +1036,62 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     },
     performance: {
       eyebrow: "Performance",
-      title: "3단계 캐시로 반복 분석 비용을 줄였습니다",
+      title: "실제 편집 시나리오에서 분석 시간을 66.4% 줄였습니다",
       stats: [
-        { label: "Workspace TTL", value: "10초", note: "파일 목록 재사용 주기" },
-        { label: "Max Scan", value: "4,000", note: "최대 검색 파일 수" },
-        { label: "Analysis Cache", value: "40개", note: "분석 결과 캐시 수" },
-        { label: "SourceFile Cache", value: "800개", note: "SourceFile 캐시 수" },
+        {
+          label: "Active Edit Analysis",
+          value: "-66.4%",
+          note: "p50 1088.25ms → 366.03ms",
+          detail:
+            "84개 Cogic 파일에서 활성 파일 코드가 매 iteration 변경되는 상황을 측정한 대표 편집 성능입니다.",
+          tone: "primary",
+        },
+        {
+          label: "Repeated Cache Hit",
+          value: "-99.5%",
+          note: "p50 1189.26ms → 6.07ms",
+          detail:
+            "동일 요청 반복으로 Full Result Cache가 hit된 Best-case cache hit 결과이며, 일반 편집 성능과 분리해 표시합니다.",
+          tone: "best-case",
+        },
+        {
+          label: "Correctness",
+          value: "Verified",
+          note: "Normalized graph hash unchanged",
+          detail: "nodes 132 · edges 576 · imports 9 · exports 2 · calls 60 · diagnostics 0",
+          tone: "verified",
+        },
       ],
       flowInput: { label: "분석 요청", note: "Active Editor + Graph Options" },
       flowOutput: { label: "분석 결과", note: "graph · diagnostics · trace · meta" },
       layers: [
         {
           badge: "Layer 1",
-          title: "Workspace File List Cache",
-          detail: "ts·tsx·js·jsx 파일 목록을 10초 동안 재사용하고, node_modules·dist·build·out·.next은 제외한 채 최대 4,000개까지 검색합니다.",
-          tags: ["workspace state"],
+          title: "Full Analysis Result Cache",
+          detail:
+            "동일한 활성 파일 경로, 코드 해시, graph depth, trace 설정, workspace root, workspace file paths hash 조합의 graph·diagnostics·trace 결과를 최대 40개까지 재사용합니다.",
+          tags: ["activeFilePath", "activeCodeHash", "graphDepth", "traceSettings", "workspaceFilesHash"],
         },
         {
           badge: "Layer 2",
-          title: "Analysis Result Cache",
-          detail: "동일한 코드와 분석 옵션의 graph·diagnostics·trace 결과를 최근 접근 시각 기준으로 최대 40개까지 재사용합니다.",
-          tags: ["codeHash", "graphDepth", "traceMode", "workspaceFilesHash"],
+          title: "TypeScript SourceFile Cache",
+          detail:
+            "활성 파일이 변경되어 full-result cache를 사용할 수 없더라도, 변경되지 않은 dependency file의 parsed SourceFile을 최대 800개까지 재사용해 반복 파싱 비용을 줄입니다.",
+          tags: ["mtimeMs", "size", "ScriptKind", "languageVersion"],
         },
         {
           badge: "Layer 3",
-          title: "TypeScript SourceFile Cache",
-          detail: "변경되지 않은 디스크 파일의 파싱 결과를 CompilerHost에서 최대 800개까지 재사용해 반복 파싱 비용을 줄입니다.",
-          tags: ["mtimeMs", "size", "ScriptKind", "languageVersionKey"],
+          title: "Workspace File List Cache",
+          detail:
+            "VS Code findFiles 결과를 약 10초 동안 재사용해 workspace file discovery 비용을 낮춥니다. 이번 analyzer benchmark 수치에는 포함하지 않았습니다.",
+          tags: ["findFiles", "10s TTL", "workspace state"],
         },
       ],
       notes: [
-        "저장되지 않은 활성 편집기 내용은 항상 메모리의 최신 텍스트로 분석해 캐시가 오래된 코드를 보여주지 않도록 했습니다.",
-        "문서 변경·저장을 감지하면 분석 결과 캐시를 비우고, 파일 생성·삭제·이름 변경은 SourceFile 캐시를 무효화합니다.",
-        "tsconfig나 캐시 설정이 바뀌면 두 캐시를 함께 초기화해 캐시 적중률과 정확성을 동시에 지킵니다.",
+        "대표 수치는 active file이 매번 바뀌는 실제 편집 상황에 가깝습니다. 이때 full-result cache는 miss되지만, 변경되지 않은 dependency SourceFile은 재사용됩니다.",
+        "99.5% 감소 수치는 동일 분석 요청이 반복되어 Full Result Cache가 hit된 Best-case cache hit입니다. 일반적인 편집 성능처럼 표현하지 않습니다.",
+        "저장되지 않은 활성 편집기 내용은 디스크 SourceFile cache를 사용하지 않고 항상 메모리의 최신 텍스트로 분석합니다.",
+        "캐시 적용 전후 normalized graph hash가 동일해 성능 개선과 분석 결과 정합성을 함께 확인했습니다.",
       ],
     },
     uxFlow: {

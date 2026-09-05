@@ -73,6 +73,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const caseNavigationItems = [
     ...projectNavigationItems,
     ...(caseStudy?.architecture ? [{ label: "System", href: "#architecture", scrollOffset: 96 }] : []),
+    ...(caseStudy?.performance ? [{ label: "Performance", href: "#performance", scrollOffset: 96 }] : []),
     ...(caseStudy?.process ? [{ label: "Process", href: "#process", scrollOffset: 96 }] : []),
     ...(marketplaceLink ? [{ label: "Downloads", href: "#downloads", scrollOffset: 96 }] : []),
   ];
@@ -508,16 +509,18 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
               </div>
               <div className="project-case-stats">
                 {caseStudy.performance.stats.map((stat) => (
-                  <article className="project-case-stats__item" key={stat.label}>
+                  <article className={`project-case-stats__item${stat.tone ? ` project-case-stats__item--${stat.tone}` : ""}`} key={stat.label}>
                     <strong>{stat.value}</strong>
                     <span>{stat.label}</span>
+                    <p className="project-case-stats__note">{stat.note}</p>
+                    {stat.detail ? <p className="project-case-stats__detail">{stat.detail}</p> : null}
                   </article>
                 ))}
               </div>
               {caseStudy.performance.layers?.length ? (
                 <div className="project-case-pipeline-wrap">
                   <p className="project-case-pipeline-wrap__caption">
-                    각 계층은 서로 다른 비용을 줄이며, 상위 캐시가 실패하면 하위 계층의 재사용 여부를 판단합니다.
+                    Full Result Cache와 SourceFile Cache를 분리해, 동일 요청 반복과 실제 편집 중 dependency 재사용을 서로 다른 계층에서 처리합니다.
                   </p>
                   <div className="project-case-pipeline">
                     {caseStudy.performance.flowInput ? (

@@ -2047,23 +2047,29 @@ html::-webkit-scrollbar {
 
 .project-case-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 0.9fr));
   gap: clamp(10px, 1.4vw, 18px);
 }
 
 .project-case-stats__item {
-  padding: 16px 10px;
+  display: flex;
+  min-width: 0;
+  min-height: 232px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(18px, 2vw, 26px);
   border: 1px solid rgba(245, 241, 234, 0.28);
   border-radius: 14px;
-  text-align: center;
+  text-align: left;
 }
 
 .project-case-stats__item strong {
   display: block;
   color: #f5f1ea;
-  font-size: clamp(22px, 2.4vw, 32px);
+  font-size: clamp(32px, 4vw, 58px);
   font-weight: var(--font-black);
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .project-case-stats__item span {
@@ -2073,6 +2079,52 @@ html::-webkit-scrollbar {
   font-size: 11px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+.project-case-stats__note {
+  margin: 18px 0 0;
+  color: rgba(245, 241, 234, 0.84);
+  font-size: clamp(15px, 1.05vw, 17px);
+  font-weight: var(--font-bold);
+  line-height: 140%;
+  overflow-wrap: anywhere;
+}
+
+.project-case-stats__detail {
+  margin: auto 0 0;
+  padding-top: 20px;
+  color: rgba(245, 241, 234, 0.58);
+  font-size: clamp(13px, 0.95vw, 15px);
+  line-height: 150%;
+  overflow-wrap: anywhere;
+}
+
+.project-case-stats__item--primary {
+  border-color: transparent;
+  background: #f5f1ea;
+  color: #1a1a1a;
+}
+
+.project-case-stats__item--primary strong,
+.project-case-stats__item--primary .project-case-stats__note {
+  color: #1a1a1a;
+}
+
+.project-case-stats__item--primary span,
+.project-case-stats__item--primary .project-case-stats__detail {
+  color: rgba(26, 26, 26, 0.64);
+}
+
+.project-case-stats__item--best-case {
+  border-style: dashed;
+}
+
+.project-case-stats__item--verified {
+  border-color: rgba(170, 238, 196, 0.58);
+}
+
+.project-case-stats__item--verified strong {
+  color: #aaeec4;
 }
 
 .project-case-pipeline-wrap {
@@ -2984,6 +3036,10 @@ html::-webkit-scrollbar {
   .project-case-split,
   .project-case-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-case-stats__item--primary {
+    grid-column: 1 / -1;
   }
 }
 
@@ -4283,10 +4339,15 @@ html::-webkit-scrollbar {
   .project-case-metrics,
   .project-case-outcomes,
   .project-case-approach,
+  .project-case-stats,
   .project-case-gallery__grid,
   .project-case-split,
   .project-case-finale__grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-case-stats__item--primary {
+    grid-column: auto;
   }
 
   .project-case-finale__grid {
