@@ -7,6 +7,7 @@ import { scrollToAnchor } from "../utils/anchorScroll";
 type FloatingMenuProps = {
   items?: LinkItem[];
   githubHref?: string;
+  secondaryAction?: LinkItem;
   showMail?: boolean;
 };
 
@@ -18,7 +19,21 @@ function HomeIcon() {
   );
 }
 
-export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.visitHref, showMail = true }: FloatingMenuProps) {
+function ExternalLinkIcon() {
+  return (
+    <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
+      <path d="M13 5h6v6M19 5l-8 8" />
+      <path d="M17 13v6H5V7h6" />
+    </svg>
+  );
+}
+
+export function FloatingMenu({
+  items = navigationItems,
+  githubHref = siteMeta.visitHref,
+  secondaryAction,
+  showMail = true,
+}: FloatingMenuProps) {
   const homeItem = useMemo(() => items.find((item) => item.label.toLowerCase() === "home"), [items]);
   const menuItems = useMemo(() => items.filter((item) => item.label.toLowerCase() !== "home"), [items]);
   const firstAnchorHref = menuItems.find((item) => item.href.startsWith("#"))?.href ?? menuItems[0]?.href ?? "";
@@ -103,6 +118,21 @@ export function FloatingMenu({ items = navigationItems, githubHref = siteMeta.vi
                       <span className="floating-action-button__text">{siteMeta.visitLabel}</span>
                     </a>
                   </strong>
+                  {secondaryAction ? (
+                    <a
+                      className="button button--medium--rounded--awwward is-custom floating-action-button floating-action-button--external"
+                      href={secondaryAction.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${secondaryAction.label} 열기`}
+                      title={secondaryAction.label}
+                    >
+                      <span className="floating-action-button__icon">
+                        <ExternalLinkIcon />
+                      </span>
+                      <strong className="floating-action-button__text">{secondaryAction.label}</strong>
+                    </a>
+                  ) : null}
                   {showMail ? (
                     <a
                       className="button button--medium--rounded--awwward is-custom floating-action-button"

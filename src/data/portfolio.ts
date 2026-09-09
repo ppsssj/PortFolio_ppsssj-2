@@ -334,8 +334,8 @@ export const featuredProjectCard: HighlightCard = {
     links: [
       { label: "GitHub", href: "https://github.com/ppsssj/InfiniteDesk" },
       {
-        label: "Download",
-        href: "https://github.com/ppsssj/InfiniteDesk/releases/download/v0.3.0/InfiniteDesk.Setup.0.3.0.exe",
+        label: "Release",
+        href: "https://github.com/ppsssj/InfiniteDesk/releases",
       },
     ],
   },
@@ -538,7 +538,10 @@ const highlightCardsSource: HighlightCard[] = [
         "Canvas 2D 기반 실시간 노드 프리뷰",
         "MediaPipe Hands CHOP을 활용한 제스처 인터랙션",
       ],
-      links: [{ label: "GitHub", href: "https://github.com/ppsssj/PrismDesign" }],
+      links: [
+        { label: "GitHub", href: "https://github.com/ppsssj/PrismDesign" },
+        { label: "Live Site", href: "https://prismdesign-web.vercel.app/" },
+      ],
     },
   },
   {

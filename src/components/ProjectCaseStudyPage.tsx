@@ -66,6 +66,7 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const galleryImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
   const heroStackCount = Math.min(galleryImages.length, 5);
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
+  const secondaryActionLink = card.detail.links?.find((link) => link.label.toLowerCase() !== "github");
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const marketplaceExtensionId = marketplaceLink
     ? new URL(marketplaceLink.href).searchParams.get("itemName")
@@ -706,7 +707,12 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
           <MarketplaceDownloadChart extensionId={marketplaceExtensionId} marketplaceHref={marketplaceLink.href} />
         ) : null}
       </main>
-      <FloatingMenu items={caseNavigationItems} githubHref={githubLink?.href ?? siteMeta.visitHref} showMail={false} />
+      <FloatingMenu
+        items={caseNavigationItems}
+        githubHref={githubLink?.href ?? siteMeta.visitHref}
+        secondaryAction={secondaryActionLink}
+        showMail={false}
+      />
       <FooterSection />
     </div>
   );
