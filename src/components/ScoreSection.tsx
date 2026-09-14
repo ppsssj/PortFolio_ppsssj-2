@@ -364,28 +364,29 @@ export function ScoreSection() {
   return (
     <section className="anchor-section" id="score" ref={scoreSectionRef}>
       <div className="block">
-        <div className="c-heading-score">
-          <h2 className="heading-2">
-            MARKET / STATS
-            <span className="c-heading-score__note">
-              <span className="c-heading-score__arrow">-&gt;</span>
-              <span className="c-heading-score__value">
-                {marketplaceStats.status === "ready" ? formatMetric(totalAcquisition * scoreProgress) : "--"}
+        <div className="score-marketplace-sticky-area">
+          <div className="c-heading-score">
+            <h2 className="heading-2">
+              MARKET / STATS
+              <span className="c-heading-score__note">
+                <span className="c-heading-score__arrow">-&gt;</span>
+                <span className="c-heading-score__value">
+                  {marketplaceStats.status === "ready" ? formatMetric(totalAcquisition * scoreProgress) : "--"}
+                </span>
+                <sup>ACQUISITION</sup>
               </span>
-              <sup>ACQUISITION</sup>
-            </span>
-          </h2>
-          <div className="c-heading-score__link">
-            <a className="link-underlined" href="#score">
-              {marketplaceStats.status === "error" ? "Marketplace data unavailable" : "3 Published VS Code Extensions"}
-            </a>
-            {updatedAtLabel ? (
-              <span className="c-heading-score__updated">Updated {updatedAtLabel} from Publisher Reports</span>
-            ) : null}
+            </h2>
+            <div className="c-heading-score__link">
+              <a className="link-underlined" href="#score">
+                {marketplaceStats.status === "error" ? "Marketplace data unavailable" : "3 Published VS Code Extensions"}
+              </a>
+              {updatedAtLabel ? (
+                <span className="c-heading-score__updated">Updated {updatedAtLabel} from Publisher Reports</span>
+              ) : null}
+            </div>
           </div>
-        </div>
 
-        <div className="layout-overall layout-overall--marketplace" style={{ "--overall-cols": marketplaceMetrics.length } as CSSProperties}>
+          <div className="layout-overall layout-overall--marketplace" style={{ "--overall-cols": marketplaceMetrics.length } as CSSProperties}>
           {marketplaceMetrics.map((item) => {
             const progressWidth = item.max > 0 ? Math.min((item.value / item.max) * 100 * scoreProgress, 100) : 0;
             const metricValue = marketplaceStats.status === "ready" ? formatMetric(item.value * scoreProgress) : "--";
@@ -437,6 +438,7 @@ export function ScoreSection() {
               </div>
             );
           })}
+          </div>
         </div>
 
         <div>

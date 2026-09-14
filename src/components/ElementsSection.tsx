@@ -1,7 +1,19 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { motion } from "framer-motion";
 
-import { featuredProjectCard, getProjectSlug, highlightCards } from "../data/portfolio";
+import {
+  featuredProjectCard,
+  getProjectSlug,
+  highlightCards,
+} from "../data/portfolio";
 import type { HighlightCard } from "../data/portfolio";
 import { ProjectPreviewImage } from "./ProjectPreviewImage";
 import { resetWindowScrollToTop } from "../utils/scrollReset";
@@ -40,13 +52,15 @@ const emphasisPattern = new RegExp(
 );
 
 function renderEmphasis(text: string) {
-  return text.split(emphasisPattern).map((part, index) =>
-    emphasisTerms.includes(part) ? (
-      <strong key={`${part}-${index}`}>{part}</strong>
-    ) : (
-      part
-    ),
-  );
+  return text
+    .split(emphasisPattern)
+    .map((part, index) =>
+      emphasisTerms.includes(part) ? (
+        <strong key={`${part}-${index}`}>{part}</strong>
+      ) : (
+        part
+      ),
+    );
 }
 
 function ProjectOpenMark() {
@@ -79,7 +93,12 @@ function MarketplaceIcon() {
 
 function DetailIcon() {
   return (
-    <svg className="ico-svg project-detail__detail-icon" viewBox="0 0 24 24" width="18" aria-hidden="true">
+    <svg
+      className="ico-svg project-detail__detail-icon"
+      viewBox="0 0 24 24"
+      width="18"
+      aria-hidden="true"
+    >
       <circle cx="10.5" cy="10.5" r="5.5" />
       <path d="m15 15 5 5" />
     </svg>
@@ -94,9 +113,16 @@ function ProjectDetailPanel({
   onClose: () => void;
 }) {
   const caseStudyHref = `/projects/${getProjectSlug(card)}`;
-  const detailImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
-  const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
-  const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
+  const detailImages = useMemo(
+    () => card.detailImages ?? [card.image],
+    [card.detailImages, card.image],
+  );
+  const marketplaceLink = card.detail.links?.find(
+    (link) => link.label.toLowerCase() === "marketplace",
+  );
+  const githubLink = card.detail.links?.find(
+    (link) => link.label.toLowerCase() === "github",
+  );
   const categoryLabel = card.category;
   const previewImage = card.previewImage ?? detailImages[0] ?? card.image;
   const modalImageSeedRef = useRef(Date.now());
@@ -112,23 +138,29 @@ function ProjectDetailPanel({
     () => [
       initialModalImage,
       ...detailImages.filter((image) => image !== initialModalImage),
-      ...(previewImage !== initialModalImage && !detailImages.includes(previewImage) ? [previewImage] : []),
+      ...(previewImage !== initialModalImage &&
+      !detailImages.includes(previewImage)
+        ? [previewImage]
+        : []),
     ],
     [detailImages, initialModalImage, previewImage],
   );
-  const actionLinks = useMemo<Array<{
-    ariaLabel: string;
-    className: string;
-    href: string;
-    icon: ReactNode;
-    label: string;
-    onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
-    external?: boolean;
-  }>>(
+  const actionLinks = useMemo<
+    Array<{
+      ariaLabel: string;
+      className: string;
+      href: string;
+      icon: ReactNode;
+      label: string;
+      onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+      external?: boolean;
+    }>
+  >(
     () => [
       {
         ariaLabel: `Open ${card.title} case study page`,
-        className: "project-detail__tab-button project-detail__tab-button--case",
+        className:
+          "project-detail__tab-button project-detail__tab-button--case",
         href: caseStudyHref,
         icon: <DetailIcon />,
         label: "detail",
@@ -138,7 +170,8 @@ function ProjectDetailPanel({
         ? [
             {
               ariaLabel: `Open ${card.title} Visual Studio Marketplace page`,
-              className: "project-detail__tab-button project-detail__tab-button--external",
+              className:
+                "project-detail__tab-button project-detail__tab-button--external",
               href: marketplaceLink.href,
               icon: <MarketplaceIcon />,
               label: "market",
@@ -150,7 +183,8 @@ function ProjectDetailPanel({
         ? [
             {
               ariaLabel: `Open ${card.title} GitHub repository`,
-              className: "project-detail__tab-button project-detail__tab-button--external",
+              className:
+                "project-detail__tab-button project-detail__tab-button--external",
               href: githubLink.href,
               icon: <GitHubIcon />,
               label: "github",
@@ -164,18 +198,26 @@ function ProjectDetailPanel({
   const mobileActionLinks = useMemo(() => {
     const order = ["detail", "github", "market"];
 
-    return [...actionLinks].sort((first, second) => order.indexOf(first.label) - order.indexOf(second.label));
+    return [...actionLinks].sort(
+      (first, second) =>
+        order.indexOf(first.label) - order.indexOf(second.label),
+    );
   }, [actionLinks]);
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState(0);
-  const selectedPreviewImage = previewImages[selectedPreviewIndex] ?? previewImage;
-  const selectedDisplayImage = selectedPreviewImage.toLowerCase().endsWith(".gif")
+  const selectedPreviewImage =
+    previewImages[selectedPreviewIndex] ?? previewImage;
+  const selectedDisplayImage = selectedPreviewImage
+    .toLowerCase()
+    .endsWith(".gif")
     ? `${selectedPreviewImage}?modal=${modalImageSeedRef.current}-${selectedPreviewIndex}`
     : selectedPreviewImage;
   const visiblePreviewItems = previewImages
     .map((image, index) => {
       const rawOffset = selectedPreviewIndex - index;
       const wrappedOffset =
-        Math.abs(rawOffset) > previewImages.length / 2 ? rawOffset - Math.sign(rawOffset) * previewImages.length : rawOffset;
+        Math.abs(rawOffset) > previewImages.length / 2
+          ? rawOffset - Math.sign(rawOffset) * previewImages.length
+          : rawOffset;
 
       return {
         image,
@@ -191,7 +233,11 @@ function ProjectDetailPanel({
   }, [previewImages]);
 
   const movePreview = (direction: -1 | 1) => {
-    setSelectedPreviewIndex((currentIndex) => (currentIndex + direction + previewImages.length) % previewImages.length);
+    setSelectedPreviewIndex(
+      (currentIndex) =>
+        (currentIndex + direction + previewImages.length) %
+        previewImages.length,
+    );
   };
 
   return (
@@ -204,7 +250,10 @@ function ProjectDetailPanel({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
     >
-      <div className="project-detail-stage" onClick={(event) => event.stopPropagation()}>
+      <div
+        className="project-detail-stage"
+        onClick={(event) => event.stopPropagation()}
+      >
         <motion.aside
           className="project-detail"
           aria-live="polite"
@@ -221,7 +270,10 @@ function ProjectDetailPanel({
               <ProjectPreviewImage card={card} image={selectedDisplayImage} />
             </div>
             {previewImages.length > 1 ? (
-              <div className="project-detail__preview-bar" aria-label={`${card.title} preview screens`}>
+              <div
+                className="project-detail__preview-bar"
+                aria-label={`${card.title} preview screens`}
+              >
                 <button
                   className="project-detail__preview-nav project-detail__preview-nav--prev"
                   type="button"
@@ -272,7 +324,10 @@ function ProjectDetailPanel({
                 <small>{categoryLabel}</small>
                 <div className="project-detail__title-row">
                   <h3>{card.title}</h3>
-                  <div className="project-detail__mobile-links" aria-label={`${card.title} project links`}>
+                  <div
+                    className="project-detail__mobile-links"
+                    aria-label={`${card.title} project links`}
+                  >
                     {mobileActionLinks.map((action) => (
                       <a
                         className="project-detail__mobile-link"
@@ -290,8 +345,18 @@ function ProjectDetailPanel({
                 </div>
               </div>
               <div className="project-detail__actions">
-                <button className="project-detail__close" type="button" onClick={onClose} aria-label="Close project detail">
-                  <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+                <button
+                  className="project-detail__close"
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close project detail"
+                >
+                  <svg
+                    className="ico-svg"
+                    viewBox="0 0 24 24"
+                    width="20"
+                    aria-hidden="true"
+                  >
                     <path d="M6 6l12 12M18 6 6 18" />
                   </svg>
                 </button>
@@ -322,12 +387,17 @@ function ProjectDetailPanel({
               </div>
               <div>
                 <dt>Stack</dt>
-                <dd>{renderEmphasis(card.detail.stack.slice(0, 4).join(", "))}</dd>
+                <dd>
+                  {renderEmphasis(card.detail.stack.slice(0, 4).join(", "))}
+                </dd>
               </div>
             </dl>
           </div>
         </motion.aside>
-        <div className="project-detail__tab-stack" aria-label={`${card.title} project links`}>
+        <div
+          className="project-detail__tab-stack"
+          aria-label={`${card.title} project links`}
+        >
           {actionLinks.map((action) => (
             <a
               className={action.className}
@@ -338,9 +408,7 @@ function ProjectDetailPanel({
               aria-label={action.ariaLabel}
               key={action.ariaLabel}
             >
-              <span className="project-detail__tab-logo">
-                {action.icon}
-              </span>
+              <span className="project-detail__tab-logo">{action.icon}</span>
               <span className="project-detail__tab-text" aria-hidden="true">
                 {action.label}
               </span>
@@ -407,72 +475,80 @@ export function ElementsSection() {
     <section className="anchor-section" id="highlights">
       <div className="block">
         <div className="inner">
-          <div className="c-heading c-heading--small">
-            <div className="c-heading__top">
-              <h2 className="text-default">Projects</h2>
-            </div>
-            <div className="c-heading__middle">
-              <h3 className="heading-5">
-                See the highlights
-                <br />
-                of this portfolio.
-              </h3>
+          <div className="heading-section">
+            <div className="heading-section__left">
+              <h2 className="heading-section__title">Projects</h2>
             </div>
           </div>
-
+          <div>
+            <p className="palette__desc belief__intro">
+              See the <strong>highlights</strong>
+              <br />
+              of this portfolio.
+            </p>
+          </div>
           <FeaturedProject
             card={featuredProjectCard}
             onOpen={() => openProjectPage(featuredProjectCard)}
           />
 
           <ul className="gallery-site gallery-site--two-cols">
-              {highlightCards.map((card) => {
-                return (
-                  <li key={card.title}>
-                    <article className="card-slide">
-                      <div className="box-figure">
-                        <figure className="figure-rollover js-collectable is-large">
-                          <button
-                            className="figure-rollover__link figure-rollover__button"
-                            type="button"
-                            onClick={() => openProjectPage(card)}
-                            aria-label={`Open ${card.title} project detail`}
-                          >
-                            <ProjectPreviewImage card={card} />
-                          </button>
-                          <div className="figure-rollover__hover">
-                            <div className="figure-rollover__left">
-                          <div className="figure-rollover__row">
-                                <small>{card.typeLabel}</small>
-                              </div>
-                              <div className="figure-rollover__row">
-                                <h3>{card.title}</h3>
-                              </div>
+            {highlightCards.map((card) => {
+              return (
+                <li key={card.title}>
+                  <article className="card-slide">
+                    <div className="box-figure">
+                      <figure className="figure-rollover js-collectable is-large">
+                        <button
+                          className="figure-rollover__link figure-rollover__button"
+                          type="button"
+                          onClick={() => openProjectPage(card)}
+                          aria-label={`Open ${card.title} project detail`}
+                        >
+                          <ProjectPreviewImage card={card} />
+                        </button>
+                        <div className="figure-rollover__hover">
+                          <div className="figure-rollover__left">
+                            <div className="figure-rollover__row">
+                              <small>{card.typeLabel}</small>
+                            </div>
+                            <div className="figure-rollover__row">
+                              <h3>{card.title}</h3>
                             </div>
                           </div>
-                          <ProjectOpenMark />
-                        </figure>
-                      </div>
-                      <div className="card-slide__info">
-                        <div className="card-slide__row">
-                          <h3 className="card-slide__title">
-                            <button type="button" onClick={() => openProjectPage(card)}>
-                              {card.title}
-                            </button>
-                          </h3>
-                          <div className="card-slide__data">
-                            <small>from</small>
-                            <button type="button" className="link-underlined" onClick={() => openProjectPage(card)}>
-                              {card.category}
-                            </button>
-                          </div>
                         </div>
-                        <p className="card-slide__description">{card.description}</p>
+                        <ProjectOpenMark />
+                      </figure>
+                    </div>
+                    <div className="card-slide__info">
+                      <div className="card-slide__row">
+                        <h3 className="card-slide__title">
+                          <button
+                            type="button"
+                            onClick={() => openProjectPage(card)}
+                          >
+                            {card.title}
+                          </button>
+                        </h3>
+                        <div className="card-slide__data">
+                          <small>from</small>
+                          <button
+                            type="button"
+                            className="link-underlined"
+                            onClick={() => openProjectPage(card)}
+                          >
+                            {card.category}
+                          </button>
+                        </div>
                       </div>
-                    </article>
-                  </li>
-                );
-              })}
+                      <p className="card-slide__description">
+                        {card.description}
+                      </p>
+                    </div>
+                  </article>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
