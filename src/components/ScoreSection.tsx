@@ -43,7 +43,7 @@ const marketplaceProjectOrder = [
     key: "gitEffects",
     displayName: "Git Effects",
     descriptor: "Git workflow UX",
-    logo: "/assets/GitEffects/logo.svg",
+    logo: "/assets/GitEffects/LOGO.svg",
     marketplaceUrl: "https://marketplace.visualstudio.com/items?itemName=ppsssj.git-effects",
   },
   {
@@ -489,10 +489,10 @@ export function ScoreSection() {
                         <div className="grid-score__item">Note</div>
                       </div>
                     </div>
-                    <ul className="list-jury-notes">
+                    <ul className="records-list">
                       {tab.rows.map((row) => (
-                        <li className="list-jury-notes__item" key={`${tab.label}-${row.name}`}>
-                          <div className="list-jury-notes__info">
+                        <li className="records-list__item" key={`${tab.label}-${row.name}`}>
+                          <div className="records-list__info">
                             <figure>
                               <div className="avatar-name__img avatar-name__img--placeholder profile-mark">
                                 <ProfileMark name={row.name} />
@@ -501,12 +501,12 @@ export function ScoreSection() {
                             <div className="info">
                               <div>
                                 <strong>{row.name}</strong>
-                                <span className="list-jury-notes__from"> from <strong>{row.source}</strong></span>
+                                <span className="records-list__from"> from <strong>{row.source}</strong></span>
                               </div>
                               <div className="hidden-sm">{row.role}</div>
                             </div>
                           </div>
-                          <div className="list-jury-notes__score">
+                          <div className="records-list__data">
                             <div className="grid-score" style={profileRowGridStyle}>
                               <div className="grid-score__item">{row.focus}</div>
                               <div className="grid-score__item">{row.stack}</div>

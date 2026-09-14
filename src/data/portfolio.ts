@@ -205,28 +205,6 @@ export type ProjectCaseStudy = {
   };
 };
 
-export type PaletteItem = {
-  value: string;
-  text: string;
-};
-
-export type ScoreItem = {
-  label: string;
-  weight: string;
-  value: number;
-  score: string;
-};
-
-export type VoteRow = {
-  name: string;
-  role: string;
-  design: number;
-  usability: number;
-  creativity: number;
-  content: number;
-  total: string;
-};
-
 export type ProfileTableRow = {
   name: string;
   role: string;
@@ -245,10 +223,6 @@ export type ProfileTableTab = {
 export const siteMeta = {
   brand: "PPsssJ",
   title: "박성진 · Frontend Engineer",
-  eyebrow: "Site of the Day",
-  date: "Date",
-  score: "88%",
-  scoreLabel: "BUILD",
   description:
     "React와 TypeScript를 중심으로 완성도 있는 인터페이스와 인터랙션을 구현하고, Web Application·Developer Tool·Desktop Application으로 확장합니다.",
   visitHref: "https://github.com/ppsssj",
@@ -1668,11 +1642,6 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   },
 };
 
-export const palette: PaletteItem[] = [
-  { value: "#EDE7DE", text: "#222222" },
-  { value: "#1A1A1A", text: "#FFFFFF" },
-];
-
 export const stack = [
   "React",
   "TypeScript",
@@ -1692,43 +1661,6 @@ export const detailDescription =
   "이 포트폴리오는 React와 TypeScript를 중심으로 인터랙티브한 Web Application과 Developer Tool을 만들고, 브라우저·에디터·데스크톱 환경까지 연결하는 과정을 보여줍니다.";
 
 export const githubUsername = "ppsssj";
-
-export const scoreBreakdown: ScoreItem[] = [
-  { label: "Frontend Craft", weight: "35%", value: 92, score: "92%" },
-  { label: "Application Engineering", weight: "25%", value: 86, score: "86%" },
-  { label: "Interaction Design", weight: "20%", value: 88, score: "88%" },
-  { label: "Product Thinking", weight: "20%", value: 84, score: "84%" },
-];
-
-export const juryVotes: VoteRow[] = [
-  {
-    name: "Product Team",
-    role: "Execution Review",
-    design: 9,
-    usability: 8,
-    creativity: 8,
-    content: 7,
-    total: "8.30",
-  },
-  {
-    name: "Frontend Lead",
-    role: "Implementation Review",
-    design: 7,
-    usability: 7,
-    creativity: 7,
-    content: 7,
-    total: "7.00",
-  },
-  {
-    name: "UX Reviewer",
-    role: "Experience Review",
-    design: 8,
-    usability: 6,
-    creativity: 7,
-    content: 9,
-    total: "7.30",
-  },
-];
 
 export const profileTableTabs: ProfileTableTab[] = [
   {

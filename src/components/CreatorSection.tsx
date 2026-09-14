@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 
 import { creatorCredits, heroGallery, siteMeta } from "../data/portfolio";
 
-function SpriteIcon({ id }: { id: string }) {
+const iconPaths = {
+  bookmark: "M7 4.5A1.5 1.5 0 0 1 8.5 3h7A1.5 1.5 0 0 1 17 4.5V21l-5-3-5 3V4.5Z",
+  share: "M18 8a3 3 0 1 0-2.83-4A3 3 0 0 0 15 5l-6.2 3.1A3 3 0 1 0 9 13.9l6.2 3.1a3 3 0 1 0 .8-1.8l-6.2-3.1a3 3 0 0 0 0-2.2L16 6.8A3 3 0 0 0 18 8Z",
+  link: "M10.6 13.4a4 4 0 0 0 5.66 0l2.14-2.14a4 4 0 0 0-5.66-5.66L11.5 6.84m1.9 3.76a4 4 0 0 0-5.66 0L5.6 12.74a4 4 0 1 0 5.66 5.66l1.24-1.24",
+} as const;
+
+function PortfolioIcon({ id }: { id: keyof typeof iconPaths }) {
   return (
-    <svg className="ico-svg" viewBox="0 0 20 20" width="20">
-      <use
-        href={`https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#${id}`}
-      />
+    <svg className="ico-svg" viewBox="0 0 24 24" width="20" aria-hidden="true">
+      <path d={iconPaths[id]} fill={id === "share" ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -178,12 +182,12 @@ export function CreatorSection() {
                   <ul className="toolbar-bts">
                     <li>
                       <span className="toolbar-bts__item">
-                        <SpriteIcon id="bookmark" />
+                        <PortfolioIcon id="bookmark" />
                       </span>
                     </li>
                     <li>
                       <span className="toolbar-bts__item">
-                        <SpriteIcon id="share" />
+                        <PortfolioIcon id="share" />
                       </span>
                     </li>
                     <li>
@@ -191,7 +195,7 @@ export function CreatorSection() {
                         className="toolbar-bts__item"
                         href={siteMeta.visitHref}
                       >
-                        <SpriteIcon id="link" />
+                        <PortfolioIcon id="link" />
                       </a>
                     </li>
                   </ul>

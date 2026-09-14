@@ -1,8 +1,8 @@
-/* React page parity layer for rules not present in the captured MERSI inline CSS. */
+/* Portfolio compositions built on the local design-system foundation. */
 :root {
   --ch-bg: #e9e9e9;
   --bg-box-figure: #181818;
-  --color-award: #ffa41b;
+  --color-accent-action: var(--color-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -80,7 +80,13 @@ html::-webkit-scrollbar {
 }
 
 .marquee-top__separator {
+  position: relative;
+  top: -1px;
+  display: inline-flex;
+  align-items: center;
   margin-inline: 16px;
+  font-size: 1.3em;
+  vertical-align: middle;
 }
 
 .header-main__logo {
@@ -389,7 +395,7 @@ html::-webkit-scrollbar {
 
 .head-site .gallery-site {
   justify-items: center;
-  padding-top: 1.4rem;
+  padding-top: 19.6px;
 }
 
 .gallery-site--two-cols {
@@ -564,7 +570,13 @@ html::-webkit-scrollbar {
 .card-slide__data small {
   display: inline-flex;
   align-items: center;
+  font-size: 75%;
   line-height: 1;
+}
+
+.card-slide__row .link-underlined {
+  font-size: clamp(18px, calc(16.5915px + 0.28169vw), 22px);
+  font-weight: var(--font-bold);
 }
 
 .card-slide__title button,
@@ -3448,10 +3460,6 @@ html::-webkit-scrollbar {
   font-weight: var(--font-bold);
 }
 
-.votes-panel {
-  border-top: var(--border-thin) solid rgba(var(--color-primary-rgb), 0.2);
-}
-
 .mb-0 {
   margin-bottom: 0 !important;
 }
@@ -3573,11 +3581,11 @@ html::-webkit-scrollbar {
   line-height: 150%;
 }
 
-.list-jury-notes {
+.records-list {
   display: grid;
 }
 
-.list-jury-notes__item {
+.records-list__item {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(420px, 1fr);
   gap: var(--gutter);
@@ -3590,18 +3598,18 @@ html::-webkit-scrollbar {
   background-repeat: repeat-x;
 }
 
-.list-jury-notes__info {
+.records-list__info {
   display: flex;
   align-items: center;
   gap: 16px;
   min-width: 0;
 }
 
-.list-jury-notes__info figure {
+.records-list__info figure {
   flex: 0 0 auto;
 }
 
-.list-jury-notes__info .avatar-name__img--placeholder,
+.records-list__info .avatar-name__img--placeholder,
 .profile-mark {
   width: 72px;
   height: 72px;
@@ -3636,11 +3644,11 @@ html::-webkit-scrollbar {
   fill: none;
 }
 
-.list-jury-notes__from {
+.records-list__from {
   color: #a7a7a7;
 }
 
-.list-jury-notes__score {
+.records-list__data {
   min-width: 0;
 }
 
@@ -4030,37 +4038,11 @@ html::-webkit-scrollbar {
   }
 }
 
-.votes-table {
-  display: grid;
-  gap: 0;
-}
-
-.votes-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 16px 0;
-  border-bottom: var(--border-thin) solid rgba(var(--color-primary-rgb), 0.2);
-}
-
-.votes-row__identity {
-  display: grid;
-  gap: 4px;
-}
-
-.votes-row__scores {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
 .menu-float {
   --menu-color-1: #ffa41b;
   --menu-color-2: #ffa41b;
   --menu-color-3: #ffa41b;
-  --color-award: #ffa41b;
+  --color-accent-action: var(--color-accent);
   opacity: 1;
   bottom: 30px;
 }
@@ -4162,16 +4144,28 @@ html::-webkit-scrollbar {
   font-weight: var(--font-bold);
 }
 
-.menu-float__layout--tertiary .button[class*="--awwward"],
-.menu-float__layout--tertiary .button[class*="--awwward"]:hover {
-  --button-bg: var(--color-award);
+.menu-float__layout--tertiary .button--accent,
+.menu-float__layout--tertiary .button--accent:hover {
+  --button-bg: var(--color-accent-action);
   --button-color: var(--color-primary);
   background: var(--button-bg);
   color: var(--button-color);
 }
 
+.menu-float__layout--tertiary .button:not(.is-custom) {
+  background: var(--menu-color-1, #dedede);
+  color: var(--color-primary);
+}
+
 .menu-float__layout--tertiary .button {
+  width: 100%;
+  font-size: 13px;
   gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.menu-float__layout--tertiary .button:hover {
+  opacity: 0.8;
 }
 
 .menu-float__layout--tertiary .floating-action-button {
@@ -4660,7 +4654,7 @@ html::-webkit-scrollbar {
     max-width: 100%;
   }
 
-  .list-jury-notes__item {
+  .records-list__item {
     grid-template-columns: 1fr;
   }
 

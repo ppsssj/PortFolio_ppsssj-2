@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { createPortal } from "react-dom";
 
 import { GitHubIcon, GmailIcon } from "./ContactIcons";
@@ -145,6 +151,26 @@ export function SiteHeader({ items }: SiteHeaderProps) {
     setIsDraggingProgress(false);
   };
 
+  const handleProgressKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const step = event.shiftKey ? 10 : 5;
+    let nextProgress: number | null = null;
+
+    if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown") {
+      nextProgress = scrollProgress + step;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
+      nextProgress = scrollProgress - step;
+    } else if (event.key === "Home") {
+      nextProgress = 0;
+    } else if (event.key === "End") {
+      nextProgress = 100;
+    }
+
+    if (nextProgress !== null) {
+      event.preventDefault();
+      setProgress(nextProgress, true);
+    }
+  };
+
   useEffect(() => {
     const updateScrollProgress = () => {
       if (isDraggingProgressRef.current || isProgressNavigationRef.current) {
@@ -187,15 +213,18 @@ export function SiteHeader({ items }: SiteHeaderProps) {
 
   return (
     <>
+      <a className="skip-link visually-hidden" href="#content">
+        본문으로 건너뛰기
+      </a>
       <header id="header">
       <div className="inner">
         <div className="c-header-main">
           <div className="header-main">
             <div className="header-main__overlay" />
             <div className="header-main__container">
-              <div className="header-main__hamburger">
-                <svg className="ico-svg" viewBox="0 0 20 20" width="16">
-                  <use href="https://www.awwwards.com/assets/redesign/images/sprite-icons.svg?v=3#hamburger" />
+              <div className="header-main__hamburger" aria-hidden="true">
+                <svg className="ico-svg" viewBox="0 0 20 20" width="16" aria-hidden="true">
+                  <path d="M3 6h14M3 10h14M3 14h14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </div>
 
@@ -273,6 +302,7 @@ export function SiteHeader({ items }: SiteHeaderProps) {
             onPointerMove={handleProgressPointerMove}
             onPointerUp={handleProgressPointerUp}
             onPointerCancel={handleProgressPointerUp}
+            onKeyDown={handleProgressKeyDown}
           >
             <div className="scroll-progress__track" ref={trackRef}>
               <div

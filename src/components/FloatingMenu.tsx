@@ -120,7 +120,7 @@ export function FloatingMenu({
                   </strong>
                   {secondaryAction ? (
                     <a
-                      className="button button--medium--rounded--awwward is-custom floating-action-button floating-action-button--external"
+                      className="button button--medium--rounded button--accent is-custom floating-action-button floating-action-button--external"
                       href={secondaryAction.href}
                       target="_blank"
                       rel="noreferrer"
@@ -135,7 +135,7 @@ export function FloatingMenu({
                   ) : null}
                   {showMail ? (
                     <a
-                      className="button button--medium--rounded--awwward is-custom floating-action-button"
+                      className="button button--medium--rounded button--accent is-custom floating-action-button"
                       href={siteMeta.secondaryCtaHref}
                       aria-label={siteMeta.secondaryCtaLabel}
                     >
