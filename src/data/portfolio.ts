@@ -18,6 +18,10 @@ export type HighlightCard = {
   image: string;
   previewImage?: string;
   detailImages?: string[];
+  caseStudyPdf?: {
+    href: string;
+    downloadName: string;
+  };
   href: string;
   detail: {
     role: string;
@@ -284,6 +288,10 @@ export const peepholeProjectCard: HighlightCard = {
     "/assets/Peephole/peephole-demo.gif",
     "/assets/Peephole/peephole_demo_img.png",
   ],
+  caseStudyPdf: {
+    href: "/data/docs/Peephole/peephole-case-study.pdf",
+    downloadName: "peephole-case-study.pdf",
+  },
   href: "#highlights",
   detail: {
     role: "Chrome Extension UI, repository analyzer, preview API, PostgreSQL job queue, gVisor sandbox, AWS production",
@@ -337,6 +345,10 @@ export const infiniteDeskProjectCard: HighlightCard = {
     "/assets/InfiniteDesk/workspace-screenshot-dark.png",
     "/assets/InfiniteDesk/logo-concept.png",
   ],
+  caseStudyPdf: {
+    href: "/data/docs/Infinitedesk/infinitedesk-case-study.pdf",
+    downloadName: "infinitedesk-case-study.pdf",
+  },
   href: "#highlights",
   detail: {
     role: "Electron 애플리케이션 구조, React/TypeScript UI, IPC 보안 경계, Win32/DWM 연동, 테스트·배포",
@@ -387,6 +399,10 @@ const highlightCardsSource: HighlightCard[] = [
       "/assets/git-reflow/github_profile.png",
       "/assets/git-reflow/github_repo.jpg",
     ],
+    caseStudyPdf: {
+      href: "/data/docs/git-reflow/git-reflow-case-study.pdf",
+      downloadName: "git-reflow-case-study.pdf",
+    },
     href: "#contact",
     detail: {
       role: "템플릿 에디터, 공유 TypeScript 계약, Node.js API, Chrome Extension 통합",
@@ -421,6 +437,10 @@ const highlightCardsSource: HighlightCard[] = [
       "/assets/Cogic/Cogic-NodeClick-poster.png",
       "/assets/Cogic/Cogic-TraceMode.gif",
     ],
+    caseStudyPdf: {
+      href: "/data/docs/cogic/cogic-case-study.pdf",
+      downloadName: "cogic-case-study.pdf",
+    },
     href: "#creator",
     detail: {
       role: "TypeScript static analysis, typed message architecture, graph visualization, VS Code extension development",
@@ -505,6 +525,10 @@ const highlightCardsSource: HighlightCard[] = [
       "/assets/GraphMind/GraphMind_surface3d.png",
       "/assets/GraphMind/GraphMind_vault.png",
     ],
+    caseStudyPdf: {
+      href: "/data/docs/graphmind/graphmind-case-study.pdf",
+      downloadName: "graphmind-case-study.pdf",
+    },
     href: "#typography",
     detail: {
       role: "Interactive visualization, frontend architecture, graph state management, Spring Boot integration",
@@ -549,6 +573,10 @@ const highlightCardsSource: HighlightCard[] = [
       "/assets/PrismDesign/PrismDesign_assets2.png",
       "/assets/PrismDesign/PrismDesign_handtracking.gif",
     ],
+    caseStudyPdf: {
+      href: "/data/docs/PrismDesign/prismdesign-case-study.pdf",
+      downloadName: "prismdesign-case-study.pdf",
+    },
     href: "#details",
     detail: {
       role: "Node editor architecture, runtime/evaluator design, ReactFlow·Canvas interaction, Express integration",
@@ -586,6 +614,10 @@ const highlightCardsSource: HighlightCard[] = [
       "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System3.png",
       "/assets/TrafficNoisePredictionSystem/Traffic-Noise-Prediction-System4.png",
     ],
+    caseStudyPdf: {
+      href: "/data/docs/Trafficnoisepredictionsystem/traffic-noise-prediction-system-case-study.pdf",
+      downloadName: "traffic-noise-prediction-system-case-study.pdf",
+    },
     href: "#score",
     detail: {
       role: "React dashboard, map/chart visualization, Flask API integration, prediction result interpretation",

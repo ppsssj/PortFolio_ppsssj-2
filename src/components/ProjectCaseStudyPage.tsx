@@ -38,6 +38,18 @@ function MarketplaceIcon() {
   );
 }
 
+function DocumentIcon() {
+  return (
+    <svg className="ico-svg project-case-hero__document-icon" viewBox="0 0 24 24" width="22" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5 2h10l4 4v16H5V2Zm2 2v16h10V8h-4V4H7Zm8 .8V6h1.2L15 4.8ZM9 11h6v2H9v-2Zm0 4h6v2H9v-2Z"
+      />
+    </svg>
+  );
+}
+
 function DownIcon() {
   return (
     <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
@@ -63,11 +75,15 @@ function getProjectLinkLabel(label: string) {
 export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const slug = getProjectSlug(card);
   const caseStudy = projectCaseStudies[slug];
+  const caseStudyPdf = card.caseStudyPdf;
   const galleryImages = useMemo(() => card.detailImages ?? [card.image], [card.detailImages, card.image]);
   const heroStackCount = Math.min(galleryImages.length, 5);
   const githubLink = card.detail.links?.find((link) => link.label.toLowerCase() === "github");
   const secondaryActionLink = card.detail.links?.find((link) => link.label.toLowerCase() !== "github");
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
+  const chromeWebStoreLink = card.detail.links?.find(
+    (link) => link.href.includes("chromewebstore.google.com"),
+  );
   const marketplaceExtensionId = marketplaceLink
     ? new URL(marketplaceLink.href).searchParams.get("itemName")
     : null;
@@ -370,6 +386,25 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                       aria-label={`Open ${card.title} Visual Studio Marketplace page`}
                     >
                       <MarketplaceIcon />
+                    </a>
+                  ) : null}
+                  {chromeWebStoreLink ? (
+                    <a
+                      href={chromeWebStoreLink.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${card.title} Chrome Web Store page`}
+                    >
+                      <MarketplaceIcon />
+                    </a>
+                  ) : null}
+                  {caseStudyPdf ? (
+                    <a
+                      href={caseStudyPdf.href}
+                      download={caseStudyPdf.downloadName}
+                      aria-label={`${card.title} 문서 PDF 다운로드`}
+                    >
+                      <DocumentIcon />
                     </a>
                   ) : null}
                 </div>
@@ -691,14 +726,20 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                 </ul>
               </article>
             </div>
-            {card.detail.links?.length ? (
+            {card.detail.links?.length || caseStudyPdf ? (
               <nav className="project-case-finale__cta" aria-label={`${card.title} 프로젝트 링크`}>
-                {card.detail.links.map((link) => (
+                {card.detail.links?.map((link) => (
                   <a href={link.href} target="_blank" rel="noreferrer" key={`${link.label}-${link.href}`}>
                     {getProjectLinkLabel(link.label)}
                     <span aria-hidden="true">↗</span>
                   </a>
                 ))}
+                {caseStudyPdf ? (
+                  <a href={caseStudyPdf.href} download={caseStudyPdf.downloadName}>
+                    Case Study PDF
+                    <span aria-hidden="true">↓</span>
+                  </a>
+                ) : null}
               </nav>
             ) : null}
           </div>
