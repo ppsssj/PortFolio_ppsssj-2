@@ -298,9 +298,9 @@ export const peepholeProjectCard: HighlightCard = {
       "AWS EC2",
       "Vitest",
     ],
-    period: "2026.08 - 2026.09",
+    period: "2026.08 - 현재",
     overview:
-      "Peephole은 낯선 공개 GitHub 프런트엔드 저장소를 로컬에 clone하거나 의존성을 설치하지 않고도 분석하고 미리볼 수 있게 만든 Chrome 확장과 격리형 프리뷰 서비스입니다. 저장소의 정확한 commit을 기준으로 실행 가능성을 판정하고, 지원되는 프로젝트만 별도 샌드박스에서 빌드해 Side Panel에 전달합니다.",
+      "Peephole은 낯선 공개 GitHub 프런트엔드 저장소를 로컬에 clone하거나 의존성을 설치하지 않고도 분석하고 미리볼 수 있게 만든 Chrome 확장과 격리형 프리뷰 서비스입니다. v0.1.0을 Chrome Web Store에 공개 배포한 뒤 운영·개선을 이어가고 있으며, 저장소의 정확한 commit을 기준으로 실행 가능성을 판정하고 지원되는 프로젝트만 별도 샌드박스에서 빌드해 Side Panel에 전달합니다.",
     problem:
       "GitHub 저장소만 보고 실제 화면과 실행 조건을 파악하려면 clone, package 설치, build command 탐색을 반복해야 합니다. 그 과정에서 신뢰할 수 없는 dependency script가 로컬에서 실행될 수 있고, secret이나 backend가 필요한 프로젝트는 시간을 들인 뒤에야 실행 불가를 알게 되는 문제가 있었습니다.",
     solution:
@@ -651,12 +651,12 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   peephole: {
     metrics: [
-      { label: "Release", value: "v0.1", note: "Chrome Extension과 production preview path 구축" },
+      { label: "Release", value: "v0.1.0", note: "Chrome Web Store 공개 배포" },
       { label: "Portable CI", value: "585", note: "환경 독립형 Vitest 검증 통과" },
       { label: "gVisor", value: "15/15", note: "실제 production-like sandbox regression 통과" },
     ],
     outcome: [
-      "GitHub 저장소를 떠나지 않고 분석 결과와 실행 가능한 프런트엔드 화면을 Side Panel에서 확인하도록 만들었습니다.",
+      "Chrome Web Store에서 실제 설치 가능한 확장 프로그램으로 배포하고, GitHub 저장소를 떠나지 않고 분석 결과와 실행 가능한 프런트엔드 화면을 Side Panel에서 확인하도록 만들었습니다.",
       "지원 여부를 먼저 판정해 실행할 수 없는 프로젝트도 구체적인 blocker와 근거를 남기도록 구성했습니다.",
       "신뢰할 수 없는 저장소 코드는 브라우저 확장이나 API가 아닌 별도의 gVisor 실행 경계에서만 다루도록 배포했습니다.",
     ],
