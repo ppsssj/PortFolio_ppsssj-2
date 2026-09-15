@@ -50,6 +50,18 @@ function DocumentIcon() {
   );
 }
 
+function LiveSiteIcon() {
+  return (
+    <svg className="ico-svg project-case-hero__live-site-icon" viewBox="0 0 24 24" width="22" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 4h7v2H6v12h12v-5h2v7H4V4Zm10 0h6v6h-2V7.4l-7.3 7.3-1.4-1.4L16.6 6H14V4Z"
+      />
+    </svg>
+  );
+}
+
 function DownIcon() {
   return (
     <svg className="ico-svg" viewBox="0 0 24 24" width="18" aria-hidden="true">
@@ -83,6 +95,9 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
   const marketplaceLink = card.detail.links?.find((link) => link.label.toLowerCase() === "marketplace");
   const chromeWebStoreLink = card.detail.links?.find(
     (link) => link.href.includes("chromewebstore.google.com"),
+  );
+  const liveSiteLink = card.detail.links?.find(
+    (link) => link.label.toLowerCase() === "live site",
   );
   const marketplaceExtensionId = marketplaceLink
     ? new URL(marketplaceLink.href).searchParams.get("itemName")
@@ -396,6 +411,16 @@ export function ProjectCaseStudyPage({ card }: ProjectCaseStudyPageProps) {
                       aria-label={`Open ${card.title} Chrome Web Store page`}
                     >
                       <MarketplaceIcon />
+                    </a>
+                  ) : null}
+                  {liveSiteLink ? (
+                    <a
+                      href={liveSiteLink.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${card.title} live site`}
+                    >
+                      <LiveSiteIcon />
                     </a>
                   ) : null}
                   {caseStudyPdf ? (
