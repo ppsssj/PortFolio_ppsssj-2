@@ -10,7 +10,6 @@ import {
 import { motion } from "framer-motion";
 
 import {
-  featuredProjectCard,
   getProjectSlug,
   highlightCards,
 } from "../data/portfolio";
@@ -36,6 +35,10 @@ const emphasisTerms = [
   "Flask API",
   "Feature Importance",
   "24시간 프로파일",
+  "Chrome Side Panel",
+  "commit SHA",
+  "gVisor",
+  "PostgreSQL",
   "텍스트 기반 탐색",
   "호출 관계",
   "데이터 흐름",
@@ -420,48 +423,6 @@ function ProjectDetailPanel({
   );
 }
 
-function FeaturedProject({
-  card,
-  onOpen,
-}: {
-  card: HighlightCard;
-  onOpen: (event: MouseEvent<HTMLButtonElement>) => void;
-}) {
-  return (
-    <article className="card-slide card-slide--featured">
-      <div className="box-figure">
-        <figure className="figure-rollover js-collectable is-large">
-          <button
-            className="figure-rollover__link figure-rollover__button"
-            type="button"
-            onClick={onOpen}
-            aria-label={`Open ${card.title} project detail`}
-          >
-            <ProjectPreviewImage card={card} />
-          </button>
-          <ProjectOpenMark />
-        </figure>
-      </div>
-      <div className="card-slide__info">
-        <div className="card-slide__row">
-          <h3 className="card-slide__title">
-            <button type="button" onClick={onOpen}>
-              {card.title}
-            </button>
-          </h3>
-          <div className="card-slide__data">
-            <small>from</small>
-            <button type="button" className="link-underlined" onClick={onOpen}>
-              {card.category}
-            </button>
-          </div>
-        </div>
-        <p className="card-slide__description">{card.description}</p>
-      </div>
-    </article>
-  );
-}
-
 export function ElementsSection() {
   const openProjectPage = (card: HighlightCard) => {
     const caseStudyHref = `/projects/${getProjectSlug(card)}`;
@@ -487,11 +448,6 @@ export function ElementsSection() {
               of this portfolio.
             </p>
           </div>
-          <FeaturedProject
-            card={featuredProjectCard}
-            onOpen={() => openProjectPage(featuredProjectCard)}
-          />
-
           <ul className="gallery-site gallery-site--two-cols">
             {highlightCards.map((card) => {
               return (
@@ -505,7 +461,7 @@ export function ElementsSection() {
                           onClick={() => openProjectPage(card)}
                           aria-label={`Open ${card.title} project detail`}
                         >
-                          <ProjectPreviewImage card={card} />
+                          <ProjectPreviewImage card={card} loading="lazy" />
                         </button>
                         <div className="figure-rollover__hover">
                           <div className="figure-rollover__left">

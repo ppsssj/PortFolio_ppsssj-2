@@ -272,9 +272,60 @@ export const creatorCredits: CreditItem[] = [
 
 export const heroGallery = ["/assets/Hero/img.png"];
 
-export const featuredProjectCard: HighlightCard = {
+export const peepholeProjectCard: HighlightCard = {
+  title: "Peephole",
+  category: "DEVELOPER TOOL / Browser Extension",
+  typeLabel: "Developer Tool / Chrome",
+  description:
+    "GitHub 저장소를 clone하기 전에 기술 스택과 빌드 조건을 분석하고, 지원되는 정적 프런트엔드를 격리된 gVisor 샌드박스에서 빌드해 Chrome Side Panel로 미리보는 확장입니다.",
+  image: "/assets/Peephole/peephole-demo.gif",
+  previewImage: "/assets/Peephole/peephole_demo_img.png",
+  detailImages: [
+    "/assets/Peephole/peephole-demo.gif",
+    "/assets/Peephole/peephole_demo_img.png",
+  ],
+  href: "#highlights",
+  detail: {
+    role: "Chrome Extension UI, repository analyzer, preview API, PostgreSQL job queue, gVisor sandbox, AWS production",
+    stack: [
+      "React",
+      "TypeScript",
+      "WXT",
+      "Chrome Extension MV3",
+      "PostgreSQL",
+      "gVisor",
+      "Caddy",
+      "AWS EC2",
+      "Vitest",
+    ],
+    period: "2026.08 - 2026.09",
+    overview:
+      "Peephole은 낯선 공개 GitHub 프런트엔드 저장소를 로컬에 clone하거나 의존성을 설치하지 않고도 분석하고 미리볼 수 있게 만든 Chrome 확장과 격리형 프리뷰 서비스입니다. 저장소의 정확한 commit을 기준으로 실행 가능성을 판정하고, 지원되는 프로젝트만 별도 샌드박스에서 빌드해 Side Panel에 전달합니다.",
+    problem:
+      "GitHub 저장소만 보고 실제 화면과 실행 조건을 파악하려면 clone, package 설치, build command 탐색을 반복해야 합니다. 그 과정에서 신뢰할 수 없는 dependency script가 로컬에서 실행될 수 있고, secret이나 backend가 필요한 프로젝트는 시간을 들인 뒤에야 실행 불가를 알게 되는 문제가 있었습니다.",
+    solution:
+      "먼저 제한된 저장소 파일만 읽어 framework, package manager, build plan, blocker를 근거와 함께 판정합니다. 실행 가능한 정적 프로젝트는 정확한 commit SHA로 고정한 뒤 non-root gVisor 환경에서 자원·디스크·네트워크 제한을 적용해 빌드하고, 결과물만 격리된 HTTPS origin을 통해 Chrome Side Panel에 표시합니다.",
+    highlights: [
+      "GitHub 저장소 화면에서 바로 열리는 Chrome Side Panel 프리뷰",
+      "framework·package manager·build command·blocker를 판정하는 evidence 기반 분석기",
+      "정확한 commit SHA를 빌드하는 비동기 PostgreSQL job queue",
+      "non-root gVisor와 자원·디스크·네트워크 제한을 적용한 untrusted build 격리",
+      "artifact별 독립 HTTPS origin과 cache key를 통한 안전한 결과 전달",
+      "portable CI 585 tests 및 실제 gVisor regression 15/15 검증",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/The-peephole/peephole" },
+      {
+        label: "Chrome Web Store",
+        href: "https://chromewebstore.google.com/detail/peephole/fieofkhijgngfoflgpkbghbkaidhdgel?hl=ko&utm_source=ext_sidebar",
+      },
+    ],
+  },
+};
+
+export const infiniteDeskProjectCard: HighlightCard = {
   title: "InfiniteDesk",
-  category: "FEATURED / Desktop Application",
+  category: "DESKTOP APPLICATION / Window Management",
   typeLabel: "Desktop / Windows",
   description:
     "실행 중인 Windows 앱 창을 하나의 작업 공간에서 미리보고, 캔버스에서 배치한 뒤 실제 데스크톱 레이아웃으로 다시 적용하는 데스크톱 컨트롤러입니다.",
@@ -316,6 +367,8 @@ export const featuredProjectCard: HighlightCard = {
 };
 
 const highlightCardsSource: HighlightCard[] = [
+  peepholeProjectCard,
+  infiniteDeskProjectCard,
   {
     title: "Git Reflow",
     category: "WEB APPLICATION / Browser Extension",
@@ -571,6 +624,8 @@ const highlightCardsSource: HighlightCard[] = [
 ];
 
 const highlightCardOrder = [
+  "Peephole",
+  "InfiniteDesk",
   "Cogic",
   "GraphMind",
   "PrismDesign",
@@ -583,7 +638,7 @@ export const highlightCards: HighlightCard[] = highlightCardOrder
   .map((title) => highlightCardsSource.find((card) => card.title === title))
   .filter((card): card is HighlightCard => Boolean(card));
 
-export const allProjectCards: HighlightCard[] = [featuredProjectCard, ...highlightCards];
+export const allProjectCards: HighlightCard[] = highlightCards;
 
 export function getProjectSlug(card: Pick<HighlightCard, "title">) {
   return card.title
@@ -594,6 +649,148 @@ export function getProjectSlug(card: Pick<HighlightCard, "title">) {
 }
 
 export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
+  peephole: {
+    metrics: [
+      { label: "Release", value: "v0.1", note: "Chrome Extension과 production preview path 구축" },
+      { label: "Portable CI", value: "585", note: "환경 독립형 Vitest 검증 통과" },
+      { label: "gVisor", value: "15/15", note: "실제 production-like sandbox regression 통과" },
+    ],
+    outcome: [
+      "GitHub 저장소를 떠나지 않고 분석 결과와 실행 가능한 프런트엔드 화면을 Side Panel에서 확인하도록 만들었습니다.",
+      "지원 여부를 먼저 판정해 실행할 수 없는 프로젝트도 구체적인 blocker와 근거를 남기도록 구성했습니다.",
+      "신뢰할 수 없는 저장소 코드는 브라우저 확장이나 API가 아닌 별도의 gVisor 실행 경계에서만 다루도록 배포했습니다.",
+    ],
+    approach: [
+      {
+        title: "Inspect Before Execute",
+        body: "package.json, lock file, framework config, 환경 변수 선언처럼 제한된 증거만 수집해 framework와 build plan을 결정합니다. 지원 조건이 모호하면 명령을 추측하지 않고 analysis-only 결과로 멈춥니다.",
+        points: ["bounded repository analysis", "evidence 기반 판정", "blocker와 warning 분리", "immutable commit identity"],
+      },
+      {
+        title: "Trust-separated Architecture",
+        body: "Chrome Extension, Preview API, gVisor worker, artifact delivery를 서로 다른 신뢰 경계로 분리했습니다. Extension과 control plane에서는 저장소 코드를 실행하지 않습니다.",
+        points: ["Chrome Side Panel", "Preview control plane", "PostgreSQL job lease", "isolated artifact origin"],
+      },
+      {
+        title: "Hostile Build Isolation",
+        body: "install과 build는 non-root gVisor sandbox에서만 실행하며 CPU, memory, process, disk, temporary storage, wall-clock을 제한합니다. build network는 차단하고 install network도 private·metadata·inter-job 목적지에 접근하지 못하게 했습니다.",
+        points: ["read-only guest root", "loop-backed ext4 capacity", "bounded egress", "crash reconciliation"],
+      },
+      {
+        title: "Commit-pinned Delivery",
+        body: "branch tip 대신 정확한 commit SHA를 검증해 빌드하고, normalized build plan과 runner version까지 포함한 cache key로 결과를 관리합니다. 생성된 정적 파일만 별도의 HTTPS origin에서 제공합니다.",
+        points: ["exact commit build", "idempotent async job", "artifact TTL", "isolated preview domain"],
+      },
+    ],
+    learnings: [
+      "공개 저장소라는 사실은 dependency script와 build output을 신뢰할 근거가 되지 않습니다.",
+      "지원하지 않는 프로젝트에 정확한 이유를 보여주는 것도 억지로 실행을 시도하는 것만큼 중요한 제품 결과입니다.",
+      "브라우저 확장은 얇은 controller와 presentation surface로 유지할수록 권한과 실행 경계를 설명하기 쉽습니다.",
+    ],
+    nextSteps: [
+      "React 외 Vue와 Svelte fixture에 동일한 production golden-path 검증 범위를 확장합니다.",
+      "자동화된 production smoke, metrics, log aggregation, alert를 통해 운영 가시성을 높입니다.",
+      "install 단계의 egress를 더 좁히기 위한 authenticated package proxy를 검토합니다.",
+    ],
+    architecture: {
+      eyebrow: "System Design",
+      title: "분석과 실행을 분리하고, 신뢰할 수 없는 build는 짧게 살아 있는 gVisor 경계 안에 가뒀습니다.",
+      gridDiagram: {
+        topRow: [
+          { title: "Chrome Extension", subtitle: "GitHub Adapter · Side Panel", note: "Repository identity와 사용자 흐름" },
+          { title: "Preview API", subtitle: "GitHub App OAuth · Analysis · Jobs", note: "검증과 control plane" },
+          { title: "PostgreSQL", subtitle: "Job Queue · Lease · Cache", note: "비동기 상태와 소유권 기록" },
+        ],
+        bottomRow: [
+          { title: "gVisor Worker", subtitle: "Commit-pinned install · build", note: "Non-root untrusted execution" },
+          { title: "Artifact Host", subtitle: "Static output · Caddy", note: "TTL과 isolated origin" },
+          { title: "Chrome Side Panel", subtitle: "HTTPS preview", note: "권한 없는 결과 표시" },
+        ],
+      },
+      items: [
+        {
+          title: "Extension Layer",
+          body: "GitHub SPA 이동을 감지해 현재 repository와 commit identity를 유지하고, 분석·job 요청과 취소 상태를 Side Panel에 표현합니다.",
+          points: ["idempotent DOM reconciliation", "typed background operations", "stale response protection"],
+        },
+        {
+          title: "Control Plane",
+          body: "Preview API가 제출된 repository identity와 build plan을 다시 검증하고, cache hit를 반환하거나 PostgreSQL queue에 새 job을 기록합니다.",
+          points: ["GitHub App OAuth + PKCE", "asynchronous jobs", "status · cancel · expiry"],
+        },
+        {
+          title: "Execution & Delivery",
+          body: "Worker는 lease한 job을 일회성 gVisor sandbox에서 처리하고, 검증된 static output만 artifact host로 게시합니다. 종료 후에는 container, mount, network, disk residue를 정리합니다.",
+          points: ["resource limits", "network policy", "crash recovery", "isolated HTTPS artifact"],
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Core Flow",
+      title: "저장소 분석부터 안전한 Side Panel 프리뷰까지의 흐름입니다.",
+      flows: [
+        {
+          title: "1. Analyze repository",
+          steps: ["GitHub repository 감지", "commit SHA 확인", "bounded evidence 수집", "eligibility 판정"],
+          caption: "실행 전에 framework, package manager, build plan과 blocker를 먼저 보여줍니다.",
+        },
+        {
+          title: "2. Build exact commit",
+          steps: ["job 생성", "server-side 재검증", "PostgreSQL lease", "gVisor install/build", "output 검증"],
+          caption: "지원되는 저장소만 immutable build plan으로 격리된 worker에 전달합니다.",
+        },
+        {
+          title: "3. Deliver preview",
+          steps: ["artifact publish", "isolated HTTPS origin", "Side Panel embed", "cache metadata 기록", "sandbox cleanup"],
+          caption: "브라우저 권한과 분리된 origin에서 정적 결과만 표시하고 실행 자원은 회수합니다.",
+        },
+      ],
+    },
+    uxFlow: {
+      eyebrow: "Product Detail",
+      title: "미리보기가 가능한 경우와 불가능한 경우를 모두 명확한 결과로 다뤘습니다.",
+      items: [
+        {
+          tag: "Analyze",
+          title: "근거가 보이는 판정",
+          body: "감지한 stack과 build command뿐 아니라 판단에 사용한 파일과 blocker를 함께 보여줍니다.",
+        },
+        {
+          tag: "Preview",
+          title: "GitHub 안에서 바로 확인",
+          body: "지원되는 정적 앱은 새 개발 환경을 준비하지 않고 Chrome Side Panel에서 결과를 확인합니다.",
+        },
+        {
+          tag: "Unsupported",
+          title: "실패 대신 설명",
+          body: "backend, secret, monorepo처럼 계약 밖의 조건이 발견되면 숨은 fallback을 실행하지 않고 이유를 설명합니다.",
+        },
+      ],
+    },
+    finale: {
+      flow: {
+        eyebrow: "Application Flow",
+        title: "Clone 없이 저장소의 실행 가능성과 실제 화면을 확인하는 과정입니다.",
+        steps: [
+          { label: "Open", detail: "공개 GitHub repository에서 Peephole action을 엽니다." },
+          { label: "Inspect", detail: "제한된 파일 근거로 stack과 build 조건을 분석합니다." },
+          { label: "Decide", detail: "existing deployment, native static build, unsupported 중 하나를 판정합니다." },
+          { label: "Isolate", detail: "정확한 commit을 일회성 non-root gVisor sandbox에서 빌드합니다." },
+          { label: "Preview", detail: "독립 HTTPS origin의 artifact를 Chrome Side Panel에 표시합니다." },
+        ],
+      },
+      decisions: {
+        eyebrow: "Build Decisions",
+        title: "빠른 미리보기보다 먼저 안전하고 설명 가능한 실행 경계를 선택했습니다.",
+        points: [
+          "지원 범위를 static HTML과 검증된 Vite frontend 계약으로 제한했습니다.",
+          "branch가 아닌 commit SHA를 빌드 단위로 사용해 분석과 실행 결과를 일치시켰습니다.",
+          "extension, control plane, execution plane, delivery origin 사이에 명확한 trust boundary를 뒀습니다.",
+          "지원하지 않는 조건은 우회하지 않고 사용자가 다음 행동을 결정할 수 있는 blocker로 표현했습니다.",
+        ],
+      },
+    },
+  },
   infinitedesk: {
     metrics: [
       { label: "Release", value: "0.3.0", note: "GitHub Releases를 통해 Windows 설치 파일 배포" },
@@ -731,7 +928,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
           "Windows 전용 흐름을 설치 없이 이해할 수 있도록 메인 자산을 GIF로 배치했습니다.",
           "로컬 데스크톱 정보를 다루기 때문에 개인정보와 보안 문서를 함께 정리했습니다.",
           "Renderer가 데스크톱 제어를 직접 실행하지 않도록 native layer를 Electron IPC 뒤로 분리했습니다.",
-          "기존 6개 카드와 무게감이 달라 홈에서는 별도 featured GIF로 강조했습니다.",
+          "Peephole과 같은 2열 프로젝트 그리드에 배치해 다른 작업과 동일한 기준으로 비교할 수 있게 했습니다.",
         ],
       },
     },

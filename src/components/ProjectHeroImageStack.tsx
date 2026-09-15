@@ -21,7 +21,12 @@ function ProjectHeroImageStackCard({ card, image, index }: ProjectHeroImageStack
       }}
       data-stack-index={index}
     >
-      <ProjectPreviewImage card={card} image={image} />
+      <ProjectPreviewImage
+        card={card}
+        image={image}
+        fetchPriority={index === 0 ? "high" : "low"}
+        loading={index === 0 ? "eager" : "lazy"}
+      />
     </figure>
   );
 }
