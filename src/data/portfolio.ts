@@ -651,6 +651,10 @@ const highlightCardsSource: HighlightCard[] = [
           label: "GitHub",
           href: "https://github.com/ppsssj/Traffic-Noise-Prediction-System",
         },
+        {
+          label: "Academic Paper",
+          href: "/data/docs/thesis/2025박성진데이터사이언스학회동계.pdf",
+        },
       ],
     },
   },
