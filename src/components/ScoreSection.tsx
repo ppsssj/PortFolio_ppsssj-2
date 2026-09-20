@@ -44,7 +44,7 @@ const marketplaceProjectOrder = [
     key: "gitEffects",
     displayName: "Git Effects",
     descriptor: "Git workflow UX",
-    logo: "/assets/GitEffects/LOGO.svg",
+    logo: "/assets/GitEffects/icon.png",
     marketplaceUrl: "https://marketplace.visualstudio.com/items?itemName=ppsssj.git-effects",
   },
   {
