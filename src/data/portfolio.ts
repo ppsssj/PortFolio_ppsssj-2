@@ -217,6 +217,7 @@ export type ProfileTableRow = {
   stack: string;
   level: string;
   note: string;
+  href?: string;
 };
 
 export type ProfileTableTab = {
@@ -2085,6 +2086,31 @@ export const profileTableTabs: ProfileTableTab[] = [
         stack: "Software Engineering, Database, System Design",
         level: "26.09",
         note: "정보처리 기반 지식 검증",
+      },
+    ],
+  },
+  {
+    label: "Papers",
+    rows: [
+      {
+        name: "2025 데이터사이언스학회 동계 논문",
+        role: "2025 데이터사이언스학회 동계 학술대회 발표 논문",
+        source: "Data Science Conference",
+        focus: "Research",
+        stack: "Data Science, Research",
+        level: "2025",
+        note: "PDF 보기",
+        href: "/data/docs/thesis/2025박성진데이터사이언스학회동계.pdf",
+      },
+      {
+        name: "2025 한국멀티미디어학회 추계 논문",
+        role: "2025 한국멀티미디어학회 추계 학술대회 발표 논문",
+        source: "Korea Multimedia Society",
+        focus: "Research",
+        stack: "Multimedia, Research",
+        level: "2025",
+        note: "PDF 보기",
+        href: "/data/docs/thesis/2025박성진추계한국멀티미디어학회.pdf",
       },
     ],
   },

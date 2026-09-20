@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { profileTableTabs } from "../data/portfolio";
 
 const profileRowGridStyle = { "--score-cols": 4 } as CSSProperties;
-const dateColumnTabs = new Set(["Awards", "Activities", "Certification"]);
+const dateColumnTabs = new Set(["Awards", "Activities", "Certification", "Papers"]);
 const numberFormat = new Intl.NumberFormat("en-US");
 
 type MarketplaceExtensionStats = {
@@ -469,6 +469,7 @@ export function ScoreSection() {
                 {
                   "--active-tab-index": activeTabIndex,
                   "--stack-row-count": currentTab.rows.length,
+                  "--stack-face-angle": `${360 / profileTableTabs.length}deg`,
                 } as CSSProperties
               }
             >
@@ -502,7 +503,14 @@ export function ScoreSection() {
                             </figure>
                             <div className="info">
                               <div>
-                                <strong>{row.name}</strong>
+                                {row.href ? (
+                                  <a className="records-list__paper-link" href={row.href} target="_blank" rel="noreferrer">
+                                    <strong>{row.name}</strong>
+                                    <span aria-hidden="true">↗</span>
+                                  </a>
+                                ) : (
+                                  <strong>{row.name}</strong>
+                                )}
                                 <span className="records-list__from"> from <strong>{row.source}</strong></span>
                               </div>
                               <div className="hidden-sm">{row.role}</div>
