@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { profileTableTabs } from "../data/portfolio";
 
 const profileRowGridStyle = { "--score-cols": 4 } as CSSProperties;
+const paperRowGridStyle = { "--score-cols": 3 } as CSSProperties;
 const dateColumnTabs = new Set(["Awards", "Activities", "Certification", "Papers"]);
 const numberFormat = new Intl.NumberFormat("en-US");
 
@@ -64,6 +65,14 @@ const marketplaceProjectOrder = [
 
 function formatMetric(value: number) {
   return numberFormat.format(Math.round(value));
+}
+
+function getProfileTabColumnLabels(tabLabel: string) {
+  if (tabLabel === "Papers") {
+    return ["Venue", "Keywords", "PDF"];
+  }
+
+  return ["Focus", "Stack", dateColumnTabs.has(tabLabel) ? "Date" : "Level", "Note"];
 }
 
 function formatUpdatedAt(value?: string) {
@@ -474,22 +483,22 @@ export function ScoreSection() {
               }
             >
               {profileTableTabs.map((tab, index) => {
-                const tabLevelColumnLabel = dateColumnTabs.has(tab.label) ? "Date" : "Level";
+                const columnLabels = getProfileTabColumnLabels(tab.label);
+                const isPaperTab = tab.label === "Papers";
 
                 return (
                   <div
-                    className={`content-tabs__item active stack-panel-face${tab.label === currentTab.label ? " is-active" : ""}`}
+                    className={`content-tabs__item active stack-panel-face${isPaperTab ? " stack-panel-face--papers" : ""}${tab.label === currentTab.label ? " is-active" : ""}`}
                     key={tab.label}
                     style={{ "--tab-index": index } as CSSProperties}
                     aria-hidden={tab.label === currentTab.label ? undefined : true}
                   >
                     <div className="stack-table-header">
                       <div className="stack-table-header__name">Name</div>
-                      <div className="grid-score" style={profileRowGridStyle}>
-                        <div className="grid-score__item">Focus</div>
-                        <div className="grid-score__item">Stack</div>
-                        <div className="grid-score__item">{tabLevelColumnLabel}</div>
-                        <div className="grid-score__item">Note</div>
+                      <div className={`grid-score${isPaperTab ? " grid-score--papers" : ""}`} style={isPaperTab ? paperRowGridStyle : profileRowGridStyle}>
+                        {columnLabels.map((label) => (
+                          <div className="grid-score__item" key={label}>{label}</div>
+                        ))}
                       </div>
                     </div>
                     <ul className="records-list">
@@ -503,25 +512,35 @@ export function ScoreSection() {
                             </figure>
                             <div className="info">
                               <div>
-                                {row.href ? (
-                                  <a className="records-list__paper-link" href={row.href} target="_blank" rel="noreferrer">
-                                    <strong>{row.name}</strong>
-                                    <span aria-hidden="true">↗</span>
-                                  </a>
-                                ) : (
-                                  <strong>{row.name}</strong>
-                                )}
-                                <span className="records-list__from"> from <strong>{row.source}</strong></span>
+                                <strong>{row.name}</strong>
+                                {tab.label !== "Papers" ? (
+                                  <span className="records-list__from"> from <strong>{row.source}</strong></span>
+                                ) : null}
                               </div>
                               <div className="hidden-sm">{row.role}</div>
                             </div>
                           </div>
                           <div className="records-list__data">
-                            <div className="grid-score" style={profileRowGridStyle}>
+                            <div className={`grid-score${isPaperTab ? " grid-score--papers" : ""}`} style={isPaperTab ? paperRowGridStyle : profileRowGridStyle}>
                               <div className="grid-score__item">{row.focus}</div>
                               <div className="grid-score__item">{row.stack}</div>
-                              <div className="grid-score__item">{row.level}</div>
-                              <div className="grid-score__item grid-score__item--wide">{row.note}</div>
+                              {!isPaperTab ? <div className="grid-score__item">{row.level}</div> : null}
+                              <div className="grid-score__item grid-score__item--wide">
+                                {row.href ? (
+                                  <a
+                                    className="records-list__paper-link"
+                                    href={row.href}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    aria-label={`Open ${row.name} PDF in a new tab`}
+                                  >
+                                    {row.note}
+                                    <span aria-hidden="true">↗</span>
+                                  </a>
+                                ) : (
+                                  row.note
+                                )}
+                              </div>
                             </div>
                           </div>
                         </li>

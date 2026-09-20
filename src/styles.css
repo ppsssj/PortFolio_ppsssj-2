@@ -3555,6 +3555,15 @@ html::-webkit-scrollbar {
   width: 100%;
 }
 
+.stack-panel-face--papers .grid-score--papers {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) max-content;
+  gap: clamp(16px, 2vw, 28px);
+}
+
+.stack-panel-face--papers .records-list__data .grid-score__item {
+  white-space: nowrap;
+}
+
 .grid-score--titles {
   min-height: 71px;
   color: #a7a7a7;
