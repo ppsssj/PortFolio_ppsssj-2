@@ -7,6 +7,49 @@ const columnLabels = ["Focus", "Stack", "Level", "Note"];
 function ProfileMark({ name }: { name: string }) {
   const key = name.toLowerCase();
 
+  if (key.includes("node") || key.includes("express")) {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M10 18h24" />
+        <path d="m30 14 4 4-4 4" />
+        <path d="M38 30H14" />
+        <path d="m18 26-4 4 4 4" />
+      </svg>
+    );
+  }
+
+  if (key.includes("postgres")) {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <ellipse cx="24" cy="12" rx="14" ry="5" />
+        <path d="M10 12v24c0 2.8 6.3 5 14 5s14-2.2 14-5V12" />
+        <path d="M10 24c0 2.8 6.3 5 14 5s14-2.2 14-5" />
+      </svg>
+    );
+  }
+
+  if (key.includes("linux") || key.includes("ec2")) {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="9" y="8" width="30" height="13" rx="3" />
+        <rect x="9" y="27" width="30" height="13" rx="3" />
+        <path d="M22 14.5h11" />
+        <path d="M22 33.5h11" />
+        <circle cx="15" cy="14.5" r="1.5" />
+        <circle cx="15" cy="33.5" r="1.5" />
+      </svg>
+    );
+  }
+
+  if (key.includes("gvisor")) {
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M24 6 10 11.5v10.5c0 9 5.9 16.6 14 19.5 8.1-2.9 14-10.5 14-19.5V11.5L24 6Z" />
+        <rect x="18.5" y="18.5" width="11" height="11" rx="2" />
+      </svg>
+    );
+  }
+
   if (key.includes("react")) {
     return (
       <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -184,7 +227,7 @@ export function StackSection() {
                               <div className="hidden-sm">{row.role}</div>
                             </div>
                           </div>
-                          <div className="records-list__data">
+                          <div className="records-list__data" lang="en">
                             <div className="grid-score" style={profileRowGridStyle}>
                               <div className="grid-score__item">{row.focus}</div>
                               <div className="grid-score__item">{row.stack}</div>
