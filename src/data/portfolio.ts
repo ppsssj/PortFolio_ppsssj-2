@@ -227,9 +227,9 @@ export type ProfileTableTab = {
 
 export const siteMeta = {
   brand: "PPsssJ",
-  title: "박성진 · Frontend Engineer",
+  title: "박성진 · Software Engineer",
   description:
-    "React와 TypeScript를 중심으로 완성도 있는 인터페이스와 인터랙션을 구현하고, Web Application·Developer Tool·Desktop Application으로 확장합니다.",
+    "사용자 경험부터 API·데이터와 실행 환경까지 연결하며, 실제 문제를 해결하는 웹 애플리케이션과 개발자 도구를 만듭니다.",
   visitHref: "https://github.com/ppsssj",
   visitLabel: "GitHub",
   secondaryCtaHref: "mailto:ppssjj020222@gmail.com",
@@ -239,10 +239,10 @@ export const siteMeta = {
 export const marqueeItems = [
   "PPsssJ Portfolio Welcome",
   "Developer Portfolio",
-  "Frontend Engineering",
+  "Software Engineering",
   "Web Applications",
   "Selected Projects",
-  "Interactive Tools",
+  "Developer Tools",
 ];
 
 export const navigationItems: LinkItem[] = [
@@ -270,7 +270,7 @@ export const socialItems: LinkItem[] = [
 ];
 
 export const creatorCredits: CreditItem[] = [
-  { name: "Frontend", role: "React, TypeScript & Interaction", badge: "FE" },
+  { name: "Software Engineering", role: "Architecture & Reliability", badge: "SE" },
   { name: "Applications", role: "Web, Desktop & Extensions", badge: "AP" },
   { name: "Product", role: "Visualization & Usable Flow", badge: "PX" },
 ];
@@ -1892,7 +1892,7 @@ export const stack = [
 ];
 
 export const detailDescription =
-  "이 포트폴리오는 React와 TypeScript를 중심으로 인터랙티브한 Web Application과 Developer Tool을 만들고, 브라우저·에디터·데스크톱 환경까지 연결하는 과정을 보여줍니다.";
+  "웹 애플리케이션과 개발자 도구를 중심으로 사용자 경험, 시스템 설계, API 연동, 성능 개선과 실제 실행 환경까지 고려하며 소프트웨어를 구현한 경험을 담았습니다.";
 
 export const githubUsername = "ppsssj";
 

@@ -4,7 +4,7 @@
 
 # PPsssJ Developer Portfolio
 
-Frontend engineering portfolio focused on web applications, interactive tools, and desktop software, built with React, TypeScript, and Vite.
+Software engineering portfolio focused on web applications, developer tools, and end-to-end product development, built with React, TypeScript, and Vite.
 
 ## Live Site
 
@@ -16,7 +16,7 @@ https://ppsssj.vercel.app/
 
 ## About
 
-PPsssJ is a personal portfolio for a frontend engineer building interactive applications and tools across the browser, editor, and desktop. It presents product thinking, frontend architecture, visualization, system integration, published extensions, activity history, and awards.
+PPsssJ is a personal portfolio for a software engineer building applications and developer tools across the browser, editor, and desktop. It presents product thinking, frontend architecture, visualization, system integration, published extensions, activity history, and awards.
 
 ## Tech Stack
 
