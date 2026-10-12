@@ -1,17 +1,8 @@
 import { useState, type CSSProperties } from "react";
-import { profileTableTabs } from "../data/portfolio";
+import { stackTabs } from "../data/portfolio";
 
 const profileRowGridStyle = { "--score-cols": 4 } as CSSProperties;
-const paperRowGridStyle = { "--score-cols": 3 } as CSSProperties;
-const dateColumnTabs = new Set(["Awards", "Activities", "Certification", "Papers"]);
-
-function getProfileTabColumnLabels(tabLabel: string) {
-  if (tabLabel === "Papers") {
-    return ["Venue", "Keywords", "PDF"];
-  }
-
-  return ["Focus", "Stack", dateColumnTabs.has(tabLabel) ? "Date" : "Level", "Note"];
-}
+const columnLabels = ["Focus", "Stack", "Level", "Note"];
 
 function ProfileMark({ name }: { name: string }) {
   const key = name.toLowerCase();
@@ -108,55 +99,6 @@ function ProfileMark({ name }: { name: string }) {
     );
   }
 
-  if (key.includes("award") || key.includes("competition") || key.includes("paper")) {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M15 7h18v9a9 9 0 0 1-18 0V7Z" />
-        <path d="M15 11H9v4a7 7 0 0 0 7 7" />
-        <path d="M33 11h6v4a7 7 0 0 1-7 7" />
-        <path d="M24 25v8" />
-        <path d="M17 39h14" />
-        <path d="m19 33 5-3 5 3" />
-      </svg>
-    );
-  }
-
-  if (key.includes("researcher") || key.includes("aics")) {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M19 8h10" />
-        <path d="M22 8v12L12 37a3 3 0 0 0 2.6 4h18.8A3 3 0 0 0 36 37L26 20V8" />
-        <path d="M17 32h14" />
-        <circle cx="23" cy="36" r="2" />
-      </svg>
-    );
-  }
-
-  if (key.includes("lead") || key.includes("staff") || key.includes("club")) {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <circle cx="24" cy="14" r="6" />
-        <circle cx="13" cy="24" r="5" />
-        <circle cx="35" cy="24" r="5" />
-        <path d="M13 34c2.5-4 6.2-6 11-6s8.5 2 11 6" />
-        <path d="M6 38c1.4-4 4-6 8-6" />
-        <path d="M42 38c-1.4-4-4-6-8-6" />
-      </svg>
-    );
-  }
-
-  if (key.includes("intern") || key.includes("innovation")) {
-    return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M24 6v7" />
-        <path d="M12 12l5 5" />
-        <path d="M36 12l-5 5" />
-        <path d="M16 27a8 8 0 1 1 16 0c0 3-1.6 5-3.5 6.8-1.2 1.1-1.5 2.3-1.5 4.2h-6c0-1.9-.3-3.1-1.5-4.2C17.6 32 16 30 16 27Z" />
-        <path d="M20 42h8" />
-      </svg>
-    );
-  }
-
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true">
       <rect x="10" y="7" width="28" height="34" rx="4" />
@@ -167,12 +109,12 @@ function ProfileMark({ name }: { name: string }) {
   );
 }
 
-export function StackRecordsSection() {
-  const [activeTab, setActiveTab] = useState(profileTableTabs[0].label);
-  const currentTab = profileTableTabs.find((tab) => tab.label === activeTab) ?? profileTableTabs[0];
+export function StackSection() {
+  const [activeTab, setActiveTab] = useState(stackTabs[0].label);
+  const currentTab = stackTabs.find((tab) => tab.label === activeTab) ?? stackTabs[0];
   const activeTabIndex = Math.max(
     0,
-    profileTableTabs.findIndex((tab) => tab.label === currentTab.label),
+    stackTabs.findIndex((tab) => tab.label === currentTab.label),
   );
 
   return (
@@ -183,7 +125,7 @@ export function StackRecordsSection() {
             <div className="heading-section__left">
               <h2 className="heading-section__title">Stack</h2>
               <ul className="menu-tabs">
-                {profileTableTabs.map((tab) => (
+                {stackTabs.map((tab) => (
                   <li className={tab.label === currentTab.label ? "active" : undefined} key={tab.label}>
                     <button
                       type="button"
@@ -206,24 +148,20 @@ export function StackRecordsSection() {
                 {
                   "--active-tab-index": activeTabIndex,
                   "--stack-row-count": currentTab.rows.length,
-                  "--stack-face-angle": `${360 / profileTableTabs.length}deg`,
                 } as CSSProperties
               }
             >
-              {profileTableTabs.map((tab, index) => {
-                const columnLabels = getProfileTabColumnLabels(tab.label);
-                const isPaperTab = tab.label === "Papers";
-
+              {stackTabs.map((tab, index) => {
                 return (
                   <div
-                    className={`content-tabs__item active stack-panel-face${isPaperTab ? " stack-panel-face--papers" : ""}${tab.label === currentTab.label ? " is-active" : ""}`}
+                    className={`content-tabs__item active stack-panel-face${tab.label === currentTab.label ? " is-active" : ""}`}
                     key={tab.label}
                     style={{ "--tab-index": index } as CSSProperties}
                     aria-hidden={tab.label === currentTab.label ? undefined : true}
                   >
                     <div className="stack-table-header">
                       <div className="stack-table-header__name">Name</div>
-                      <div className={`grid-score${isPaperTab ? " grid-score--papers" : ""}`} style={isPaperTab ? paperRowGridStyle : profileRowGridStyle}>
+                      <div className="grid-score" style={profileRowGridStyle}>
                         {columnLabels.map((label) => (
                           <div className="grid-score__item" key={label}>{label}</div>
                         ))}
@@ -241,34 +179,17 @@ export function StackRecordsSection() {
                             <div className="info">
                               <div>
                                 <strong>{row.name}</strong>
-                                {tab.label !== "Papers" ? (
-                                  <span className="records-list__from"> from <strong>{row.source}</strong></span>
-                                ) : null}
+                                <span className="records-list__from"> from <strong>{row.source}</strong></span>
                               </div>
                               <div className="hidden-sm">{row.role}</div>
                             </div>
                           </div>
                           <div className="records-list__data">
-                            <div className={`grid-score${isPaperTab ? " grid-score--papers" : ""}`} style={isPaperTab ? paperRowGridStyle : profileRowGridStyle}>
+                            <div className="grid-score" style={profileRowGridStyle}>
                               <div className="grid-score__item">{row.focus}</div>
                               <div className="grid-score__item">{row.stack}</div>
-                              {!isPaperTab ? <div className="grid-score__item">{row.level}</div> : null}
-                              <div className="grid-score__item grid-score__item--wide">
-                                {row.href ? (
-                                  <a
-                                    className="records-list__paper-link"
-                                    href={row.href}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    aria-label={`Open ${row.name} PDF in a new tab`}
-                                  >
-                                    {row.note}
-                                    <span aria-hidden="true">↗</span>
-                                  </a>
-                                ) : (
-                                  row.note
-                                )}
-                              </div>
+                              <div className="grid-score__item">{row.level}</div>
+                              <div className="grid-score__item grid-score__item--wide">{row.note}</div>
                             </div>
                           </div>
                         </li>

@@ -217,12 +217,42 @@ export type ProfileTableRow = {
   stack: string;
   level: string;
   note: string;
-  href?: string;
 };
 
 export type ProfileTableTab = {
   label: string;
   rows: ProfileTableRow[];
+};
+
+export type RecordEntry = {
+  period: string;
+  title: string;
+  meta?: string;
+  description: string;
+  keywords: string[];
+};
+
+export type AwardRecord = {
+  title: string;
+  event: string;
+  category: string;
+  date: string;
+};
+
+export type CertificationRecord = {
+  name: string;
+  type: string;
+  date: string;
+  scope: string[];
+};
+
+export type PublicationRecord = {
+  title: string;
+  venue: string;
+  type: string;
+  year: string;
+  keywords: string[];
+  href?: string;
 };
 
 export const siteMeta = {
@@ -250,7 +280,7 @@ export const navigationItems: LinkItem[] = [
   { label: "Projects", href: "#highlights" },
   { label: "Belief", href: "#typography" },
   { label: "Skills", href: "#details", scrollOffset: 96 },
-  { label: "Records", href: "#score" },
+  { label: "Records", href: "#records" },
 ];
 
 export const projectNavigationItems: LinkItem[] = [
@@ -1896,7 +1926,7 @@ export const detailDescription =
 
 export const githubUsername = "ppsssj";
 
-export const profileTableTabs: ProfileTableTab[] = [
+export const stackTabs: ProfileTableTab[] = [
   {
     label: "Tech Stack",
     rows: [
@@ -2015,110 +2045,92 @@ export const profileTableTabs: ProfileTableTab[] = [
       },
     ],
   },
-  {
-    label: "Awards",
-    rows: [
-      {
-        name: "2025 BLEP 데이터 활용 경진대회",
-        role: "장려상",
-        source: "Competition",
-        focus: "Data Utilization",
-        stack: "Data Analysis, Data Utilization",
-        level: "25.11.20",
-        note: "2025 BLEP 데이터 활용 경진대회 - 장려상",
-      },
-      {
-        name: "2025 한국 데이터 사이언스 학회",
-        role: "최우수 논문상",
-        source: "Academic",
-        focus: "Research",
-        stack: "Data Science, Paper Presentation",
-        level: "25.12.19",
-        note: "2025 한국 데이터 사이언스 학회 - 최우수 논문상",
-      },
-    ],
-  },
-  {
-    label: "Activities",
-    rows: [
-      {
-        name: "Leadership Staff, LikeLion Club",
-        role: "동아리 운영진으로 프론트엔드 교육, 프로젝트 진행, 구성원 멘토링을 지원하며 협업 중심의 개발 문화를 경험했습니다.",
-        source: "멋쟁이사자처럼",
-        focus: "Leadership",
-        stack: "PM, Frontend, Mentoring, Collaboration",
-        level: "25.01 - 25.12",
-        note: "프론트엔드 교육, 프로젝트 진행, 구성원 멘토링",
-      },
-      {
-        name: "AICS Undergraduate Researcher",
-        role: "AI 및 컴퓨팅 시스템 분야의 학부 연구생으로 논문 리뷰, 기술 탐색, 세미나 발표에 참여하며 연구 기반 문제 해결 역량을 확장했습니다.",
-        source: "AICS",
-        focus: "Research",
-        stack: "Research, Data, AI Systems",
-        level: "25.09 - 26.12",
-        note: "논문 리뷰, 기술 탐색, 세미나 발표",
-      },
-      {
-        name: "Startup Club Lead",
-        role: "팀 리더로 아이디어 구체화부터 MVP 기획, 역할 분배, 프로젝트 실행까지 주도하며 제품 중심 개발 경험을 쌓았습니다.",
-        source: "Startup Club",
-        focus: "Leadership",
-        stack: "PM, Frontend, Ideation, Product Planning",
-        level: "25.03 - 25.12",
-        note: "MVP 기획, 역할 분배, 프로젝트 실행",
-      },
-      {
-        name: "Innovase Intern",
-        role: "제품 및 혁신 프로젝트 실무를 지원하며 리서치, 기획, 실행 과정을 경험하고 실무형 협업 프로세스에 참여했습니다.",
-        source: "Innovase Intern",
-        focus: "Innovation",
-        stack: "PM, Frontend, Product Research, Execution",
-        level: "26.05 - 26.08",
-        note: "리서치, 기획, 실행, 실무형 협업",
-      },
-    ],
-  },
-  {
-    label: "Certification",
-    rows: [
-      {
-        name: "정보처리기사",
-        role: "소프트웨어 개발, 데이터베이스, 운영체제, 시스템 설계 등 정보처리 기반 지식을 검증한 국가 기술 자격입니다.",
-        source: "Certification",
-        focus: "Software Engineering",
-        stack: "Software Engineering, Database, System Design",
-        level: "26.09",
-        note: "정보처리 기반 지식 검증",
-      },
-    ],
-  },
-  {
-    label: "Papers",
-    rows: [
-      {
-        name: "시계열 데이터 분석 기반 서울시 교통·소음 예측 및 원인 분석 플랫폼 개발",
-        role: "2025 · 박성진 · 학술 발표 논문",
-        source: "한국데이터사이언스학회",
-        focus: "한국데이터사이언스학회 동계",
-        stack: "교통소음 · CatBoost · 도시환경",
-        level: "2025",
-        note: "PDF 보기",
-        href: "/data/docs/thesis/2025박성진데이터사이언스학회동계.pdf",
-      },
-      {
-        name: "SUMO 기반 도시 교통 시뮬레이션을 활용한 신규 도로 개설 효과 분석 시스템 설계",
-        role: "2025 · 박성진 · 학술 발표 논문",
-        source: "한국멀티미디어학회",
-        focus: "한국멀티미디어학회 추계",
-        stack: "SUMO · 교통 시뮬레이션 · 도로 효과",
-        level: "2025",
-        note: "PDF 보기",
-        href: "/data/docs/thesis/2025박성진추계한국멀티미디어학회.pdf",
-      },
-    ],
-  },
 ];
+
+export const records: {
+  experience: RecordEntry[];
+  activities: RecordEntry[];
+  awards: AwardRecord[];
+  certifications: CertificationRecord[];
+  publications: PublicationRecord[];
+} = {
+  experience: [
+    {
+      period: "2026.04 – 2026.08",
+      title: "이노베이스(주)",
+      meta: "인턴 · Frontend Development · Product Planning · Project Management",
+      description:
+        "병원 CT 장비 통합 관리 웹 서비스의 프론트엔드를 개발했습니다. 장비 관리와 온도·습도·진동 모니터링, 로그인·세션 관리를 구현하고 서비스 화면과 라우팅 구조를 개선했습니다.",
+      keywords: ["React", "MUI"],
+    },
+  ],
+  activities: [
+    {
+      period: "2025.09 – Present",
+      title: "AICS Undergraduate Researcher",
+      meta: "AICS",
+      description:
+        "AI 및 컴퓨팅 시스템 분야의 학부 연구생으로 논문 리뷰, 기술 탐색, 세미나 발표에 참여하며 연구 기반 문제 해결 역량을 확장했습니다.",
+      keywords: ["Research", "Data", "AI Systems"],
+    },
+    {
+      period: "2025.03 – 2025.12",
+      title: "Startup Club Lead",
+      meta: "Startup Club",
+      description:
+        "팀 리더로 아이디어 구체화부터 MVP 기획, 역할 분배, 프로젝트 실행까지 주도하며 제품 중심 개발 경험을 쌓았습니다.",
+      keywords: ["PM", "Frontend", "Ideation", "Product Planning"],
+    },
+    {
+      period: "2025.01 – 2025.12",
+      title: "Leadership Staff, LikeLion Club",
+      meta: "멋쟁이사자처럼",
+      description:
+        "동아리 운영진으로 프론트엔드 교육, 프로젝트 진행, 구성원 멘토링을 지원하며 협업 중심의 개발 문화를 경험했습니다.",
+      keywords: ["PM", "Frontend", "Mentoring", "Collaboration"],
+    },
+  ],
+  awards: [
+    {
+      title: "최우수 논문상",
+      event: "2025 한국데이터사이언스학회",
+      category: "Academic",
+      date: "2025.12.19",
+    },
+    {
+      title: "장려상",
+      event: "2025 BLEP 데이터 활용 경진대회",
+      category: "Competition",
+      date: "2025.11.20",
+    },
+  ],
+  certifications: [
+    {
+      name: "정보처리기사",
+      type: "국가기술자격",
+      date: "2026.09",
+      scope: ["Software Engineering", "Database", "System Design"],
+    },
+  ],
+  publications: [
+    {
+      title: "시계열 데이터 분석 기반 서울시 교통·소음 예측 및 원인 분석 플랫폼 개발",
+      venue: "한국데이터사이언스학회 동계",
+      type: "학술 발표 논문",
+      year: "2025",
+      keywords: ["교통소음", "CatBoost", "도시환경"],
+      href: "/data/docs/thesis/2025박성진데이터사이언스학회동계.pdf",
+    },
+    {
+      title: "SUMO 기반 도시 교통 시뮬레이션을 활용한 신규 도로 개설 효과 분석 시스템 설계",
+      venue: "한국멀티미디어학회 추계",
+      type: "학술 발표 논문",
+      year: "2025",
+      keywords: ["SUMO", "교통 시뮬레이션", "도로 효과"],
+      href: "/data/docs/thesis/2025박성진추계한국멀티미디어학회.pdf",
+    },
+  ],
+};
 
 export const footerGroups = [
   ["About", "Projects", "Belief"],
