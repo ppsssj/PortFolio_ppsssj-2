@@ -24,9 +24,9 @@ function RecordsGroup({ index, children }: { index: number; children: ReactNode 
   );
 }
 
-function EntryRow({ entry, isLead = false }: { entry: RecordEntry; isLead?: boolean }) {
+function EntryRow({ entry }: { entry: RecordEntry }) {
   return (
-    <li className={`records-entry${isLead ? " records-entry--lead" : ""}`}>
+    <li className="records-entry">
       <div className="records-when">{entry.period}</div>
       <div className="records-entry__title">
         <strong>{entry.title}</strong>
@@ -77,7 +77,7 @@ export function RecordsSection() {
           <ul className="records-entries">
             <li className="records-kind" aria-hidden="true">Experience</li>
             {records.experience.map((entry) => (
-              <EntryRow entry={entry} isLead key={entry.title} />
+              <EntryRow entry={entry} key={entry.title} />
             ))}
             <li className="records-kind" aria-hidden="true">Activities</li>
             {records.activities.map((entry) => (

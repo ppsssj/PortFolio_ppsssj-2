@@ -3806,22 +3806,6 @@ html::-webkit-scrollbar {
   line-height: 1.6;
 }
 
-.records-entry--lead .records-when {
-  color: var(--color-primary);
-  font-weight: var(--font-medium);
-}
-
-.records-entry--lead .records-when::before {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  vertical-align: 0.15em;
-  content: "";
-}
-
 .records-awards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
