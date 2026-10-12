@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 const beliefTags = [
-  "Creative",
-  "Rapid Prototyping",
-  "Fast Execution",
-  "Product Focus",
+  "Problem Solving",
   "Product Thinking",
-  "AI Integration",
-  "User Flow Design",
-  "Initiative",
+  "System Design",
+  "Performance",
+  "Reliability",
+  "Rapid Prototyping",
+  "User Experience",
+  "End-to-end Ownership",
 ];
 
 export function PaletteSection() {
@@ -26,9 +26,9 @@ export function PaletteSection() {
 
         <div className="palette belief">
           <p className="palette__desc belief__intro">
-            A frontend engineer
+            A software engineer
             <br />
-            building <strong>interactive applications.</strong>
+            building <strong>applications &amp; tools.</strong>
           </p>
           <div className="palette__list">
             <ul
@@ -53,12 +53,12 @@ export function PaletteSection() {
                     </div>
                     <div className="belief-card__body">
                       <p>
-                        React와 TypeScript를 중심으로 복잡한 인터랙션을 설계하고,
-                        실제 사용 흐름을 기준으로 제품을 만듭니다.
+                        빠른 구현을 넘어 문제의 원인을 분석하고, 성능과
+                        유지보수성을 고려해 소프트웨어를 설계합니다.
                       </p>
                       <p>
-                        브라우저·에디터·데스크톱 환경의 시스템 연동을 사용자가
-                        이해할 수 있는 화면과 흐름으로 연결합니다.
+                        프론트엔드부터 API·데이터·실행 환경까지 연결하며, 실제
+                        사용 가능한 제품으로 완성하는 과정을 중요하게 생각합니다.
                       </p>
                       <ul className="belief-tags">
                         {beliefTags.map((tag) => (
@@ -74,14 +74,14 @@ export function PaletteSection() {
                   <div className="list-palette__box belief-card__box">
                     <div className="list-palette__header">
                       <div className="list-palette__name">
-                        <strong>Frontend-led</strong> Application Craft
+                        <strong>Software</strong> Engineering
                       </div>
                     </div>
                     <div className="belief-card__statement">
                       <span>A</span>
                       <span>product-minded</span>
-                      <span>frontend engineer</span>
-                      <span>building interactive</span>
+                      <span>software engineer</span>
+                      <span>building reliable</span>
                       <span>applications &amp; tools.</span>
                     </div>
                     <p className="belief-card__copy"></p>

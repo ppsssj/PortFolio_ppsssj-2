@@ -2,7 +2,7 @@
   "name": "ppsssj-portfolio",
   "private": true,
   "version": "1.0.0",
-  "description": "Frontend engineering portfolio for web applications and interactive tools",
+  "description": "Software engineering portfolio focused on web applications, developer tools, and end-to-end product development.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
