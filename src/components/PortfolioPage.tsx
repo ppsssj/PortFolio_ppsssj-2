@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { AnimatedFavicon } from "./AnimatedFavicon";
 import { FooterSection } from "./FooterSection";
 import { CreatorSection } from "./CreatorSection";
-import { DetailsSection } from "./DetailsSection";
 import { ElementsSection } from "./ElementsSection";
 import { FloatingMenu } from "./FloatingMenu";
+import { GitHubContributionsSection } from "./GitHubContributionsSection";
+import { MarketplaceStatsSection } from "./MarketplaceStatsSection";
 import { MarqueeBar } from "./MarqueeBar";
 import { PaletteSection } from "./PaletteSection";
-import { ScoreSection } from "./ScoreSection";
 import { SiteHeader } from "./SiteHeader";
+import { StackRecordsSection } from "./StackRecordsSection";
+import { TechnologiesSection } from "./TechnologiesSection";
 
 export function PortfolioPage() {
   useEffect(() => {
@@ -29,9 +31,11 @@ export function PortfolioPage() {
         <CreatorSection />
         <ElementsSection />
         <div className="inner">
+          <MarketplaceStatsSection />
           <PaletteSection />
-          <DetailsSection />
-          <ScoreSection />
+          <TechnologiesSection />
+          <StackRecordsSection />
+          <GitHubContributionsSection />
         </div>
         <FloatingMenu />
       </main>

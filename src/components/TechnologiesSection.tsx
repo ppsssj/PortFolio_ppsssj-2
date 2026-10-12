@@ -1,7 +1,6 @@
 import { stack } from "../data/portfolio";
-import { GitHubActivity } from "./GitHubActivity";
 
-export function DetailsSection() {
+export function TechnologiesSection() {
   return (
     <section className="anchor-section" id="details">
       <div className="block">
@@ -24,14 +23,6 @@ export function DetailsSection() {
         </ul>
 
       </div>
-
-      <div className="block">
-        <div className="github-activity-heading">
-          <h2>GitHub Contributions</h2>
-        </div>
-        <GitHubActivity />
-      </div>
-
     </section>
   );
 }
