@@ -8,8 +8,9 @@ import { GitHubContributionsSection } from "./GitHubContributionsSection";
 import { MarketplaceStatsSection } from "./MarketplaceStatsSection";
 import { MarqueeBar } from "./MarqueeBar";
 import { PaletteSection } from "./PaletteSection";
+import { RecordsSection } from "./RecordsSection";
 import { SiteHeader } from "./SiteHeader";
-import { StackRecordsSection } from "./StackRecordsSection";
+import { StackSection } from "./StackSection";
 import { TechnologiesSection } from "./TechnologiesSection";
 
 export function PortfolioPage() {
@@ -34,7 +35,8 @@ export function PortfolioPage() {
           <MarketplaceStatsSection />
           <PaletteSection />
           <TechnologiesSection />
-          <StackRecordsSection />
+          <StackSection />
+          <RecordsSection />
           <GitHubContributionsSection />
         </div>
         <FloatingMenu />
